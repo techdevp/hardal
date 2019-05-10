@@ -1,0 +1,25 @@
+<div class="sidebar-header">
+  <h3 class="title text-center">Hardal Panel</h3>
+  <img *ngIf="!user.user.photo" src="./assets/img/avatars/1.jpg" class="img-circle sidebar_profileimg" />
+  <img *ngIf="user.user.photo" src="{{photo_url}}{{user.user.photo}}" class="img-circle sidebar_profileimg" />
+  <p *ngIf="user">{{user.user.name}}</p>
+  <div class="user-icon">
+    <div class="row ">
+      <div class="col-5"></div>
+      <div class="col-sm-2 ">
+        <div class="btn-group " dropdown>
+          <button type="button" class="btn  dropdown-toggle p-0" dropdownToggle style="background: transparent;">
+        <i class="icon-settings"></i>
+        </button>
+          <div class="dropdown-menu " *dropdownMenu>
+            <a class="dropdown-item" [routerLink]='["/users/change-password"]' *ngIf="account_type==1">Change Password</a>
+            <a class="dropdown-item" href="#">Account</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <i class="icon-power active" (click)="logout()"></i>
+      </div>
+    </div>
+  </div>
+</div>

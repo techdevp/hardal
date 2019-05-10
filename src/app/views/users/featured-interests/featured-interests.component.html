@@ -1,0 +1,142 @@
+<div class="alert alert-success" *ngIf="show_msg ">
+  {{show_msg}}
+</div>
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="row " *ngIf="interest_count">
+  <div class="col-2 new_layout">
+    <p>New Interests(30 days)</p>
+    {{interest_count.new_count}}
+  </div>
+  <div class="col-2 remove_layout">
+    <p>Removed Interests(30 days)</p>
+    0
+  </div>
+  <div class="col-2 remove_layout_interest">
+    <p>Removed Interests</p>
+    0
+  </div>
+  <div class="col-2 total_layout_usage">
+    <p> Total Interests</p>
+    {{interest_count.total_count}}
+  </div>
+</div>
+
+<div class="all_header layout_header">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-xl-4 search_div">
+        <input type="text" class="search-input search_field" placeholder="Search interest or interest category" [(ngModel)]="search_text">
+        <span class="input-group-addon search-icon magnifier"><i class="icon-magnifier" tappable  (click)="searchInterest(search_text)"></i></span>
+      </div>
+      <div class="col-sm-3 col-xl-4">
+        Featured Interests
+      </div>
+      <!-- <div class="col-sm-3 col-xl-4">
+        <button type="button" class="btn btn-add" [routerLink]="'/layouts/new-layout'">+Add Layout</button>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+<div id="print-section">
+  <table class="table table-responsive table-hover allSticker">
+    <thead>
+      <tr>
+        <th> Sr.No. </th>
+        <th> Interest Id </th>
+        <th>Interest </th>
+        <th class="long_text_database">Registration Date and Time</th>
+        <th></th>
+        <th class="text_archive">Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of featured_interest ; let i=index" class="k-alt">
+        <td *ngIf="data  && data._id">
+          <tr>
+            <td class="checbox_field">
+              <input type="checkbox" name="{{'select'+i}}" [(ngModel)]="selected[i]" (ngModelChange)="selectedvalues($event,data._id,selected[i],i)"><br>
+            </td>
+            <td class="checbox_field">{{i+1}}</td>
+          </tr>
+        </td>
+        <td *ngIf="data && !data._id">{{i+1}}</td>
+        <td class="id_underline" *ngIf="data && data._id">{{data._id}}</td>
+        <td class="id_underline" *ngIf="data && !data._id"></td>
+        <td style="    min-width: 223px!important;">
+          <select class="dropbutton" name="{{'selected'+i}}" [(ngModel)]="selectedInterest[i]" (change)="selectInterest(selectedInterest[i],i)">
+                      <option value="undefined" disabled  selected>SELECT AN INTEREST</option>
+                      <option *ngFor="let interest of interests" [disabled]="isdisabled(interest.name)" value = "{{interest.name}}">
+                      <span> {{interest.name|uppercase}} </span>
+                      </option>
+          </select>
+        </td>
+        <td *ngIf="data && data.created">{{data.created| date : "dd.MM.y hh:mm "}}</td>
+        <td *ngIf="data && !data.created">{{data.created| date : "dd.MM.y hh:mm "}}</td>
+        <td style="color:#2c57d0" *ngIf="data  && data._id"><a [routerLink]="['/users/view-interest',data._id]">View</a></td>
+        <td *ngIf="data  && data._id" tappable (click)="removeInterest(data._id,i);selectedInterest[i]='undefined'"><i class="fa fa-trash-o trash" aria-hidden="true"></i></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="row footer_section">
+  <div class="col-sm-2">
+    <div class="green_box">Total Interest</div>
+    <div class="count_text" *ngIf="featured_interest">{{featured_interest.length}}</div>
+  </div>
+  <div class="col-sm-2">
+    <div class="green_box ">Selected Interest</div>
+    <div class="count_text">{{selected_layout}}</div>
+  </div>
+  <div class="col-3 ">
+    <div tappable>
+      <i class="fa fa-print font_icon" aria-hidden="true" style="margin-right:35px;" (click)="print()" tappable></i>
+      <i class="fa fa-download font_icon" aria-hidden="true" (click)="download()" tappable></i>
+    </div>
+  </div>
+</div>
+
+<div id="print-section1" style="display:none">
+  <table class="table table-responsive table-hover allSticker">
+    <thead>
+      <tr>
+        <th> Sr.No. </th>
+        <th> Interest Id </th>
+        <th>Interest </th>
+        <th class="long_text_database">Registration Date and Time</th>
+        <th></th>
+        <th class="text_archive">Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      <div *ngFor="let data of featured_interest ; let i=index">
+        <tr class="k-alt" *ngIf="data.checked">
+          <td *ngIf="data  && data._id">
+            <tr>
+              <td class="checbox_field">
+                <input type="checkbox" name="{{'select'+i}}" [(ngModel)]="selected[i]" (ngModelChange)="selectedvalues($event,data._id,selected[i],i)"><br>
+              </td>
+              <td class="checbox_field">{{i+1}}</td>
+            </tr>
+          </td>
+          <td *ngIf="data && !data._id">{{i+1}}</td>
+          <td class="id_underline" *ngIf="data && data._id">{{data._id}}</td>
+          <td class="id_underline" *ngIf="data && !data._id"></td>
+          <td style="    min-width: 223px!important;">
+            <select class="dropbutton" name="{{'selected'+i}}" [(ngModel)]="selectedInterest[i]" (change)="selectInterest(selectedInterest[i],i)">
+                      <!-- <option value="undefined" disabled  selected>SELECT AN INTEREST</option> -->
+                      <option *ngFor="let interest of interests" value = "{{interest.name}}">
+                      <span> {{interest.name|uppercase}} </span>
+                      </option>
+          </select>
+          </td>
+          <td *ngIf="data && data.created">{{data.created| date : "dd.MM.y hh:mm "}}</td>
+          <td *ngIf="data && !data.created">{{data.created| date : "dd.MM.y hh:mm "}}</td>
+          <td style="color:#2c57d0" *ngIf="data  && data._id">View</td>
+          <td *ngIf="data  && data._id" tappable (click)="removeInterest(data._id,i);selectedInterest[i]='undefined'"><i class="fa fa-trash-o trash" aria-hidden="true"></i></td>
+        </tr>
+      </div>
+    </tbody>
+  </table>
+</div>

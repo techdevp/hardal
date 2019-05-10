@@ -1,0 +1,50 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="row " *ngIf="layout_count">
+  <div class="col-2 new_layout">
+    <p>New Layouts(30 days)</p>
+    {{layout_count.newlayout_count}}
+  </div>
+  <div class="col-2 remove_layout">
+    <p>Total Removed Layouts</p>
+    0
+  </div>
+  <div class="col-2 total_layout">
+    <p>Total Layout Artists</p>
+    {{layout_count.artist_count}}
+  </div>
+  <div class="col-2 total_layout_usage">
+    <p> Total Layout Usage</p>
+    {{layout_count.layout_usage_count}}
+  </div>
+</div>
+
+<div class="all_header layout_header">
+  <div class="row">
+    <div class="col-sm-4 text-left">
+      <i class="fa fa-arrow-left arrow_icon" aria-hidden="true" (click)="backClicked()" tappable></i>
+    </div>
+    <div class="col-sm-4">
+      VIEW LAYOUT CATEGORY
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row edit_box">
+    <div class="col-3">Layout Category Name :</div>
+    <div class="col-4 category-input layout_input">
+      <tabset>
+        <tab heading="English" id="tab1"><input type="text" [(ngModel)]="category_details.name" placeholder="Category name" readonly></tab>
+        <tab heading="Spanish"><input type="text" [(ngModel)]="category_details.name_es" placeholder="Category name" readonly></tab>
+        <tab heading="Turkish"><input type="text" [(ngModel)]="category_details.name_tr" placeholder="Category name" readonly></tab>
+        <tab heading="Portuguese"><input type="text" [(ngModel)]="category_details.name_pt" placeholder="Category name" readonly></tab>
+      </tabset>
+    </div>
+  </div>
+  <div class="row edit_box">
+    <div class="col-3 ">Category Location :</div>
+    <div class="col-6 category-input ">
+      <input type="text " [(ngModel)]="category_details.location" style="width:80%; " placeholder="" readonly>
+    </div>
+  </div>
+</div>

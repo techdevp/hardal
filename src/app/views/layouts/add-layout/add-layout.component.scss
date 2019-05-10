@@ -1,0 +1,71 @@
+.container {
+  background-color: white!important;
+}
+
+.profile-pic {
+  background: #eaeaea;
+  text-align: center;
+  border-radius: 7px;
+}
+
+p.upload {
+  background: #b1b1b1;
+  text-align: center;
+  border-radius: 4px;
+  color: #fff;
+  padding: 3px 0;
+}
+
+.category-input input {
+  width: 100%;
+  box-shadow: 1px 1px 0 0 #eee;
+  border: 1px solid #eee;
+  height: 30px;
+}
+
+.layout-cate {
+  padding: 15px 0;
+}
+
+.btn_new {
+  padding: 0 15px;
+  border-radius: 15px;
+}
+
+.mandatory_text {
+  font-size: 13px;
+}
+
+.arrow_th {
+  min-width: 50px;
+  margin: 0 -3px;
+}
+
+.arrow {
+  max-width: 13px;
+  display: inline-block;
+  padding: 0 3px;
+}
+
+.pink {
+  background-color: pink;
+  color: black;
+}
+
+.white {
+  background-color: white;
+  color: black;
+}
+
+.layout_name {
+  background: #f5c2ca;
+  font-weight: bold;
+}
+
+.layout_input {
+  padding: 0 !important;
+}
+
+.table-row tbody tr {
+  background-color: rgba(0, 0, 0, 0.075) !important;
+}

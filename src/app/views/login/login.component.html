@@ -1,0 +1,37 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="app flex-row align-items-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-4">
+        <div class="card-group">
+          <div class="card p-4">
+            <div class="card-body">
+              <form class="LOGIN_form" #signupForm="ngForm" (ngSubmit)="submitForm(signupForm.value,signupForm)">
+                <h1>Login</h1>
+                <p class="text-muted">Sign In to your account</p>
+                <div class="input-group mb-3">
+                  <span class="input-group-addon mr-2 mt-1"><i class="icon-user"></i></span>
+                  <input type="text" required class="form-control" #user_email="ngModel" name="email" [(ngModel)]="email" placeholder="Email Id" (focus)="clear();">
+                </div>
+                <div class="input-group mb-4">
+                  <span class="input-group-addon mr-2 mt-1"><i class="icon-lock"></i></span>
+                  <input type="password" required class="form-control" #user_pass="ngModel" minlength="5" name="password" [(ngModel)]="password" placeholder="Password" (focus)="clear();" />
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <button type="submit" class="btn btn-primary px-4">Login</button>
+                  </div>
+                  <div class="col-6 text-right">
+                    <button type="button" class="btn btn-link px-0" [routerLink]='["forgot-pass"]'>Forgot password?</button>
+                  </div>
+                </div>
+                <div class="text-danger text-center" [style.margin-top]="'10px'" [hidden]="!errormsg">{{errormsg}}</div>
+              </form>
+              <button class="LOGIN_form btn btn-googleplus" (click)="socialSignIn('google')"><i class="fa fa-google-plus fa-fw"></i> Signin in with Google</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

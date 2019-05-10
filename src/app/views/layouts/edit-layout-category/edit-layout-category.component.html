@@ -1,0 +1,125 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="row " *ngIf="layout_count">
+  <div class="col-2 new_layout">
+    <p>New Layouts(30 days)</p>
+    {{layout_count.newlayout_count}}
+  </div>
+  <div class="col-2 remove_layout">
+    <p>Total Removed Layouts</p>
+    0
+  </div>
+  <div class="col-2 total_layout">
+    <p>Total Layout Artists</p>
+    {{layout_count.artist_count}}
+  </div>
+  <div class="col-2 total_layout_usage">
+    <p> Total Layout Usage</p>
+    {{layout_count.layout_usage_count}}
+  </div>
+</div>
+
+<div class="all_header layout_header">
+  <div class="row">
+    <div class="col-sm-4 text-left">
+      <i class="fa fa-arrow-left arrow_icon" aria-hidden="true" (click)="backClicked()" tappable *ngIf="id!=':id'"></i>
+    </div>
+    <div class="col-sm-4">
+      EDIT LAYOUT CATEGORY
+    </div>
+    <!-- <div class="col-sm-4">
+      <button type="button" class="btn btn-add" [routerLink]="'/layouts/new-layout'">+Add New Layout</button>
+    </div> -->
+  </div>
+</div>
+
+<div class="alert alert-success" *ngIf="successMessage">
+  {{successMessage}}
+</div>
+<div class="alert alert-danger" *ngIf="error_msg">
+  {{error_msg}}
+</div>
+
+<div class="container" *ngIf="!error_msg">
+  <div class="row edit_box" *ngIf="id==':id'">
+    <div class="col-3">Choose a layout category to edit :</div>
+    <div class="col-6" class="selct_sizeset">
+      <select class="dropbutton select_box" [(ngModel)]="selectedCategory" (ngModelChange)="selectCategory(selectedCategory)">
+            <option value="undefined" disabled  selected>Select Category</option>
+            <option *ngFor="let data of category" value = "{{data._id}}">
+              <span> {{data.name}} </span>
+            </option>
+          </select>
+    </div>
+  </div>
+
+  <div class="row edit_box">
+    <div class="col-3">Edit Your Layout Category :</div>
+    <div class="col-4 category-input layout_input">
+      <tabset>
+        <tab heading="English" id="tab1"><input type="text" [(ngModel)]="category_details.name" placeholder="Category name"></tab>
+        <tab heading="Spanish"><input type="text" [(ngModel)]="category_details.name_es" placeholder="Category name"></tab>
+        <tab heading="Turkish"><input type="text" [(ngModel)]="category_details.name_tr" placeholder="Category name"></tab>
+        <tab heading="Portuguese"><input type="text" [(ngModel)]="category_details.name_pt" placeholder="Category name"></tab>
+      </tabset>
+    </div>
+  </div>
+
+  <!-- <div class="row edit_box">
+      <div class="col-3 ">Edit your layout category name</div>
+      <div class="col-6 category-input ">
+        <input type="text " [(ngModel)]="category_details.name" style="width:80%; " placeholder="">
+      </div>
+    </div> -->
+
+  <div class="row edit_box">
+    <div class="col-3">Edit locations to publish :</div>
+    <div class="col-6" class="selct_sizeset set_dropdown">
+      <select class="dropbutton" [(ngModel)]="category_details.location" (change)="setCountry(category_details.location)">
+          <option value="undefined" disabled  selected>Select Country</option>
+          <option *ngFor="let data of countries" value = "{{data}}">
+             {{data}}
+          </option>
+        </select>
+    </div>
+  </div>
+
+
+
+  <!-- <div class="set_top">
+    <h3 text-secondary class="mandatory_text ">(<span class="star_position" style="margin-left: 2px;!important">*</span>is Mandatory). Please upload 4 images to proceed</h3>
+  </div> -->
+
+  <div class="row">
+    <div class="col-4"></div>
+    <div class="col-3">
+      <div class="d-flex justify-content-end ">
+        <div class="p-2 "> <button type="button " class="btn btn-danger btn_new  ml-2 " (click)="backClicked() ">Cancel</button></div>
+        <div class="p-2 "> <button type="button " class="btn btn-warning btn_new " (click)="editCategory() ">Save</button></div>
+        <div class="p-2 "> <button type="button " class="btn btn-success btn_new " (click)="publishCategory() ">Publish</button></div>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="d-flex justify-content-end ">
+        <div class="p-2 "> <button type="button " class="btn btn-danger btn_remove ml-2 " (click)="deleteCategory() ">Remove Layout Category</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row bottom_boxes" *ngIf="selectedCategory!='undefined'">
+    <div class="col-4">
+    </div>
+    <div class="col-1 approve" (click)="changeStatus('Active')" tappable *ngIf=" category_details && category_details.status!='Active'">
+      <i class="fa fa-check icon_font " aria-hidden="true"></i>
+      <p>Approve</p>
+    </div>
+    <div class="col-1 reject " (click)="changeStatus('Rejected')" tappable *ngIf="category_details && category_details.status!='Rejected'">
+      <i class="fa fa-times icon_font" aria-hidden="true"></i>
+      <p>Reject</p>
+    </div>
+    <div class="col-1 archive" (click)="changeStatus('Archived')" tappable *ngIf="category_details && category_details.status!='Archived'">
+      <div>
+        Archive
+      </div>
+    </div>
+  </div>
+</div>

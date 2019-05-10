@@ -1,0 +1,388 @@
+<div class="alert alert-success" *ngIf="show_msg ">
+  {{show_msg}}
+</div>
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="row " *ngIf="layout_count">
+  <div class="col-2 new_layout">
+    <p>New Layouts(30 days)</p>
+    {{layout_count.newlayout_count}}
+  </div>
+  <div class="col-2 remove_layout">
+    <p>Total Removed Layouts</p>
+    0
+  </div>
+  <div class="col-2 total_layout">
+    <p>Total Layout Artists</p>
+    {{layout_count.artist_count}}
+  </div>
+  <div class="col-2 total_layout_usage">
+    <p> Total Layout Usage</p>
+    {{layout_count.layout_usage_count}}
+  </div>
+</div>
+
+<div *ngIf="!submission">
+  <div class="all_header layout_header">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6 col-xl-4 search_div">
+          <!-- <input type="text" class="search-input search_field" placeholder="Search Layouts or Layout Category" [(ngModel)]="search_text" (focusout)="checkBlur(search_text)" (focus)="checkFocus(search_text)"> -->
+          <input type="text" class="search-input search_field" placeholder="Search Layouts or Layout Category" [(ngModel)]="search_text">
+          <span class="input-group-addon search-icon"><i class="icon-magnifier" tappable  (click)="searchLayout(search_text)"></i></span>
+        </div>
+        <div class="col-sm-3 col-xl-4" *ngIf="!selectedCategory">
+          LAYOUT SUBMISSIONS
+        </div>
+        <div class="col-sm-3 col-xl-4" *ngIf="selectedCategory">
+          {{selectedCategory|uppercase}} LAYOUT
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-success" *ngIf="successMessage">
+    {{successMessage}}
+  </div>
+  <div class="alert alert-danger" *ngIf="error_msg">
+    {{error_msg}}
+  </div>
+
+  <div class="row edit_box" *ngIf="layout && layout.length">
+    <div class="col-6 text-center"> Choose Layout status</div>
+    <div class="col-6 text-center" class="selct_sizeset">
+      <select class="dropbutton" [(ngModel)]="selectedCategory" (change)="getPageDetail(selectedCategory)">
+     <option [ngValue]="undefined" disabled  selected>Select Status</option>
+      <option *ngFor="let data of status" value ="{{data}}">
+      <span> {{data}} </span>
+     </option>
+    </select>
+    </div>
+  </div>
+
+  <!-- <div class="row layout-cate" mt-9>
+    <div class="col-3"></div>
+    <div class="col-3" class="search_name">SEARCH</div>
+    <div class="col-4 category-input "><input type="text" placeholder="(Layouts or Layout Category)" class="search_input" [(ngModel)]="search_text" (ngModelChange)="getSearch(search)" (focusout)="checkBlur()" (focus)="checkFocus()"></div>
+  </div> -->
+
+  <div id="print-section" *ngIf="layout && layout.length">
+    <table class="table table-responsive table-hover allSticker">
+
+      <thead>
+        <tr>
+          <th> Sr.No. </th>
+          <th> Layout Thumbnail </th>
+          <th> Layout Id </th>
+          <th> Layout Category </th>
+          <th> Layout Species </th>
+          <th> Location will be used </th>
+          <th>Username </th>
+          <th>User ID </th>
+          <th>Gender </th>
+          <!-- <th>Age </th> -->
+          <th>Registration Date and Time </th>
+          <!-- <th class="long_text_database ">Inforamtion</th> -->
+          <!-- <th>Total Layouts submitted </th> -->
+          <th>Badge Yellow/grey/none </th>
+          <th> Layout Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of layout;let i=index" class="k-alt">
+          <td>
+            <tr>
+              <td class="checbox_field">
+                <input type="checkbox" name="{{'select'+i}}" [(ngModel)]="selected[i]" (ngModelChange)="selectLayout($event,data._id,selected[i],i)"><br>
+              </td>
+              <td class="checbox_field">{{i+1}}</td>
+            </tr>
+          </td>
+          <td><img class="img_thumbnail" [src]="imageUrl + data.photo"></td>
+          <td class="id_underline">{{data._id}}</td>
+          <td *ngIf="data.categoryId.length">
+            <div *ngFor="let cat of data.categoryId">{{cat.name}} </div>
+          </td>
+          <td *ngIf="!data.categoryId.length">
+            <div>{{data.categoryId && data.categoryId.name?data.categoryId.name:'--'}} </div>
+          </td>
+          <td *ngIf="data.speciesId && data.speciesId.name">{{data.speciesId.name}}</td>
+          <td *ngIf="!data.speciesId">-</td>
+          <td>{{data.location}}</td>
+          <td>{{data.artist && data.artist.username?data.artist.username:'--'}}</td>
+          <td>{{data && data.artist && data && data.artist._id?data.artist._id:'--'}}</td>
+          <td>{{data && data.artist && data && data.artist.gender?data.artist.gender:'--'}}</td>
+          <!-- <td>{{data && data.artist && data && data.artist.age?data.artist.age:'--'}}</td> -->
+          <td class="date_center">{{data.created| date : "dd.MM.y hh:mm"}}</td>
+          <!-- <td>0</td> -->
+          <td [ngClass]="data.artist.badge_number=='2'?'star':'grey'" *ngIf="data && data.artist && data.artist.badge_number!=0"><i class="fa fa-star " style="font-size: 12px !important;" aria-hidden="true"></i></td>
+          <td class="grey" *ngIf="data && data.artist && data.artist.badge_number==0">None</td>
+          <td class="grey" *ngIf="data && !data.artist">--</td>
+          <td (click)="doActive(user._id,user.status)" style="color: #0ae6f5;" *ngIf="data.status=='Pending'">Not responded </td>
+          <td tappable *ngIf="data.status!='Pending'" [ngClass]="[data.status=='Archived'||data.status=='Rejected'?'text_archive':'grey',data.status=='Active'?'green':'grey']">{{data.status}} </td>
+          <td *ngIf="admin_type==1||admin_type==2"><a (click)="viewSubmission(data._id,i)" style="color: #f7c631;" tappable>View submission</a></td>
+          <td *ngIf="admin_type==3"><a [routerLink]="['/layouts/view-layout', data._id]" style="color: #f7c631;" tappable>View submission</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ul class="pagination justify-content-end" *ngIf="layout && layout.length">
+    <li class="page-item "><a class="page-link " (click)="findPrev()">Prev</a></li>
+    <li class="page-item "><a class="page-link " (click)="findNext()">Next</a></li>
+  </ul>
+  <div class="user_btns" *ngIf="layout && layout.length">
+    <ul>
+      <li><button class="btn">Total Layouts</button>
+        <p *ngIf="layout">{{total_count}}</p>
+      </li>
+      <li><button class="btn">Selected Layouts</button>
+        <p>{{selected_layout}}</p>
+      </li>
+      <li tappable><img class="image_css" src='assets/img/download-to-storage-drive.png' (click)="download()" />
+        <p></p>
+      </li>
+      <li tappable><img class="image_css" src='assets/img/printer-tool.png' (click)="print()" />
+        <p></p>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- //  **************************************************VIEW SUBMISSION****************************************************-->
+
+<div *ngIf="submission">
+  <div class="all_header layout_header">
+    <div class="container">
+      <div class="row">
+        <i class="fa fa-arrow-left arrow_icon" aria-hidden="true" (click)="submission=!submission;" tappable></i>
+        <div class="col-sm-4">
+        </div>
+        <div class="col-sm-4">
+          VIEW SUBMISSIONS
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="layout_details">
+    <div class="col-6">
+      <form>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Name:</label>
+          <div class="col-sm-10" *ngIf="layout_details && layout_details.artist && layout_details.artist.name">
+            <input type="text" class="form-control input_field1" [(ngModel)]="layout_details.artist.name" [ngModelOptions]="{standalone: true}" readonly>
+          </div>
+          <div class="col-sm-10" *ngIf="layout_details && !layout_details.artist ">
+            <input type="text" class="form-control input_field1" placeholder="--" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Username:</label>
+          <div class="col-sm-10" *ngIf="layout_details && layout_details.artist && layout_details.artist.name">
+            <input type="text" class="form-control input_field1" [(ngModel)]="layout_details.artist.username" [ngModelOptions]="{standalone: true}" readonly>
+          </div>
+          <div class="col-sm-10" *ngIf="layout_details && !layout_details.artist ">
+            <input type="text" class="form-control input_field1" placeholder="--" readonly>
+          </div>
+        </div>
+        <div *ngIf="layout_details.status!='Pending'">
+          <div class="row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Categories:</label>
+            <div class="col-sm-10">
+              <div class="row category_field" *ngFor="let data of layout_details.categoryId;let i=index">
+                <div class="col-6">
+                  {{data.name}}
+                </div>
+                <div class="col-6">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Species:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control input_field1" [(ngModel)]="layout_details.speciesId.name" [ngModelOptions]="{standalone: true}" readonly>
+            </div>
+          </div>
+          <div class="row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Location:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control input_field1" [(ngModel)]="layout_details.location" [ngModelOptions]="{standalone: true}" readonly>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="layout_details.status=='Pending'">
+          <div class="row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Categories:</label>
+            <div class="col-sm-10">
+              <div class="row category_field" *ngFor="let data of layout_details.categoryId;let i=index">
+                <div class="col-6">
+                  {{data.name}}
+                </div>
+                <div class="col-6">
+                  <span *ngIf="edit" (click)="removeCategory(i)" class="fa fa-times cross_icon" tappable></span>
+                </div>
+              </div>
+              <div class="row category_field" *ngIf="layout_details && layout_details.categoryId && !layout_details.categoryId.length">
+                <div class="col-6">
+                  Add Category
+                </div>
+              </div>
+              <div class="edit_text">
+                <a (click)="edit=!edit;" tappable>EDIT</a>
+              </div>
+              <div class="set_dropdown" *ngIf="edit">
+                <select tappable class="country_dropdown" [(ngModel)]="editCategory" (ngModelChange)="addNewCategory(editCategory);" [ngModelOptions]="{standalone: true}" multiple>
+                    <option [ngValue]="undefined" disabled  selected >Select Category</option>
+                    <option *ngFor="let data of category" value = "{{data.name}}">
+                      {{data.name}}
+                    </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="layout_details.speciesId">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Species:</label>
+            <div class="col-sm-10">
+              <div class="set_dropdown">
+                <select tappable class="country_dropdown" [(ngModel)]="layout_details.speciesId._id" (change)="changeSpcies(layout_details.speciesId._id);" [ngModelOptions]="{standalone: true}">
+                  <option [ngValue]="undefined" disabled  selected>Select Species</option>
+                  <option *ngFor="let data of species" value = "{{data._id}}">
+                    <span> {{data.name}} </span>
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="!location">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Location:</label>
+            <div class="col-sm-6">
+              <input readonly type="text" class="form-control input_fields" [(ngModel)]="layout_details.location" [ngModelOptions]="{standalone: true}">
+              <input *ngIf="location" type="text" class="form-control input_fields" style="color:black" [(ngModel)]="layout_details.location" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col-sm-1 edit_text" style="margin-left: -47px!important;">
+              <a (click)="location=!location;" tappable>EDIT</a>
+              <a *ngIf="location" (click)="location=!location;" tappable>Done</a>
+            </div>
+          </div>
+          <div class="row" *ngIf="location">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Location:</label>
+            <div class="col-sm-10">
+              <div class="col-6" class="set_dropdown">
+                <select class="country_dropdown" [(ngModel)]="layout_details.location" (change)="location=!location;setCountry(layout_details.location)" [ngModelOptions]="{standalone: true}">
+                <option value="undefined" disabled  selected>Select Country</option>
+                <option *ngFor="let data of countries" value = "{{data}}">
+                  <span> {{data}} </span>
+                </option>
+              </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="col -2 uploader-box">
+      <p class="upload_artwork" text-center>Uploaded Artwork</p>
+      <div class="row">
+        <div class="col-4">
+          <div class="profile-pic">
+            <img *ngIf="!layout_details.photo" class="img-responsive pic" src="./assets/img/avatars/ic_addnew_dummy@3x.png">
+            <img *ngIf="layout_details.photo" class="img-responsive pic" [src]="imageUrl + layout_details.photo">
+          </div>
+          <input hidden id="upload_photo1" class="input-file UPLo" type="file" accept="image/*" multiple name="select_file3" (change)="editFileSelect($event,1)" required>
+          <p text-center><label for="upload_photo1" class="upload_field2" tappable *ngIf="layout_details.status=='Pending'">Upload image instead</label></p>
+        </div>
+        <div class="col">
+          <label float-right class="upload_field1" (click)="downloadImage(imageUrl + layout_details.photo)" tappable>Download image </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="layout_details && layout_details.status=='Pending'">
+    <div class="col"></div>
+    <div class="col">
+      <div class="d-flex justify-content-start">
+        <div class="p-2"> <button type="button" class="btn btn-cancel btn_new ml-2" (click)="submission=!submission" tappable>Cancel</button></div>
+        <div class="p-2"> <button type="button" class="btn btn-save btn_new" (click)="editLayout()" tappable>Save</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row bottom_boxes">
+    <div class="col-4">
+    </div>
+    <div class="col-1 approve" (click)="changeStatus('Active')" tappable *ngIf=" layout_details && layout_details.status!='Active'">
+      <i class="fa fa-check" aria-hidden="true"></i>
+      <p>Approve</p>
+    </div>
+    <div class="col-1 reject " (click)="changeStatus('Rejected')" tappable *ngIf="layout_details && layout_details.status!='Rejected'">
+      <i class="fa fa-times" aria-hidden="true"></i>
+      <p>Reject</p>
+    </div>
+    <div class="col-1 archive" (click)="changeStatus('Archived')" tappable *ngIf="layout_details && layout_details.status!='Archived'">
+      <div>
+        Archive
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="print-section1" style="display:none">
+  <table class="table table-responsive table-hover allSticker">
+
+    <thead>
+      <tr>
+        <th> Sr.No. </th>
+        <th> Layout Thumbnail </th>
+        <th> Layout Id </th>
+        <th> Layout Category </th>
+        <th> Layout Species </th>
+        <th> Location will be used </th>
+        <th>Username </th>
+        <th>User ID </th>
+        <th>Gender </th>
+        <th>Age </th>
+        <th>Registration Date and Time </th>
+        <!-- <th class="long_text_database ">Inforamtion</th> -->
+        <th>Total Layouts submitted </th>
+        <th>Badge Yellow/grey/none </th>
+        <th> Layout Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <div *ngFor="let data of layout;let i=index">
+        <tr class="k-alt" *ngIf="data.checked">
+
+          <td class="checbox_field">{{i+1}}</td>
+
+          <td><img class="img_thumbnail" [src]="imageUrl + data.photo"></td>
+          <td class="id_underline">{{data._id}}</td>
+          <td *ngIf="data.categoryId.length">
+            <div *ngFor="let cat of data.categoryId">{{cat.name}} </div>
+          </td>
+          <td *ngIf="!data.categoryId.length">
+            <div>{{data.categoryId.name}} </div>
+          </td>
+          <td *ngIf="data.speciesId && data.speciesId.name">{{data.speciesId.name}}</td>
+          <td *ngIf="!data.speciesId">-</td>
+          <td>{{data.location}}</td>
+          <td>{{data.artist && data.artist.username?data.artist.username:'--'}}</td>
+          <td *ngIf="data && data.artist">{{data.artist._id}}</td>
+          <td *ngIf="data && data.artist">{{data.artist.gender}}</td>
+          <td *ngIf="data && data.artist">{{data.artist.age}}</td>
+          <td class="date_center">{{data.created| date : "dd.MM.y hh:mm"}}</td>
+          <td>0</td>
+          <td [ngClass]="data.artist.badge_number=='2'?'star':'grey'" *ngIf="data && data.artist && data.artist.badge_number!=0"><i class="fa fa-star " style="font-size: 12px !important;" aria-hidden="true"></i></td>
+          <td class="grey" *ngIf="data && data.artist && data.artist.badge_number==0">None</td>
+          <td tappable (click)="doActive(user._id,user.status)" style="color: #0ae6f5;">Not responded </td>
+          <!-- <td tappable (click)="doActive(user._id,user.status)" *ngIf="data.status!='Pending'">{{data.status}} </td> -->
+          <td><a (click)="viewSubmission(data._id,i)" style="color: #f7c631;" tappable>View submission</a></td>
+        </tr>
+
+      </div>
+    </tbody>
+  </table>
+</div>

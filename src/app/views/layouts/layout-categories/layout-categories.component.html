@@ -1,0 +1,390 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="row" *ngIf="!selectedCategory && layout_count">
+  <div class="col-2 new_layout">
+    <p>New Layouts(30 days)</p>
+    {{layout_count.newlayout_count}}
+  </div>
+  <div class="col-2 remove_layout">
+    <p>Total Removed Layouts</p>
+    0
+  </div>
+  <div class="col-2 total_layout">
+    <p>Total Layout Artists</p>
+    {{layout_count.artist_count}}
+  </div>
+  <div class="col-2 total_layout_usage">
+    <p> Total Layout Usage</p>
+    {{layout_count.layout_usage_count}}
+  </div>
+</div>
+
+<div class="row" *ngIf="selectedCategory">
+  <div class="col-2 new_layout">
+    <p>New Interests(30 days)</p>
+    {{interest_count.new_count}}
+  </div>
+  <div class="col-2 remove_layout">
+    <p>Removed Interests(30 days)</p>
+    0
+  </div>
+  <div class="col-2 remove_layout_interest">
+    <p>Removed Interests</p>
+    0
+  </div>
+  <div class="col-2 total_layout_usage">
+    <p> Total Interests</p>
+    {{interest_count.total_count}}
+  </div>
+</div>
+
+<div class="all_header layout_header">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-xl-4 search_div">
+        <input *ngIf="!selectedCategory" type="text" class="search-input search_field" placeholder="Search Layout Category" [(ngModel)]="search_text" (focusout)="checkBlur(search_text)">
+        <span class="input-group-addon search-icon" *ngIf="!selectedCategory"><i class="icon-magnifier" tappable  (click)="searchCategory(search_text)"></i></span>
+      </div>
+      <div class="col-sm-3 col-xl-4" *ngIf="!selectedCategory">LAYOUTS CATEGORIES</div>
+      <div class="col-sm-3 col-xl-4" *ngIf="selectedCategory">{{selectedCategory|uppercase}} CATEGORY</div>
+      <div class="col-sm-3 col-xl-4">
+        <button type="button" class="btn btn-add" [routerLink]="'/layouts/new-layout-category'">+Add Layout Category</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row layout_field" *ngIf="categories && categories.length">
+  <div class="col-2 text-center"> Choose Layout Category</div>
+  <div class="col-6 text-center" class="selct_sizeset">
+    <select class="dropbutton" [(ngModel)]="selectedCategory" (change)="getPageDetail(selectedCategory)">
+     <option [ngValue]="undefined" disabled  selected>Select Category</option>
+      <option *ngFor="let data of categories" value ="{{data.name}}">
+      <span> {{data.name}} </span>
+     </option>
+    </select>
+  </div>
+</div>
+
+<div class="alert alert-success" *ngIf="successMessage">
+  {{successMessage}}
+</div>
+<div class="alert alert-danger" *ngIf="error_msg">
+  {{error_msg}}
+</div>
+<!-- <div class="row layout-cate" mt-9>
+  <div class="col-3"></div>
+  <div class="col-3" class="search_name">SEARCH</div>
+  <div class="col-4 category-input "><input type="text" placeholder="( Layouts Id or Artist Username )" class="search_input"></div>
+</div> -->
+<div id="print-section" *ngIf="!selectedCategory && layout && layout.length">
+  <table class="table table-responsive table-hover allSticker">
+    <thead>
+      <tr>
+        <th> Sr.No. </th>
+        <th> Layout Category Id </th>
+        <!-- <th> Position</th> -->
+        <th>Layout Category </th>
+        <th>Layout Species </th>
+        <th>Location will be used </th>
+        <th class="long_text_database">Layout Category Database </th>
+        <th class="long_text_database">Registration Date and Time</th>
+        <th class="long_text_database">Number of Layouts in it</th>
+        <th class="long_text_no">Last Edited Date and time </th>
+        <th class="long_text_no"> Number of total posts</th>
+        <th>Category Status</th>
+        <th></th>
+        <th></th>
+        <th class="text_archive">Archive</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="layout && layout.length">
+      <tr *ngFor="let data of layout;let i=index;let last=last;" class="k-alt">
+        <td>
+          <tr>
+            <td class="checbox_field">
+              <input type="checkbox" name="{{'select'+i}}" [(ngModel)]="selected[i]" (ngModelChange)="selectLayout($event,data._id,selected[i],i)"><br>
+            </td>
+            <td class="checbox_field">{{i+1}}</td>
+            <td class="checbox_field" *ngIf="!last"><img class="down arrow" src='./assets/img/ic_down_arrow.png' (click)="swapDown(data._id,i+1,i) "></td>
+            <td class="checbox_field" *ngIf="i!=0"><img class="up arrow" src='./assets/img/ic_up_arrow.png' (click)=" swapUp(data._id,i+1,i) "></td>
+          </tr>
+        </td>
+        <td class="id_underline">{{data._id}}</td>
+        <!-- <td>{{data.position}}</td> -->
+        <td>
+          {{data.name}}
+        </td>
+        <td>-</td>
+        <td>{{data.location}}</td>
+        <td>0 kb</td>
+        <td>{{data.created| date : "dd.MM.y hh:mm "}}</td>
+        <td>{{data.layout_count}}</td>
+        <td *ngIf="data.updated">{{data.updated| date : "dd.MM.y hh:mm "}}</td>
+        <td *ngIf=!data.updated>-</td>
+        <td>{{data.post_count}}</td>
+        <td tappable [ngClass]="[data.status=='Archived'?'text_archive':'grey',data.status=='Active'?'green':'grey']">{{data.status}} </td>
+        <td tappable class="star" [routerLink]="['/layouts/view-category', data._id]">View Category</td>
+        <td tappable class="star ">
+          <div class="edit_field" [routerLink]="['/layouts/edit-layout-category',data._id]">Edit</div>
+        </td>
+        <td tappable (click)="editCategory(data._id,'Archived',i)"> <i class="fa fa-trash-o trash" aria-hidden="true"></i></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<div id="print-section" *ngIf="selectedCategory">
+  <table class="table table-responsive table-hover allSticker">
+    <thead>
+      <tr>
+        <th> Sr.No. </th>
+        <th> Thumbnail </th>
+        <th> Layout Id </th>
+        <th>Artist Username </th>
+        <th>Layout Category </th>
+        <th>Layout Species </th>
+        <th>Location will be used </th>
+        <th class="long_text_database">Layout Database </th>
+        <th class="long_text_database">Registration Date and Time</th>
+        <th class="long_text_database">Number of users used it</th>
+        <th class="long_text_no">Edit Date </th>
+        <th class="long_text_no"> Number of total posts</th>
+        <th><i class="fa fa-star star" aria-hidden="true"></i>HighLight/Unhighlight </th>
+        <th>Layout Status</th>
+        <th></th>
+        <th></th>
+        <th class="text_archive">Archive</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of layout;let i=index;" class="k-alt">
+        <td>
+          <tr>
+            <td class="checbox_field">
+              <input type="checkbox" name="{{'select'+i}}" [(ngModel)]="selected[i]" (ngModelChange)="selectLayout($event,data._id,selected[i],i)"><br>
+            </td>
+            <td class="checbox_field">{{i+1}}</td>
+          </tr>
+        </td>
+        <td><img class="img_thumbnail" [src]="imageUrl + data.photo"></td>
+        <td class="id_underline">{{data._id}}</td>
+        <td>{{data.artist && data.artist.username?data.artist.username:'--'}}</td>
+        <td *ngIf="data.categoryId.length">
+          <div *ngFor="let cat of data.categoryId">{{cat.name}} </div>
+        </td>
+        <td *ngIf="!data.categoryId.length">
+          <div>{{data.categoryId.name}} </div>
+        </td>
+        <td *ngIf="data.speciesId">{{data.speciesId.name}}</td>
+        <td *ngIf="!data.speciesId"></td>
+        <td>{{data.location}}</td>
+        <td>{{data.filesize * 0.001 + 'KB'}}</td>
+        <td>{{data.created| date : "dd.MM.y hh:mm "}}</td>
+        <td>{{data.user_count}}</td>
+        <td *ngIf="data.updated">{{data.updated| date : "dd.MM.y hh:mm "}}</td>
+        <td *ngIf="!data.updated">-</td>
+        <td>{{data.post_count}}</td>
+        <td tappable [ngClass]="data.highlighted ?'yellow':'grey'" (click)="changeHighlighted(data._id,i)"><i class="fa fa-star" aria-hidden="true"></i></td>
+        <td tappable [ngClass]="[data.status=='Archived'?'text_archive':'grey',data.status=='Active'?'green':'grey']">{{data.status}} </td>
+        <td tappable class="star" [routerLink]="['/layouts/view-layout', data._id]">View Layout</td>
+        <td tappable class="star ">
+          <div class="edit_field" [routerLink]="['/layouts/edit-layout', data._id]">Edit</div>
+        </td>
+        <td tappable> <i class="fa fa-trash-o trash" aria-hidden="true" (click)="changeStatus(data._id,'Archived',i)" *ngIf="data.status!=='Archived'"></i></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- <ul class="pagination justify-content-end" *ngIf="layout && layout.length">
+  <li class="page-item "><a class="page-link " (click)="findPrev()">Prev</a></li>
+
+  <li class="page-item "><a class="page-link " (click)="findNext()">Next</a></li>
+</ul> -->
+
+<!-- <div class="pagination">
+  <div class="pagination-previous">
+    <a (click)="findPrev()" style="border: 1px solid;padding: 6px;">Prevoius </a>
+  </div>
+  <div *ngFor="let page of pages" class="pagination_border">
+    <div [ngClass]="page==current_page?'pagination_border_purple':'pagination_border'">
+      <a (click)="getCurrentPage(page)" class="ngx-pagination">
+        <span>{{ page }}</span>
+        </a>
+    </div>
+  </div>
+  <div class="pagination-next">
+    <a (click)="findNext()" style="border: 1px solid;padding: 6px;"> Next </a>
+  </div>
+</div> -->
+
+
+
+<!-- <pagination-template #p="paginationApi" (pageChange)="pageChange.emit($event)" class="pagination justify-content-end">
+  <div class="pagination-previous" [class.disabled]="p.isFirstPage()" class="pagination_border">
+    <a *ngIf="!p.isFirstPage()" (click)="findPrev()">
+      < </a>
+  </div>
+  <div *ngFor="let page of pages" [class.current]="p.getCurrent() === page">
+    <div [ngClass]="page==current_page?'pagination_border_purple':'pagination_border'">
+      <a (click)="getCurrentPage(page)" *ngIf="p.getCurrent() !== page" class="ngx-pagination">
+                <span>{{ page }}</span>
+            </a>
+      <div *ngIf="p.getCurrent() === page">
+        <span>{{ page }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="pagination-next" [class.disabled]="p.isLastPage()" class="pagination_border">
+    <a *ngIf="!p.isLastPage()" (click)="findNext()"> > </a>
+  </div>
+</pagination-template> -->
+
+
+<!-- <div class="row footer_section">
+  <div class="col-sm-2">
+    <div class="green_box">Total Layouts</div>
+    <div class="count_text" *ngIf="layout">{{total_count}}</div>
+  </div>
+  <div class="col-sm-2">
+    <div class="green_box ">Selected Layouts</div>
+    <div class="count_text">{{selected_layout}}</div>
+  </div>
+  <div class="col-3 ">
+    <div tappable>
+      <i class="fa fa-print font_icon" aria-hidden="true" style="margin-right:35px;" (click)="print()" tappable></i>
+      <i class="fa fa-download font_icon" aria-hidden="true" (click)="download()" tappable></i>
+    </div>
+  </div>
+</div> -->
+
+<div class="user_btns" *ngIf="layout && layout.length">
+  <ul>
+    <li><button class="btn">Total Layouts</button>
+      <p *ngIf="layout">{{total_count}}</p>
+    </li>
+    <li><button class="btn">Selected Layouts</button>
+      <p>{{selected_layout}}</p>
+    </li>
+    <li tappable><img class="image_css" src='assets/img/download-to-storage-drive.png' (click)="download()" />
+      <p></p>
+    </li>
+    <li tappable><img class="image_css" src='assets/img/printer-tool.png' (click)="print()" />
+      <p></p>
+    </li>
+  </ul>
+</div>
+<div id="print-section1" style="display:none">
+
+  <table class="table table-responsive table-hover allSticker" *ngIf="!selectedCategory">
+    <thead>
+      <tr>
+        <th> Sr.No. </th>
+        <th> Layout Category Id </th>
+        <th>Layout Category </th>
+        <th>Layout Species </th>
+        <th>Location will be used </th>
+        <th class="long_text_database">Layout Category Database </th>
+        <th class="long_text_database">Registration Date and Time</th>
+        <th class="long_text_database">Number of Layouts in it</th>
+        <th class="long_text_no">Last Edited Date and time </th>
+        <th class="long_text_no"> Number of total posts</th>
+        <th>Category Status</th>
+        <th></th>
+        <th></th>
+        <th class="text_archive">Archive</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="layout && layout.length">
+      <div *ngFor="let data of layout;let i=index;">
+        <tr *ngIf="data.checked" class="k-alt">
+
+          <td class="checbox_field">{{i+1}}</td>
+
+          <td class="id_underline">{{data._id}}</td>
+          <td>
+            {{data.name}}
+          </td>
+          <td>-</td>
+          <td>{{data.location}}</td>
+          <td>0 kb</td>
+          <td>{{data.created| date : "dd.MM.y hh:mm "}}</td>
+          <td>{{data.layout_count}}</td>
+          <td *ngIf="data.updated">{{data.updated| date : "dd.MM.y hh:mm "}}</td>
+          <td *ngIf=!data.updated>-</td>
+          <td>{{data.layout_count}}</td>
+          <td tappable [ngClass]="[data.status=='Archived'?'text_archive':'grey',data.status=='Active'?'green':'grey']">{{data.status}} </td>
+          <td tappable class="star">View Category</td>
+          <td tappable class="star ">
+            <div class="edit_field" [routerLink]="'/layouts/edit-layout-category'">Edit</div>
+          </td>
+          <td tappable (click)="editCategory(data._id,'Archived',i)"> <i class="fa fa-trash-o trash" aria-hidden="true"></i></td>
+        </tr>
+      </div>
+    </tbody>
+  </table>
+  <table class="table table-responsive table-hover allSticker" *ngIf="selectedCategory">
+    <thead>
+      <tr>
+        <th> Sr.No. </th>
+        <th> Thumbnail </th>
+        <th> Layout Id </th>
+        <th>Artist Username </th>
+        <th>Layout Category </th>
+        <th>Layout Species </th>
+        <th>Location will be used </th>
+        <th class="long_text_database">Layout Database </th>
+        <th class="long_text_database">Registration Date and Time</th>
+        <th class="long_text_database">Number of users used it</th>
+        <th class="long_text_no">Edit Date </th>
+        <th class="long_text_no"> Number of total posts</th>
+        <th><i class="fa fa-star star" aria-hidden="true"></i>HighLight/Unhighlight </th>
+        <th>Layout Status</th>
+        <th></th>
+        <th></th>
+        <th class="text_archive">Archive</th>
+      </tr>
+    </thead>
+    <tbody>
+      <div *ngFor="let data of layout;let i=index;">
+        <tr *ngIf="data.checked" class="k-alt">
+          <td>
+            <tr>
+              <td class="checbox_field">
+                <input type="checkbox" name="{{'select'+i}}" [(ngModel)]="selected[i]" (ngModelChange)="selectLayout($event,data._id,selected[i],i)"><br>
+              </td>
+              <td class="checbox_field">{{i+1}}</td>
+            </tr>
+          </td>
+          <td><img class="img_thumbnail" [src]="imageUrl + data.photo"></td>
+          <td class="id_underline">{{data._id}}</td>
+          <td>{{data.artist && data.artist.username?data.artist.username:'--'}}</td>
+          <td *ngIf="data.categoryId.length">
+            <div *ngFor="let cat of data.categoryId">{{cat.name}} </div>
+          </td>
+          <td *ngIf="!data.categoryId.length">
+            <div>{{data.categoryId.name}} </div>
+          </td>
+          <td *ngIf="data.speciesId">{{data.speciesId.name}}</td>
+          <td *ngIf="!data.speciesId"></td>
+          <td>{{data.location}}</td>
+          <td>{{data.filesize * 0.001 + 'KB'}}</td>
+          <td>{{data.created| date : "dd.MM.y hh:mm "}}</td>
+          <td>{{data.user_count}}</td>
+          <td *ngIf="data.updated">{{data.updated| date : "dd.MM.y hh:mm "}}</td>
+          <td *ngIf="!data.updated">-</td>
+          <td>{{data.post_count}}</td>
+          <td tappable [ngClass]="data.highlighted ?'yellow':'grey'" (click)="changeHighlighted(data._id,i)"><i class="fa fa-star" aria-hidden="true"></i></td>
+          <td tappable [ngClass]="[data.status=='Archived'?'text_archive':'grey',data.status=='Active'?'green':'grey']">{{data.status}} </td>
+          <td tappable class="star">View Layout</td>
+          <td tappable class="star ">
+            <div class="edit_field">Edit</div>
+          </td>
+          <td tappable (click)="changeStatus(data._id,'Archived',i)"> <i class="fa fa-trash-o trash" aria-hidden="true"></i></td>
+        </tr>
+      </div>
+    </tbody>
+  </table>
+</div>

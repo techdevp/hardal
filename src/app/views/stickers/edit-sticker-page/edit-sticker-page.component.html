@@ -1,0 +1,125 @@
+<div class="container-fluid">
+  <div class="alert alert-success" *ngIf="show_msg">
+    {{show_msg}}
+  </div>
+  <!-- <div class="Searchtype-input"><input type="text" id="search" placeholder="Search to type"></div> -->
+  <ng4-loading-spinner> </ng4-loading-spinner>
+  <div class="row mb-1">
+    <div class="col-sm-3 col-12"> Choose your sticker pages</div>
+    <div class="col-sm-6 col-12 selct_sizeset">
+      <select class="dropbutton" style="max-width:100%;" [(ngModel)]="selectedPage" (change)="getPage(selectedPage)">
+          <option [ngValue]="undefined" disabled  selected>Select Page</option>
+          <option *ngFor="let page of page_info" value = "{{page._id}}">
+             <span> {{page.name}} </span>
+          </option>
+      </select>
+    </div>
+    <div class="float-right col-12 col-sm-3  trash_box">
+      <i class="fa fa-trash-o" (click)="deletePage(selectedPage)"></i>
+    </div>
+  </div>
+  <!-- <div class="row">
+    <div class="col-3">Edit your Sticker Pages</div>
+    <div class="col-9 custom_input"><input type="text" [(ngModel)]="selected_page">
+      <div class="col-2 float-right" style="padding:0px;border:0px;"><i class="fa fa-trash-o" (click)="deletePage(selectedPage)"></i></div>
+    </div>
+  </div> -->
+  <div class="row edit_box align-items-center">
+    <div class="col-12 col-sm-3">Edit your Sticker Page Name</div>
+    <div class="col-12 col-sm-6 category-input layout_input">
+      <tabset>
+        <tab heading="English" id="tab1"><input type="text" [(ngModel)]="page_name" placeholder="Sticker Page name"></tab>
+        <tab heading="Spanish"><input type="text" [(ngModel)]="page_name_es" placeholder="Sticker Page name"></tab>
+        <tab heading="Turkish"><input type="text" [(ngModel)]="page_name_tr" placeholder="Sticker Page name"></tab>
+        <tab heading="Portuguese"><input type="text" [(ngModel)]="page_name_pt" placeholder="Sticker Page name"></tab>
+      </tabset>
+    </div>
+    <div class="float-right col-12 col-sm-2 ">
+      <button tappable class="save-button btn btn-warning btn_new " (click)="updatePage()">Update</button>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div tappable class="col-3 text-center">
+      <input hidden id="upload_photo" class="input-file UPLo" type="file" accept="image/png" (change)="onFileSelect($event)" multiple required>
+      <div class="profile-pic">
+        <label tappable for="upload_photo"><img  class="img-fluid pic " src="./assets/img/avatars/8T65jX9Gc.png"></label>
+      </div>
+      <label tappable for="upload_photo" class="upload_multiple" text-center>Upload Multiple Stickers</label>
+    </div>
+  </div>
+  <div class="card-header">
+    LOCAL IMAGE
+  </div>
+  <div class="row">
+    <div *ngFor="let image_sticker of table_array;let i = index" class="col-lg-3">
+      <input hidden id="upload_photo56" type="file" (change)="onFileEdit($event,i)" accept="image/png" required>
+      <div class="uploader-box mt-2">
+        <div class="profile-pic">
+          <label tappable for="upload_photo56" class="change"><img  class="img-fluid pic"  [src]='image_sticker' (click) = "getIndex(i)"></label>
+          <label tappable for="upload_photo56" class="upload_multiple" text-center (click)="getIndex(i)">Edit Image</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="p-2"> <button type="button" class="btn btn-warning btn_new float-right" (click)="doneEdit()">SAVE</button></div>
+
+
+  <hr>
+  <!-- <p> {{info_msg}}</p> -->
+  <div class="card-header">
+    UNPUBLISHED IMAGE
+  </div>
+  <div class="row" *ngIf="unpublished_arr && edit_sticker">
+    <div tappable class="col-3 text-center uploader-box" *ngFor="let edit of unpublished_arr">
+      <input hidden id="upload_photo55" type="file" (change)="fileChangeEventOfSticker($event,edit._id)" accept="image/png" required>
+      <div class="profile-pic" *ngIf="edit">
+        <label tappable for="upload_photo55" class="change"><img class="img-fluid pic pic " [src]='sticker_url + edit.filename' (click)="diclick(edit._id)"></label>
+        <label tappable for="upload_photo55" class="upload_multiple" (click)="diclick(edit._id)" text-center>Change Image</label>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="card-header">
+    PUBLISHED IMAGE
+  </div>
+  <div class="row" *ngIf="published_arr && edit_sticker">
+    <div tappable class="col-3 text-center uploader-box" *ngFor="let edit of published_arr">
+      <input hidden id="upload_photo57" type="file" (change)="fileChangeEventOfSticker($event,edit._id)" accept="image/png" required>
+      <div class="profile-pic" *ngIf="edit">
+        <label tappable for="upload_photo57" class="change"><img class="img-fluid pic pic" [src]='sticker_url + edit.filename' (click)="diclick(edit._id)"></label>
+        <label for="upload_photo57" class="upload_multiple" tappable (click)="diclick(edit._id)" text-center>Change Image</label>
+      </div>
+    </div>
+  </div>
+  <div class="p-2 "> <button type="button" class="float-right btn btn-warning btn_new justify-content-end " (click)="publishEdit()">Publish</button></div>
+  <table class="table table-responsive table-bordered table-hover allSticker" id="MyTbl ">
+    <thead>
+
+      <tr>
+        <th width="20% "> Sr.No. </th>
+        <th class="arrow_th"></th>
+        <th width="20% "> Thumbnail </th>
+        <th width="20% "> Sticker Id </th>
+        <th width="20% ">No.of Use </th>
+        <th width="30% "> Created Date </th>
+        <th colspan="2">Status</th>
+
+      </tr>
+
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of edit_sticker; let i=index ">
+        <td width="20% ">{{i+1}}</td>
+        <td><img class="down arrow" src='./assets/img/ic_down_arrow.png' (click)="swapDownCrete(user._id) "><img class="up arrow" src='./assets/img/ic_up_arrow.png' (click)="swapUpCreate(user._id) ">
+          <td width="20% "><img class="img-thumbnail " [src]="sticker_url + user.filename "></td>
+          <td width="20% ">{{user._id}}</td>
+          <td width="20% "></td>
+          <td width="30% ">{{user.created | date : "dd.MM.y " }}</td>
+          <td tappable [ngClass]="{ 'pink':user.status==true, 'white':user.status==false} " tappable (click)="doActive(user._id,user.status) ">Active </td>
+          <td tappable [ngClass]="{ 'pink':user.status==false, 'white':user.status==true} " tappable (click)="doPassive(user._id,user.status) ">Passive</td>
+          <td style="background: #f1ebd9;" tappable (click)="deleteEdit(user._id,user.pageId)">DELETE</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

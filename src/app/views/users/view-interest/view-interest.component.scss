@@ -1,0 +1,257 @@
+.container {
+  background-color: white!important;
+}
+
+.profile-pic {
+  background: #eaeaea;
+  text-align: center;
+  border-radius: 7px;
+}
+
+p.upload {
+  background: #b1b1b1;
+  text-align: center;
+  border-radius: 4px;
+  color: #fff;
+  padding: 3px 0;
+}
+
+.category-input input {
+  width: 100%;
+  box-shadow: 1px 1px 0 0 #eee;
+  border: 1px solid #eee;
+  height: 30px;
+}
+
+.layout-cate {
+  padding: 15px 0;
+  margin-left: -2px;
+  margin-bottom: 20px;
+}
+
+.btn_new {
+  // padding: 8px 67px;
+  // border-radius: 15px;
+}
+
+.btn_remove {
+  padding: 7px 15px;
+  border-radius: 15px;
+  background: red;
+}
+
+.all_header {
+  background-color: #7db5fb;
+  text-align: center;
+  color: white;
+  padding: 5px 0;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.all_header {
+  margin-top: -30px;
+}
+
+.arrow_icon {
+  color: white;
+  font-size: 27px;
+}
+
+.search_name {
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.060) !important;
+  height: 31px!important;
+  padding: 5px;
+}
+
+.search_input {
+  padding-left: 90px;
+  background-color: rgba(0, 0, 0, 0.060) !important;
+  margin-left: 10px !important;
+  margin-left: -15px !important;
+}
+
+.mandatory_text {
+  font-size: 13px;
+}
+
+.arrow_th {
+  min-width: 50px;
+  margin: 0 -3px;
+}
+
+.arrow {
+  max-width: 13px;
+  display: inline-block;
+  padding: 0 3px;
+}
+
+.pink {
+  background-color: pink;
+  color: black;
+}
+
+.white {
+  background-color: white;
+  color: black;
+}
+
+.layout_name {
+  background: #f5c2ca;
+  font-weight: bold;
+  padding: 2px;
+  width: 20%;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.layout_input {
+  padding: 0 !important;
+}
+
+.table_row tbody tr {
+  background-color: rgba(0, 0, 0, 0.075) !important;
+}
+
+.table_row th {
+  background: white !important;
+  border: none !important;
+}
+
+.table_row tr td:nth-last-child(-n+5) {
+  border: 0;
+}
+
+.drop_down {
+  padding: 0 !important;
+  border-style: solid;
+  border-width: 1px;
+  border-left: none;
+}
+
+.orange_color {
+  background-color: #fde2ba !important;
+  padding-left: 180px !important;
+  max-width: 100% !important;
+}
+
+.fields_data {
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+.star_position {
+  position: relative;
+  font-size: 24px;
+  color: #f70707;
+  // margin-left: 14px;
+  /* margin-bottom: 75px; */
+  margin-top: -5px;
+}
+
+.search_artist {
+  padding: 0 !important;
+  font-size: 2px!important;
+}
+
+.artist_input {
+  width: 100%;
+  padding: 0;
+  text-align: center;
+  font-size: 17px;
+  // border: none;
+}
+
+.set_top {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.edit_input {
+  border: 1px solid black;
+  width: 51%;
+}
+
+.edit_layout_text {
+  background: #f5c2ca;
+  font-weight: bold;
+  padding: 4px;
+  width: 100%;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+  color: black;
+}
+
+.edit_box {
+  margin-bottom: 30px;
+}
+
+.select_box {
+  padding: 7px;
+}
+
+.all_header.layout_header {
+  background: #313541;
+  color: #f1b35b;
+  font-weight: bold;
+  font-size: 17px;
+  margin-top: 44px;
+  padding: 12px !important;
+}
+
+.btn-add {
+  background: #ec6a6a;
+  border: #ec6a6a;
+  border-radius: 14px;
+  color: white;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.green_box {
+  background: #71bd1a;
+  border-radius: 25px;
+  padding: 12px;
+  text-align: center;
+  color: white;
+}
+
+.count_text {
+  color: #71bd1a;
+  text-align: center;
+  margin-top: 12px;
+}
+
+.font_icon {
+  font-size: 50px;
+}
+
+.footer_section {
+  margin-top: 230px;
+  margin-left: 250px;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  overflow-x: scroll;
+
+  .flex-item {
+    flex: 1;
+    margin-right: 5px;
+  }
+}
+
+.archive {
+  border: 2px solid black;
+  margin-right: 12px;
+  color: #b38600;
+  text-align: center;
+  font-weight: bolder;
+}
+
+.bottom_boxes {
+  margin-top: 300px;
+}

@@ -1,0 +1,83 @@
+<div class="all_header layout_header">
+  <div class="container">
+    <div class="row">
+      <i class="fa fa-arrow-left arrow_icon" aria-hidden="true" (click)="backClicked()" tappable></i>
+      <div class="col-sm-6 col-xl-4 search_div">
+        <!-- <input type="text" class="search-input search_field" placeholder="Search Layouts or Layout Category" [(ngModel)]="search_text" (focusout)="checkBlur(search_text)">
+        <span class="input-group-addon search-icon"><i class="icon-magnifier" tappable  (click)="searchLayout(search_text)"></i></span> -->
+      </div>
+      <div class="col-sm-3 col-xl-4">
+        {{title}}
+      </div>
+      <div class="col-sm-3 col-xl-4">
+        <!-- <button type="button" class="btn btn-add" [routerLink]="">Add a new user</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="alert alert-success" *ngIf="successMessage">
+  {{successMessage}}
+</div>
+<div class="alert alert-danger" *ngIf="error_msg">
+  {{error_msg}}
+</div>
+<!-- <div class="alert alert-danger" *ngIf="errormsg">
+  {{errormsg}}
+</div> -->
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class=" container card" *ngIf="id=='add'">
+  <form class="LOGIN_form" #adminForm="ngForm" (ngSubmit)="submitForm(adminForm.value,adminForm)">
+    <div class="row text-center email_text">
+      <span class="mb-3 underline">ENTER A GMAIL ADDRESS TO INVITE A USER</span>
+    </div>
+    <div class="row edit_box mt-3">
+      <div class="col-4">
+        <input type="text" email required class=" input_email p-l-2" #user_email="ngModel" name="email" [(ngModel)]="email" placeholder="Type a gmail account" (focus)="focuesd()">
+      </div>
+      <div class="col-5">
+        <div class="role_dropdown p-1" [ngClass]="{'show-dropdown':role}">
+          <ul (click)="role=!role">{{selected_role}}
+            <i class="fa fa-chevron-down arrow " aria-hidden="true" *ngIf="!role"></i>
+            <i class="fa fa-chevron-up arrow " aria-hidden="true" *ngIf="role"></i>
+          </ul>
+          <ul *ngIf="role" class="border_bottom pt-2 pb-1" (click)="setRole('Admin user');role=!role"> Admin user</ul>
+          <ul *ngIf="role" (click)="setRole('Layout Admin user');role=!role">Layout Admin user</ul>
+        </div>
+      </div>
+      <div class="col-3">
+        <button type="submit" class="btn btn-danger invite_button" tappable>Send invitation</button>
+      </div>
+    </div>
+  </form>
+  <div>
+    <p class="text-danger text-center justify-content-center" [hidden]="!errormsg">{{errormsg}}</p>
+  </div>
+</div>
+<div class=" container " *ngIf="id!='add' && user">
+  <form class="LOGIN_form" #adminForm="ngForm" (ngSubmit)="update(adminForm.value,adminForm)">
+    <div class="row text-center email_text">
+      <!-- <span class="mb-3 underline">VIEW ADMIN USER DETAILS</span> -->
+    </div>
+    <div class="row edit_box mt-3">
+      <div class="col-4">
+        <input type="text" readonly email required class=" input_email p-l-2" #user_email="ngModel" name="email" [(ngModel)]="user.email" placeholder="Type a gmail account" (focus)="focuesd()">
+      </div>
+      <div class="col-5">
+        <div class="role_dropdown p-1" [ngClass]="{'show-dropdown_view':role}">
+          <ul (click)="role=!role">{{selected_role}}
+            <i class="fa fa-chevron-down arrow " aria-hidden="true" *ngIf="!role"></i>
+            <i class="fa fa-chevron-up arrow " aria-hidden="true" *ngIf="role"></i>
+          </ul>
+          <ul *ngIf="role && user.admin_type!=2" class="border_bottom_view pt-2 pb-1" (click)="setRole('Admin user');role=!role"> Admin user</ul>
+          <ul *ngIf="role && user.admin_type!=3" class="border_bottom_view pt-2 pb-1" (click)="setRole('Layout Admin user');role=!role">Layout Admin user</ul>
+        </div>
+      </div>
+      <div class="col-3">
+        <button type="submit" class="btn btn-danger invite_button" tappable>Update Role</button>
+      </div>
+    </div>
+  </form>
+  <div>
+    <p class="text-danger text-center justify-content-center" [hidden]="!errormsg">{{errormsg}}</p>
+  </div>
+</div>

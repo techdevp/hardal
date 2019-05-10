@@ -1,0 +1,209 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="all_header">TT List</div>
+
+<div class="row layout-cate" mt-9>
+  <div class="col-1"></div>
+  <div class="col-3" class="search_name">SEARCH</div>
+  <div class="col-4 category-input "><input type="text" id="search" placeholder="Search hashtag id or hashtag" [(ngModel)]="hashtag_text" (ngModelChange)="searchHashtag($event,hashtag_text)" class="search_input"></div>
+  <div class="col-2 choose_fields">Choose date</div>
+  <div class="col-2 choose_fields">Choose location</div>
+</div>
+
+<div id="print-section">
+  <table class="table table-responsive table-hover table-bordered allSticker">
+    <thead>
+      <tr>
+        <th> Sr.No. </th>
+        <th> Hashtag Id </th>
+        <th class="long_text_database">Hashtag </th>
+        <th class="long_text_date">Hashtag Created Date </th>
+        <th class="long_text_date">Number of use </th>
+        <th class="long_text_date">Hashtag Post database </th>
+        <th class="long_text_date">Last used </th>
+        <th class="long_text_date">Location </th>
+        <th class="long_text_date">Language </th>
+        <th class="long_text_date">Views </th>
+        <th class="long_text_date">Likes </th>
+        <th class="long_text_date">Comments </th>
+        <th class="long_text_date">Shares </th>
+        <th class="long_text_date">Interaction </th>
+        <th class="long_text_date">Reports </th>
+        <th class="long_text_date">TT list </th>
+        <th colspan="2">Status</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="hashtags && hashtags.length">
+      <tr *ngFor="let hashtag of hashtags| orderBy: orderby: order;let i=index">
+        <td>{{i+1}}</td>
+        <td>{{hashtag._id}}</td>
+        <td>{{hashtag.name}}</td>
+        <td>{{hashtag.created | date : "dd.MM.y " }}</td>
+        <td>56</td>
+        <td>{{hashtag.filesize * 0.001 + 'KB'}} </td>
+        <td>{{hashtag.created | date : "dd.MM.y " }}</td>
+        <td>India</td>
+        <td>English</td>
+        <td>324</td>
+        <td>324</td>
+        <td>324</td>
+        <td>324</td>
+        <td>%04</td>
+        <td>Added to list</td>
+        <td>Spam</td>
+        <td tappable [ngClass]="{ 'pink':hashtag.status==true, 'white':hashtag.status==false} " tappable (click)="doActive(hashtag._id,hashtag.status) ">Active </td>
+        <td tappable [ngClass]="{ 'pink':hashtag.status==false, 'white':hashtag.status==true} " tappable (click)="doPassive(hashtag._id,hashtag.status) ">Passive</td>
+
+        <td tappable style="background: #f1ebd9;" (click)="viewPost(hashtag,i)">View Posts</td>
+        <td style="background:red;" tappable (click)="deleteHashtag(hashtag._id,i) ">Delete Hashtag</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="row " *ngIf="hashtags">
+  <div class="col-sm-4 ">
+    <div style="background: #a3d696; " class="col-6 float-left ">Total Hashtags</div>
+    <div style="background: #caefc0; " class="col-6 float-right ">{{hashtags.length}}</div>
+  </div>
+  <div class="col-sm-4 ">
+    <div style="background: #a3d696; " class="col-6 float-left ">Selected Hashtags</div>
+    <div style="background: #caefc0; " class="col-6 float-right ">'N/A'</div>
+  </div>
+  <div class="col-sm-4 ">
+    <div tappable style="background: #e69603;text-align: center;border: 2px solid; " class="col-6 float-left " (click)="print() ">Printout</div>
+    <div tappable style="background: #e69603;text-align: center;border: 2px solid; " class="col-6 float-right " (click)="csv() ">Download</div>
+  </div>
+</div>
+
+<div class="table-responsive " *ngIf="hashtags">
+  <div class="sticker_data">
+    <div class="sticker-size">
+      <h5 class="filter">filter</h5>
+    </div>
+    <div class="sticker-size">
+      <h5 class="allclas" [class.active_link]="temp_object.all" (click)="getAll();getAllPage('all')" tappable>All</h5>
+    </div>
+    <div class="sticker-size">
+      <h5>Hashtag Id</h5>
+      <ul>
+        <li [class.active_link]="temp_object.dec_id" tappable (click)="setByDecId($event);getAllPage('dec_id')">Decreasing</li>
+        <li [class.active_link]="temp_object.inc_id" tappable (click)="setByIncId($event);getAllPage('inc_id')">Growing</li>
+      </ul>
+    </div>
+    <div class="sticker-size ">
+      <h5>Hashtag</h5>
+      <ul>
+        <li [class.active_link]="temp_object.dec_db" tappable (click)="setByDecSize();getAllPage('dec_db')">A-Z</li>
+        <li [class.active_link]="temp_object.inc_db" tappable (click)="setByIncSize();getAllPage('inc_db')">Z-A</li>
+      </ul>
+    </div>
+    <div class="sticker-size ">
+      <h5>Hashtag Date</h5>
+
+      <ul>
+        <li tappable (click)="getAllPage('dec_created_date')"> <input type='date'></li>
+        <!-- <li [class.active_link]="temp_object.inc_created_date" tappable (click)="setByIncDate();getAllPage('inc_created_date')">Growing</li> -->
+      </ul>
+    </div>
+    <div class="sticker-size">
+      <h5>Number of use</h5>
+      <ul>
+        <li [class.active_link]="temp_object.user_dec" tappable (click)="getAllPage('user_dec')">Decreasing</li>
+        <li [class.active_link]="temp_object.user_inc" tappable (click)="getAllPage('user_inc')">Growing</li>
+      </ul>
+    </div>
+
+    <div class="sticker-size ">
+      <h5>Hashtag Post Database</h5>
+      <ul>
+        <li [class.active_link]="temp_object.used_post_dec" tappable (click)="getAllPage('used_post_dec')">Decreasing</li>
+        <li [class.active_link]="temp_object.used_post_inc" tappable (click)="getAllPage('used_post_inc')">Growing</li>
+      </ul>
+    </div>
+    <div class="sticker-size ">
+      <h5 tappable (click)="getAllPage('edit_date')">Last Used</h5>
+      <ul>
+        <li tappable (click)="getAllPage('dec_created_date')"> <input type='date'></li>
+        <!-- <li [class.active_link]="temp_object.inc_created_date" tappable (click)="setByIncDate();getAllPage('inc_created_date')">Growing</li> -->
+      </ul>
+    </div>
+    <div class="sticker-size ">
+      <h5 tappable (click)="getAllPage('edit_date')">Location</h5>
+      <ul>
+        <li tappable (click)="getAllPage('dec_created_date')"> <input type='text'></li>
+      </ul>
+    </div>
+    <div class="sticker-size ">
+      <h5 tappable (click)="getAllPage('edit_date')">Language</h5>
+      <ul>
+        <li tappable (click)="getAllPage('dec_created_date')"> <input type='text'></li>
+      </ul>
+    </div>
+
+    <div class="sticker-size ">
+      <h5>Views</h5>
+      <ul>
+        <li [class.active_link]="temp_object.used_post_dec" tappable (click)="getAllPage('used_post_dec')">Decreasing</li>
+        <li [class.active_link]="temp_object.used_post_inc" tappable (click)="getAllPage('used_post_inc')">Growing</li>
+      </ul>
+    </div>
+
+    <div class="sticker-size ">
+      <h5>Likes</h5>
+      <ul>
+        <li [class.active_link]="temp_object.used_post_dec" tappable (click)="getAllPage('used_post_dec')">Decreasing</li>
+        <li [class.active_link]="temp_object.used_post_inc" tappable (click)="getAllPage('used_post_inc')">Growing</li>
+      </ul>
+    </div>
+    <div class="sticker-size ">
+      <h5>Comments</h5>
+      <ul>
+        <li [class.active_link]="temp_object.used_post_dec" tappable (click)="getAllPage('used_post_dec')">Decreasing</li>
+        <li [class.active_link]="temp_object.used_post_inc" tappable (click)="getAllPage('used_post_inc')">Growing</li>
+      </ul>
+    </div>
+    <div class="sticker-size ">
+      <h5>Shares</h5>
+      <ul>
+        <li [class.active_link]="temp_object.used_post_dec" tappable (click)="getAllPage('used_post_dec')">Decreasing</li>
+        <li [class.active_link]="temp_object.used_post_inc" tappable (click)="getAllPage('used_post_inc')">Growing</li>
+      </ul>
+    </div>
+    <div class="sticker-size ">
+      <h5>Interaction</h5>
+      <ul>
+        <li [class.active_link]="temp_object.used_post_dec" tappable (click)="getAllPage('used_post_dec')">Decreasing</li>
+        <li [class.active_link]="temp_object.used_post_inc" tappable (click)="getAllPage('used_post_inc')">Growing</li>
+      </ul>
+    </div>
+    <div class="sticker-size ">
+      <h5>Report</h5>
+      <ul>
+        <li [class.active_link]="temp_object.used_post_dec" tappable (click)="getAllPage('used_post_dec')">Decreasing</li>
+        <li [class.active_link]="temp_object.used_post_inc" tappable (click)="getAllPage('used_post_inc')">Growing</li>
+        <li [class.active_link]="temp_object.used_post_inc" tappable>Selected report reason</li>
+      </ul>
+    </div>
+    <div class="sticker-size ">
+      <h5>Trend topic list</h5>
+      <ul>
+        <li [class.active_link]="temp_object.used_post_dec" tappable (click)="getAllPage('used_post_dec')">Date selection</li>
+        <li [class.active_link]="temp_object.used_post_inc" tappable (click)="getAllPage('used_post_inc')">Location selection</li>
+        <li [class.active_link]="temp_object.used_post_inc" tappable>Language selection</li>
+      </ul>
+    </div>
+
+    <div class="sticker-size ">
+      <h5>Status</h5>
+      <div class="row ">
+        <div class="col-6 " [class.active_link]="temp_object.status_active">
+          <span class="activehover" tappable (click)="showActive();getAllPage('status_active')">Active</span>
+        </div>
+        <div class="col-6 " [class.active_link]="temp_object.status_passive">
+          <span class="activehover" tappable (click)="showPassive();getAllPage('status_passive')">Passive</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

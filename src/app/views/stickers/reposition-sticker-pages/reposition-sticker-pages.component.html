@@ -1,0 +1,32 @@
+<div class="alert alert-success" *ngIf="successMessage">
+  {{successMessage}}
+</div>
+<div class="alert alert-danger" *ngIf="error_msg">
+  {{error_msg}}
+</div>
+<table class="table table-responsive table-hover table-bordered allSticker" *ngIf="pages">
+  <thead>
+    <tr>
+      <th> Sr.No. </th>
+      <th class="arrow_th"></th>
+      <th> Sticker Page Id </th>
+      <th class="long_text_database">Page Name </th>
+      <th class="long_text_date"> Created Date </th>
+      <!-- <th colspan="2">Status</th> -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let page of pages | orderBy :orderby :order; let i=index;let last=last;">
+      <td>{{i+1}}</td>
+      <td>
+        <img class="down arrow" *ngIf="!last" src='./assets/img/ic_down_arrow.png' (click)="swapDownPage(page._id,i+1,i) ">
+        <img class="up arrow" *ngIf="i!=0" src='./assets/img/ic_up_arrow.png' (click)="swapUpPage(page._id,i+1,i) ">
+      </td>
+      <td>{{page._id}}</td>
+      <td>{{page.name}}</td>
+      <td>{{page.created | date : "dd.MM.y" }}</td>
+      <!-- <td [ngClass]="{ 'pink':page.status==true, 'white':page.status==false} " tappable (click)="doActive(page._id,page.status) ">Active </td>
+      <td [ngClass]="{ 'pink':page.status==false, 'white':page.status==true} " tappable (click)="doPassive(page._id,page.status) ">Passive</td> -->
+    </tr>
+  </tbody>
+</table>

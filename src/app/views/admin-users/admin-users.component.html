@@ -1,0 +1,57 @@
+<div class="alert alert-success" *ngIf="show_msg ">
+  {{show_msg}}
+</div>
+<ng4-loading-spinner> </ng4-loading-spinner>
+
+<div class="all_header layout_header">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-xl-4 search_div">
+        <!-- <input type="text" class="search-input search_field" placeholder="Search Layouts or Layout Category" [(ngModel)]="search_text" (focusout)="checkBlur(search_text)">
+        <span class="input-group-addon search-icon"><i class="icon-magnifier" tappable  (click)="searchLayout(search_text)"></i></span> -->
+      </div>
+      <div class="col-sm-3 col-xl-4">
+        ADMIN USERS
+      </div>
+      <div class="col-sm-3 col-xl-4">
+        <button type="button" class="btn btn-add" [routerLink]="['add-admin','add']">Add a new user</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="alert alert-success" *ngIf="successMessage">
+  {{successMessage}}
+</div>
+<div class="alert alert-danger" *ngIf="error_msg">
+  {{error_msg}}
+</div>
+<div id="print-section" *ngIf="users && users.length">
+  <table class="table table-responsive table-hover allSticker">
+    <thead>
+      <tr>
+        <th> Name </th>
+        <th>Email </th>
+        <th> Role </th>
+        <th>Registration Date and Time</th>
+        <th>Last login Date and Time</th>
+        <th></th>
+        <th class="text_archive">Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="k-alt" *ngFor="let data of users;let i=index">
+
+        <td>{{data.name}}</td>
+        <td>{{data.email}}</td>
+        <td *ngIf="data.admin_type==3">Layout Admin</td>
+        <td *ngIf="data.admin_type==2">Admin</td>
+        <td>{{data.created|date:"dd:MM:yy hh:mm:ss"}}</td>
+        <td>{{data && data.last_login? (data.last_login|date:"dd:MM:yy hh:mm:ss"):'N/A'}}</td>
+        <td tappable class="star ">
+          <div class="edit_field" [routerLink]="['add-admin',data._id]">Edit</div>
+        </td>
+        <td tappable (click)="changeType(data._id,i)"> <i class="fa fa-trash-o trash" aria-hidden="true"></i></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

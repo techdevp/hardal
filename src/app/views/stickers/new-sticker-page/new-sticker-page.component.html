@@ -1,0 +1,80 @@
+<div class="container-fluid ">
+  <div class="alert alert-success " *ngIf="show_msg ">
+    {{show_msg}}
+  </div>
+  <div class="row layout-cate align-items-center" mt-9>
+
+    <div class="col-12 col-sm-3 ">Name your Sticker Page</div>
+    <div class="col-12 col-sm-9 category-input ">
+      <div class="row align-items-center">
+        <div class="float-left col-12 col-sm-8 ">
+          <!-- <div class="col-3">Name Your Layout Category</div> -->
+          <div class="col-12 edit_box">
+            <tabset>
+              <tab heading="English" id="tab1"><input type="text" [(ngModel)]="page_name" placeholder="Sticker Page name"></tab>
+              <tab heading="Spanish"><input type="text" [(ngModel)]="page_name_es" placeholder="Sticker Page name"></tab>
+              <tab heading="Turkish"><input type="text" [(ngModel)]="page_name_tr" placeholder="Sticker Page name"></tab>
+              <tab heading="Portuguese"><input type="text" [(ngModel)]="page_name_pt" placeholder="Sticker Page name"></tab>
+            </tabset>
+          </div>
+
+          <!-- <input type="text " [(ngModel)]="page" style="width:100%; " placeholder="Name your Sticker Page "> -->
+        </div>
+        <div class="float-right col-12 col-sm-4 ">
+          <button tappable class="save-button btn btn-warning btn_new " (click)="createPage(page)">CREATE PAGE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center" *ngIf="!hide_more">
+    <div tappable class="col-3 text-center">
+      <input hidden id="upload_photo" class="input-file UPLo" type="file" accept="image/png" (change)="onFileSelect($event)" multiple required>
+      <div class="profile-pic text-center">
+        <label tappable for="upload_photo"><img  class="img-fluid pic" src="./assets/img/avatars/8T65jX9Gc.png"></label>
+      </div>
+      <label tappable for="upload_photo" class="upload_multiple" text-center>Upload Multiple Stickers</label>
+    </div>
+  </div>
+  <div class="row " *ngIf='selected_sticker'>
+    <div *ngFor="let image_sticker of table_array" class="col-lg-4 ">
+      <div class="uploader-box mt-2 ">
+        <div class="profile-pic ">
+          <label><img  class="img-fluid pic d-flex justify-content-center "  [src]='image_sticker'></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end ">
+    <div class="p-2 "> <button type="button " class="btn btn-warning btn_new " (click)="doneCreate()">SAVE</button></div>
+  </div>
+  <div class="d-flex justify-content-end ">
+    <div class="p-2 "> <button type="button " class="btn btn-success btn_new " (click)="publishSticker()">Publish</button></div>
+    <div class="p-2 "> <button type="button " class="btn btn-danger btn_new ml-2 " (click)="cancelCreate()">Cancel</button></div>
+  </div>
+  <table class="table table-responsive table-bordered table-hover allSticker" id="MyTbl ">
+    <thead>
+      <tr>
+        <th width="20% "> Sr.No. </th>
+        <th class="arrow_th"></th>
+        <th width="20% "> Thumbnail </th>
+        <th width="20% "> Sticker Id </th>
+        <th width="20% ">No.of Use </th>
+        <th width="30% "> Created Date </th>
+        <th colspan="2 ">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of table_data; let i=index ">
+        <td width="20% ">{{i+1}}</td>
+        <td><img class="down arrow" src='./assets/img/ic_down_arrow.png' (click)="swapDownCrete(user._id) "><img class="up arrow" src='./assets/img/ic_up_arrow.png' (click)="swapUpCreate(user._id) ">
+          <td width="20% "><img class="img-thumbnail " [src]="sticker_url + user.filename "></td>
+          <td width="20% ">{{user._id}}</td>
+          <td width="20% "></td>
+          <td width="30% ">{{user.created | date : "dd.MM.y " }}</td>
+          <td [ngClass]="{ 'pink':user.status==true, 'white':user.status==false} " tappable (click)="doActive(user._id)">Active </td>
+          <td [ngClass]="{ 'pink':user.status==false, 'white':user.status==true} " tappable (click)="doPassive(user._id)">Passive</td>
+          <td style="background: #f1ebd9; " (click)="deleteCreated(user._id,user.pageId) ">CANCEL</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

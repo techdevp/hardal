@@ -1,0 +1,315 @@
+.container {
+  background-color: white!important;
+}
+
+.profile-pic {
+  background: #eaeaea;
+  text-align: center;
+  border-radius: 7px;
+}
+
+p.upload {
+  background: #b1b1b1;
+  text-align: center;
+  border-radius: 4px;
+  color: #fff;
+  padding: 3px 0;
+}
+
+.category-input input {
+  width: 100%;
+  box-shadow: 1px 1px 0 0 #eee;
+  border: 1px solid #eee;
+  height: 30px;
+}
+
+.layout-cate {
+  padding: 15px 0;
+}
+
+.btn_new {
+  padding: 0 15px;
+  border-radius: 15px;
+}
+
+.edit_box {
+  margin-bottom: 30px;
+}
+
+.all_header {
+  background-color: #7db5fb;
+  text-align: center;
+  color: white;
+  padding: 5px 0;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.all_header {
+  margin-top: -30px;
+}
+
+.search_name {
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.060) !important;
+  height: 31px!important;
+  padding: 5px;
+}
+
+.search_input {
+  padding-left: 90px;
+  background-color: rgba(0, 0, 0, 0.060) !important;
+  margin-left: 10px !important;
+  margin-left: -15px !important;
+}
+
+.mandatory_text {
+  font-size: 13px;
+}
+
+.arrow_th {
+  min-width: 50px;
+  margin: 0 -3px;
+}
+
+.arrow {
+  max-width: 13px;
+  display: inline-block;
+  padding: 0 3px;
+}
+
+.pink {
+  background-color: pink;
+  color: black;
+}
+
+.white {
+  background-color: white;
+  color: black;
+}
+
+.layout_name {
+  background: #f5c2ca;
+  font-weight: bold;
+  padding: 2px;
+  width: 20%;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.layout_input {
+  padding: 0 !important;
+}
+
+.table-row tbody tr {
+  background-color: rgba(0, 0, 0, 0.075) !important;
+}
+
+.drop_down {
+  padding: 0 !important;
+  border-style: solid;
+  border-width: 1px;
+  border-left: none;
+}
+
+.orange_color {
+  background-color: #fde2ba !important;
+  padding-left: 180px !important;
+  max-width: 100% !important;
+}
+
+.fields_data {
+  margin-top: 50px;
+}
+
+.star_position {
+  position: relative;
+  font-size: 24px;
+  color: #f70707;
+  margin-left: 14px;
+  /* margin-bottom: 75px; */
+  margin-top: -33px;
+}
+
+.search_artist {
+  padding: 0 !important;
+  font-size: 2px!important;
+}
+
+.artist_input {
+  width: 100%;
+  padding: 0;
+  text-align: center;
+  font-size: 17px;
+  // border: none;
+}
+
+.set_top {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.all_header.layout_header {
+  background: #313541;
+  color: #f1b35b;
+  font-weight: bold;
+  font-size: 17px;
+  margin-top: 44px;
+  padding: 12px !important;
+}
+
+.search_field {
+  width: 323px!important;
+  font-size: 14px;
+  padding: 8px;
+}
+
+.btn-add {
+  background: #ec6a6a;
+  border: #ec6a6a;
+  border-radius: 14px;
+  color: white;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  overflow-x: scroll;
+
+  .flex-item {
+    flex: 1;
+    margin-right: 5px;
+  }
+}
+
+.name_text {
+  font-weight: bolder;
+}
+
+.button_fields {
+  margin-bottom: 25px;
+  margin-top: 30px;
+}
+
+.checbox_field {
+  border: none!important;
+  min-width: 20px!important;
+}
+
+.star {
+  color: #f7c631;
+}
+
+.text_archive {
+  color: red;
+}
+
+.trash {
+  font-size: 20px;
+}
+
+.green_box {
+  background: #71bd1a;
+  border-radius: 25px;
+  padding: 7px;
+  text-align: center;
+  color: white;
+}
+
+.count_text {
+  color: #71bd1a;
+  text-align: center;
+  margin-top: 12px;
+}
+
+.font_icon {
+  font-size: 40px;
+}
+
+.footer_section {
+  margin-top: 76px;
+}
+
+tr.k-alt:nth-child(odd) {
+  background: #bfbfbf1f;
+}
+
+.table thead th {
+  border: none!important;
+}
+
+.table td,
+.table th {
+  border: none!important;
+}
+
+.platform,
+table.allSticker th {
+  background: none!important;
+}
+
+.id_underline {
+  text-decoration: underline;
+}
+
+.star {
+  color: #f7c631;
+}
+
+.grey {
+  color: #d0d0d0;
+}
+
+.green {
+  color: green;
+}
+
+.yellow {
+  color: #f7c631;
+}
+
+.text_archive {
+  color: red;
+}
+
+.trash {
+  font-size: 20px;
+  color: #8a8a8a;
+}
+
+.user_btns li {
+  display: inline-block;
+}
+
+.user_btns {
+  text-align: center;
+}
+
+.user_btns button.btn {
+  background: #4cc302;
+  color: #fff;
+  border-radius: 25px;
+  padding: 4px 21px;
+}
+
+.user_btns p {
+  color: #4cc302;
+}
+
+.image_css {
+  margin-bottom: 53px !important;
+}
+
+.species_dropdown {
+  width: 100% !important;
+  padding: 0 !important;
+  margin-top: 20px;
+  margin-bottom:: 20px;
+}
+
+.species_select {
+  background: white;
+  border: 1px solid #bdbdbd;
+  padding: 6px;
+  width: 100%;
+}

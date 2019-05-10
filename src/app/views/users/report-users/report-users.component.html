@@ -1,0 +1,177 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="all_header layout_header" style="margin-bottom:20px">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-xl-4 search_div">
+        <input type="text" class="search-input search_field" placeholder="User name or email" [(ngModel)]="search_text">
+        <span class="input-group-addon search-icon magnifier"><i class="icon-magnifier" tappable  (click)="searchUser(search_text)"></i></span>
+      </div>
+      <div class="col-sm-3 col-xl-4">
+        REPORT USERS
+      </div>
+      <!-- <div class="col-sm-3 col-xl-4">
+        <button type="button" class="btn btn-add" [routerLink]="'/layouts/new-layout'">+Add Layout</button>
+      </div> -->
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="alert alert-success" *ngIf="successMessage">
+    {{successMessage}}
+  </div>
+  <div class="alert alert-danger" *ngIf="error_msg">
+    {{error_msg}}
+  </div>
+  <table class="table table-responsive table-bordered table-hover allSticker" id="MyTbl" *ngIf="users && users.length">
+    <thead class="small">
+      <tr>
+        <th> Sr.No. </th>
+        <th> Reporter user </th>
+        <th>Reported User Id </th>
+        <th style="min-width:200px;">Reported Username </th>
+        <th style="min-width:200px;">Reported name </th>
+        <th *ngIf="admin_type==1">Reported E-mail Address </th>
+        <th *ngIf="admin_type==1">Reported Login Time </th>
+        <th>Reported Gender </th>
+        <th style="min-width:100px;">Reported Age </th>
+        <th>Reported Ip address </th>
+        <th>Reported Location </th>
+        <th>Reported Language </th>
+        <th>Reported Follower </th>
+        <th>Reported Following </th>
+        <th>Reported Monthly Follower Increase </th>
+        <th>Reported Post </th>
+        <th>Reported Tagged Post </th>
+        <th>Reported Saved Post </th>
+        <th>Reported Publications </th>
+        <th>Reported Activities </th>
+        <th>Reported Mentions </th>
+        <th>Reported Messaging </th>
+        <th>Reported Reports </th>
+        <th>Reported Badge </th>
+        <th>Reported Interests </th>
+        <th>Report reason </th>
+        <th>Reported Status </th>
+      </tr>
+
+    </thead>
+    <tbody class="small">
+
+      <tr *ngFor="let user of users; let i = index ">
+        <td> {{i + 1}}</td>
+        <td> {{user.from && user.from.name?user.from.name:"--"}}</td>
+        <td> {{user.to && user.to._id?user.to._id:"--"}}</td>
+        <td>
+          <div class="row">
+            <div class="col-9 input_ico ">
+              <span *ngIf="!usernameEdit[i]">{{user.to && user.to.username?user.to.username:'Unknown'}}</span>
+              <!-- <input *ngIf="usernameEdit[i]" type="text" class="form-control" [(ngModel)]="user.username" style="width:200%"> -->
+              <input *ngIf="user.to && usernameEdit[i]" type="text" pattern="[a-zA-Z0-9_]+" maxlength="16" minlength="2" class="form-control" name="usrname[i]" #usrname[i]="ngModel" [(ngModel)]="user.to.username" placeholder="Username" />
+            </div>
+            <div class="col-1 link_ico " *ngIf="!usernameEdit[i] && admin_type==1">
+              <a [hidden]="usernameEdit[i] " tappable class="float-left text-danger mr-1 ">
+              <i class="icon-pencil " (click) = "usernameEdit[i]=!usernameEdit[i]">
+            </i>
+          </a>
+            </div>
+            <div class="col-1 link_ico " *ngIf="usernameEdit[i]" style="margin-left:15px">
+              <a tappable class="float-right text-primary " style="margin-left: 15px; " [hidden]="!usernameEdit[i] ">
+            <i class="fa fa-check "(click) = "updateUsername(user,user.username,userForm,i);">
+            </i>
+          </a>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="row">
+            <div class="col-9 input_ico ">
+              <span *ngIf="!nameEdit[i]">{{user.to && user.to.name?user.to.name:'Unknown'}}</span>
+              <!-- <input *ngIf="nameEdit[i]" type="text" class="form-control" name="u_name" #uname="ngModel" [(ngModel)]="user.name" pattern="^[A-Za-z0-9_]{2,16}$"> -->
+              <input *ngIf="user.to && nameEdit[i]" type="text" pattern="[a-zA-Z0-9_]+" maxlength="30" minlength="2" class="form-control" name="name[i]" #name[i]="ngModel" [(ngModel)]="user.to.name" placeholder="Name" />
+            </div>
+            <div class="col-1 link_ico " *ngIf="!nameEdit[i] && admin_type==1">
+              <a [hidden]="nameEdit[i] " tappable class="float-left text-danger mr-1 ">
+              <i class="icon-pencil " (click) = "nameEdit[i]=!nameEdit[i]">
+            </i>
+          </a>
+            </div>
+            <div class="col-1 link_ico " *ngIf="nameEdit[i]" style="margin-left:15px">
+              <a tappable class="float-right text-primary " style="margin-left: 15px; " [hidden]="!nameEdit[i] ">
+            <i class="fa fa-check "(click) = "updatename(user,user.name,userForm,i);">
+            </i>
+          </a>
+            </div>
+          </div>
+        </td>
+        <td *ngIf="admin_type==1">{{user.to && user.to.email?user.to.email:'N/A'}}</td>
+        <td *ngIf="admin_type==1">{{user.to && user.to.last_login?(user.to.last_login|date:"dd.MM.yy hh:mm:ss"):'N/A'}}</td>
+        <td>{{user.to && user.to.gender?user.to.gender:'N/A'}}</td>
+        <td>{{user.to && user.to.dob?user.to.dob:'N/A'}}</td>
+        <td>{{user.to.ip_address?user.to.ip_address:'N/A'}}</td>
+        <td>{{user.to && user.to.location?user.to.location:'N/A'}}</td>
+        <td>{{user.to && user.to.language?user.to.language:'N/A'}}</td>
+        <td>{{user.to && user.to.followers?user.to.followers.length :'N/A' }}</td>
+        <td>{{user.to && user.to.followings_count ?user.to.followings_count :'N/A' }}</td>
+        <td>{{user.to && user.to.monthly_follower_increase?user.to.monthly_follower_increase:'N/A'}}</td>
+        <td>{{user.to && user.to.posts?user.to.posts.length:'N/A'}}</td>
+        <td>{{user.to && user.to.tagged_count?user.to.tagged_count:'N/A'}}</td>
+        <td>{{user.to && user.to.saved_posts?user.to.saved_posts.length:'N/A'}}</td>
+        <td>{{user.to && user.to.publications?user.to.publications:'N/A'}}</td>
+        <td>{{user.to && user.to.activities?user.to.activities:'N/A'}}</td>
+        <td>{{user.to && user.to.mentions?user.to.mentions:'N/A'}}</td>
+        <td>{{user.to && user.to.messaging?user.to.messaging:'N/A'}}</td>
+        <td>{{user.to && user.to.reported_count ?user.to.reported_count :'0' }}
+          <i *ngIf="user.to && user.to.reported_count&& user.to.reported_count !=0" class="fa fa-eye ml-2" (click)="goToReports(user.to)"></i></td>
+        <td>
+          <fieldset class="rating text-center ">
+            <label tappable class="text-secondary " (click)="ratingMeasure(user.to,2)" [class]="user.to && user.to.badge_number==2?'gold':'text-secondary'"><i class="fa fa-star"></i></label>
+            <label tappable class="text-secondary " (click)="ratingMeasure(user.to,1)" [class]="user.to && user.to.badge_number==1?'grey':'text-secondary'"><i class="fa fa-star"></i></label>
+            <i class="fa fa-times text-danger" *ngIf="user.to && user.to.badge_number !=0 " (click)="ratingMeasure(user.to,0)"></i>
+          </fieldset>
+        </td>
+        <td><select *ngIf="user.to && user.to.interests.length !=0 " class="dropbutton ">
+          <option *ngFor="let interest of user.to.interests " value = {{interest.name}}>
+                  {{interest.name}}
+          </option>
+          </select>
+          <p class="text-center " *ngIf="user.to && user.to.interests.length==0">N/A</p>
+        </td>
+        <td>{{user.feedback?user.feedback:"--"}}</td>
+        <td *ngIf="!user.to"></td>
+        <td *ngIf="user.to">
+          <i class="fa fa-check-circle" [ngClass]="{ 'text-success':user.to.is_verified, 'text-warning':!user.to.is_verified} "></i>
+          <p><button tappable *ngIf="!user.to.is_verified && admin_type==1" class="verify_bt mt-1" (click)="verifyEmail(user.to._id)">Verify email</button></p>
+        </td>
+        <td><a class="text-warning" (click)="goToProfile(user.to)" tappable>VIEW</a>
+          <i class="fa fa-trash-o ml-2 " aria-hidden="true " *ngIf="admin_type==1" (click)="deleteRecord(user.to._id) " data-toggle="tooltip" data-placement="bottom" title="Delete"></i>
+          <i tappable class="fa fa-ban ml-2 " *ngIf="admin_type==1 &&  user.to&&user.to.status!=1" aria-hidden="true " (click)="updateuser(user,1) " data-toggle="tooltip" data-placement="bottom" title="Suspend"></i>
+          <i tappable class="fa fa-hand-paper-o ml-2 " *ngIf="admin_type==1" aria-hidden="true " (click)="updateuser(user,2) " data-toggle="tooltip" data-placement="bottom" title="Hold"></i>
+          <i tappable class="fa fa-check-circle ml-2 " *ngIf="admin_type==1 && (user.to && user.to.status==1)" aria-hidden="true " (click)="updateuser(user,0) " data-toggle="tooltip" data-placement="bottom" title="Active"></i>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <ul class="pagination justify-content-end" *ngIf="users && users.length">
+    <li class="page-item "><a class="page-link " (click)="goBack()">Prev</a></li>
+
+    <li class="page-item "><a class="page-link " (click)="goNext()">Next</a></li>
+  </ul>
+  <div class="user_btns" *ngIf="users">
+    <ul>
+      <li><button class="btn">Total Users</button>
+        <p *ngIf="users">{{total_count}}</p>
+      </li>
+      <li><button class="btn">Selected Users</button>
+        <p>0</p>
+      </li>
+      <li tappable><img class="image_css" src='assets/img/download-to-storage-drive.png' (click)="csv()" />
+        <p></p>
+      </li>
+      <li tappable><img class="image_css" src='assets/img/printer-tool.png' (click)="print()" />
+        <p></p>
+      </li>
+
+    </ul>
+  </div>

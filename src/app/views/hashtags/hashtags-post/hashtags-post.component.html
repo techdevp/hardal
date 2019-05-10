@@ -1,0 +1,155 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<table class="table table-responsive table-hover table-bordered allSticker">
+  <thead>
+    <tr>
+      <th> Sr.No. </th>
+      <th> Hashtag Id </th>
+      <th class="long_text_database">Hashtag </th>
+      <th class="long_text_date">Hashtag Created Date </th>
+      <th class="long_text_date">Number of use </th>
+      <th class="long_text_date">Hashtag Posts size </th>
+      <th class="long_text_date">Last used </th>
+      <th class="long_text_date">Location </th>
+      <th class="long_text_date">Language </th>
+      <th class="long_text_date">Views </th>
+      <th class="long_text_date">Likes </th>
+      <th class="long_text_date">Comments </th>
+      <th class="long_text_date">Shares </th>
+      <th class="long_text_date">Interaction </th>
+      <th class="long_text_date">Trend topic list </th>
+      <th colspan="2">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let hashtag of hashtags ;let i=index">
+      <td>{{i+1}}</td>
+      <td>{{hashtag._id}}</td>
+      <td>{{hashtag.name}}</td>
+      <td>{{hashtag.created | date : "dd.MM.y " }}</td>
+      <td>56</td>
+      <td>{{hashtag.filesize * 0.001 + 'KB'}} </td>
+      <td>{{hashtag.created | date : "dd.MM.y " }}</td>
+      <td>India</td>
+      <td>English</td>
+      <td>324</td>
+      <td>324</td>
+      <td>324</td>
+      <td>324</td>
+      <td>%04</td>
+      <td>Added to list</td>
+      <td tappable [ngClass]="{ 'pink':hashtag.status==true, 'white':hashtag.status==false} " tappable (click)="doActive(hashtag._id,hashtag.status) ">Active </td>
+      <td tappable [ngClass]="{ 'pink':hashtag.status==false, 'white':hashtag.status==true} " tappable (click)="doPassive(hashtag._id,hashtag.status) ">Passive</td>
+      <td style="background:red;" tappable (click)="deleteHashtag(hashtag._id,i) ">Delete Hashtag</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<div id="print-section">
+  <table class="table table-responsive table-hover table-bordered allSticker">
+    <thead>
+      <tr>
+        <th> Sr.No. </th>
+        <th> Post Id </th>
+        <th class="long_text_date">Post Date </th>
+        <th class="long_text_date">Post Edit Date </th>
+        <th class="long_text_date">Post database</th>
+        <th class="long_text_date">User id </th>
+        <th class="long_text_date">Username </th>
+        <th class="long_text_date">Post type </th>
+        <th class="long_text_date">Tag user id </th>
+        <th class="long_text_date">hash tags </th>
+        <th class="long_text_date">location </th>
+        <th class="long_text_date">language </th>
+        <th class="long_text_date">views </th>
+        <th class="long_text_date">likes </th>
+        <th class="long_text_date">comments </th>
+        <th class="long_text_date">Shares </th>
+        <th class="long_text_date">Interaction </th>
+        <th class="long_text_date">reports </th>
+        <th colspan="2">Search home page ad</th>
+        <th colspan="2">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let post of posts | paginate: { id: 'server', itemsPerPage: 10, currentPage: p, totalItems: total } ;let i=index">
+        <td>{{i+1}}</td>
+        <td>{{post._id}}</td>
+        <td>{{post.created | date : "dd.MM.y " }}</td>
+        <td>{{post.created | date : "dd.MM.y " }}</td>
+        <td>{{post.filesize * 0.001 + 'KB'}} </td>
+        <td>{{post.creator._id}}</td>
+        <td>{{post.creator.username}}</td>
+        <td>N/A</td>
+        <td>
+          <div *ngFor="let data of post.tags">{{data}} </div>
+        </td>
+        <td>
+          <div *ngFor="let data of post.hashtags">{{data}} </div>
+        </td>
+        <td>{{post.location}}</td>
+        <td>N/A</td>
+        <td>{{post.views_count}}</td>
+        <td>{{post.ups_count}}</td>
+        <td>{{post.comments_count}}</td>
+        <td>%04</td>
+        <td>04</td>
+        <td>0</td>
+        <td>search</td>
+        <td>home</td>
+        <td tappable [ngClass]="{ 'pink':post.status==true, 'white':post.status==false} " (click)="doActive(post._id,post.status) ">Active </td>
+        <td tappable [ngClass]="{ 'pink':post.status==false, 'white':post.status==true} " (click)="doPassive(post._id,post.status) ">Passive</td>
+
+        <td tappable style="background: #f1ebd9;" (click)="viewPost(post,i)">View Posts</td>
+        <td style="background:red;" tappable (click)="deleteHashtag(post._id,i) ">Delete Hashtag</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ul class="pagination justify-content-end">
+  <li class="page-item "><a class="page-link " (click)="findPrev()">Prev</a></li>
+
+  <li class="page-item "><a class="page-link " (click)="findNext()">Next</a></li>
+</ul>
+<!-- <div class="pagination justify-content-end">
+  <div class="pagination-previous" class="pagination_border">
+    <a (click)="findPrev()" style="border: 1px solid;padding: 6px;">Prevoius </a>
+  </div>
+  <div *ngFor="let page of pages">
+    <div [ngClass]="page==current_page?'pagination_border_purple':'pagination_border'">
+      <a (click)="getCurrentPage(page)" class="ngx-pagination">
+        <span>{{ page }}</span>
+        </a>
+    </div>
+  </div>
+  <div class="pagination-next" class="pagination_border">
+    <a (click)="findNext()" style="border: 1px solid;padding: 6px;"> Next </a>
+  </div>
+</div> -->
+
+<!-- <pagination-template #p="paginationApi" (pageChange)="pageChange.emit($event)" class="pagination justify-content-end">
+
+  <div class="pagination-previous" [class.disabled]="p.isFirstPage()" style="margin-right: 15px;">
+    <a *ngIf="!p.isFirstPage()" (click)="findPrev()">
+      < </a>
+  </div>
+
+  <div *ngFor="let page of pages" [class.current]="p.getCurrent() === page" style="margin-right: 15px;">
+    <a (click)="getCurrentPage(page)" *ngIf="p.getCurrent() !== page" class="ngx-pagination">
+                <span>{{ page }}</span>
+            </a>
+    <div *ngIf="p.getCurrent() === page">
+      <span>{{ page }}</span>
+    </div>
+  </div>
+
+  <div class="pagination-next" [class.disabled]="p.isLastPage()" style="margin-right: 15px;">
+    <a *ngIf="!p.isLastPage()" (click)="findNext()"> > </a>
+  </div>
+
+</pagination-template> -->
+
+<!-- <div class="has-text-centered">
+  <pagination-controls (pageChange)="getPage($event)" id="server" previousLabel="Previous" nextLabel="Next"></pagination-controls>
+</div> -->

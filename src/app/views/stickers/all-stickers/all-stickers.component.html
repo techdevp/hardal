@@ -1,0 +1,141 @@
+<div class="alert alert-success" *ngIf="show_msg ">
+  {{show_msg}}
+</div>
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="all_header">STICKER ALL</div>
+<div class="Searchtype-input "><input type="text" id="search" placeholder="Search to type"></div>
+<div id="print-section">
+  <table class="table table-responsive table-hover table-bordered allSticker">
+    <thead>
+      <tr style="border:0px;">
+        <td colspan="7" style="border:0;"></td>
+        <td colspan="3" class="platform">Used Platform</td>
+      </tr>
+    </thead>
+    <thead>
+      <tr>
+        <th> Sr.No. </th>
+        <th class="arrow_th"></th>
+        <th> Thumbnail </th>
+        <th> Sticker Id </th>
+        <th class="long_text_database">Sticker Database </th>
+        <th class="long_text_no"> No. of Users Used Sticker </th>
+        <th class="long_text_date"> Created Date </th>
+        <th style="background:#ffecc9;">IOS</th>
+        <th style="background:#ffecc9;">Android</th>
+        <th style="background:#ffecc9;">Browsers</th>
+        <th colspan="2">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of all_stickers | orderBy: orderby: order; let i=index">
+        <td>{{i+1}}</td>
+        <td><img class="down arrow" src='./assets/img/ic_down_arrow.png' (click)="swapDownAll(user._id) "><img class="up arrow" src='./assets/img/ic_up_arrow.png' (click)=" swapUpAll(user._id) ">
+        </td>
+        <td><img class="img-thumbnail" [src]="sticker_url + user.filename"></td>
+        <td>{{user._id}}</td>
+        <td>{{user.filesize * 0.001 + 'KB'}} </td>
+        <td></td>
+        <td>{{user.created | date : "dd.MM.y " }}</td>
+        <td>997</td>
+        <td>340</td>
+        <td>324</td>
+        <td tappable [ngClass]="{ 'pink':user.status==true, 'white':user.status==false} " tappable (click)="doActive(user._id,user.status) ">Active </td>
+        <td tappable [ngClass]="{ 'pink':user.status==false, 'white':user.status==true} " tappable (click)="doPassive(user._id,user.status) ">Passive</td>
+        <td tappable style="background: #f1ebd9; ">View Sticker</td>
+        <td tappable style="background: #f1ebd9; ">View Used Post</td>
+        <td style="background: #f1ebd9; " tappable (click)="deleteSticker2(user._id,user.pageId) ">Delete Sticker</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="row " *ngIf="all_stickers">
+  <div class="col-sm-4 ">
+    <div style="background: #a3d696; " class="col-6 float-left ">Total Stickers</div>
+    <div style="background: #caefc0; " class="col-6 float-right ">{{all_stickers.length}}</div>
+  </div>
+  <div class="col-sm-4 ">
+    <div style="background: #a3d696; " class="col-6 float-left ">Selected Stickers</div>
+    <div style="background: #caefc0; " class="col-6 float-right ">'N/A'</div>
+  </div>
+  <div class="col-sm-4 ">
+    <div tappable style="background: #e69603;text-align: center;border: 2px solid; " class="col-6 float-left " (click)="print() ">Printout</div>
+    <div tappable style="background: #e69603;text-align: center;border: 2px solid; " class="col-6 float-right " (click)="csv() ">Download</div>
+  </div>
+</div>
+
+<div class="table-responsive " *ngIf="all_stickers">
+  <div class="sticker_data">
+    <div class="sticker-size">
+      <h5 class="filter">filter</h5>
+    </div>
+    <div class="sticker-size">
+      <h5 class="allclas" [class.active_link]="temp_object.all" (click)="getAll();getAllPage('all')" tappable>All</h5>
+    </div>
+    <div class="sticker-size">
+      <h5>Sticker Id</h5>
+      <ul>
+        <li [class.active_link]="temp_object.dec_id" tappable (click)="setByDecId($event);getAllPage('dec_id')">Decreasing</li>
+        <li [class.active_link]="temp_object.inc_id" tappable (click)="setByIncId($event);getAllPage('inc_id')">Growing</li>
+      </ul>
+    </div>
+    <div class="sticker-size ">
+      <h5>Sticker Database</h5>
+      <ul>
+        <li [class.active_link]="temp_object.dec_db" tappable (click)="setByDecSize();getAllPage('dec_db')">Decreasing</li>
+        <li [class.active_link]="temp_object.inc_db" tappable (click)="setByIncSize();getAllPage('inc_db')">Growing</li>
+      </ul>
+    </div>
+    <div class="sticker-size ">
+      <h5>Created Date</h5>
+
+      <ul>
+        <li tappable (click)="getAllPage('dec_created_date')"> <input type='date'></li>
+        <!-- <li [class.active_link]="temp_object.inc_created_date" tappable (click)="setByIncDate();getAllPage('inc_created_date')">Growing</li> -->
+      </ul>
+    </div>
+    <div class="sticker-size">
+      <h5>No. of User</h5>
+      <ul>
+        <li [class.active_link]="temp_object.user_dec" tappable (click)="getAllPage('user_dec')">Decreasing</li>
+        <li [class.active_link]="temp_object.user_inc" tappable (click)="getAllPage('user_inc')">Growing</li>
+      </ul>
+    </div>
+    <div class="sticker-size ">
+      <h5 tappable (click)="getAllPage('edit_date')">Edit Date</h5>
+      <ul>
+        <li tappable (click)="getAllPage('dec_created_date')"> <input type='date'></li>
+        <!-- <li [class.active_link]="temp_object.inc_created_date" tappable (click)="setByIncDate();getAllPage('inc_created_date')">Growing</li> -->
+      </ul>
+    </div>
+    <div class="sticker-size ">
+      <h5>Sticker Used Post</h5>
+      <ul>
+        <li [class.active_link]="temp_object.used_post_dec" tappable (click)="getAllPage('used_post_dec')">Decreasing</li>
+        <li [class.active_link]="temp_object.used_post_inc" tappable (click)="getAllPage('used_post_inc')">Growing</li>
+      </ul>
+    </div>
+    <div class="sticker-size ">
+      <h5>Status</h5>
+      <div class="row ">
+        <div class="col-6 " [class.active_link]="temp_object.status_active">
+          <span class="activehover" tappable (click)="showActive();getAllPage('status_active')">Active</span>
+        </div>
+        <div class="col-6 " [class.active_link]="temp_object.status_passive">
+          <span class="activehover" tappable (click)="showPassive();getAllPage('status_passive')">Passive</span>
+        </div>
+      </div>
+    </div>
+    <div class="sticker-size ">
+      <h5>Platform</h5>
+      <ul>
+        <li tappable [class.active_link]="temp_object.ios" (click)="getAllPage('ios')">Ios</li>
+        <li tappable [class.active_link]="temp_object.android" (click)="getAllPage('android')">Android</li>
+        <li tappable [class.active_link]="temp_object.browser" (click)="getAllPage('browser')">Browser</li>
+        <li tappable [class.active_link]="temp_object.platform_dec" (click)="getAllPage('platform_dec')">Decreasing</li>
+        <li tappable [class.active_link]="temp_object.platform_inc" (click)="getAllPage('platform_inc')">Growing</li>
+      </ul>
+    </div>
+  </div>
+</div>

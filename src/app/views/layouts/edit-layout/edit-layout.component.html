@@ -1,0 +1,160 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div>
+  <div class="all_header layout_header">
+    <div class="row">
+      <div class="col-sm-4 text-left">
+        <i class="fa fa-arrow-left arrow_icon" aria-hidden="true" (click)="backClicked()" tappable></i>
+      </div>
+      <div class="col-sm-4">
+        EDIT LAYOUT
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="layout_details">
+    <div class="col-6">
+      <form>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Name:</label>
+          <div class="col-sm-10" *ngIf="layout_details && layout_details.artist && layout_details.artist.name">
+            <input type="text" class="form-control input_field1" [(ngModel)]="layout_details.artist.name" [ngModelOptions]="{standalone: true}" readonly>
+          </div>
+          <div class="col-sm-10" *ngIf="layout_details && !layout_details.artist">
+            <input type="text" class="form-control input_field1" placeholder="--" readonly>
+          </div>
+        </div>
+
+        <div class="row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Username:</label>
+          <div class="col-sm-10" *ngIf="layout_details && layout_details.artist && layout_details.artist.username">
+            <!-- <input type="text" class="form-control input_field1" [(ngModel)]="layout_details.artist.username" [ngModelOptions]="{standalone: true}" readonly> -->
+            <input type="text" class="field1 input_field1" placeholder="Search username" [(ngModel)]="username" name="username" (ngModelChange)="searchArtisan($event,username,i);drop_div=!drop_div">
+            <div *ngIf="drop_div" class="username_drop">
+              <div *ngFor="let user of artists;let j=index;" (click)="selectedUser(user,j,i);drop_div=!drop_div" tappable>{{user.username}}
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-10" *ngIf="layout_details && !layout_details.artist ">
+            <input type="text" class="form-control input_field1" placeholder="--" readonly>
+          </div>
+        </div>
+
+        <div>
+          <div class="row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Categories:</label>
+            <div class="col-sm-10">
+              <div class="row category_field" *ngFor="let data of layout_details.categoryId;let i=index">
+                <div class="col-6">
+                  {{data.name}}
+                </div>
+                <div class="col-6">
+                  <!-- <span *ngIf="edit" (click)="removeCategory(i)" class="fa fa-times cross_icon" tappable></span> -->
+                  <span (click)="removeCategory(i)" class="fa fa-times cross_icon" tappable></span>
+                </div>
+              </div>
+              <div class="row category_field" *ngIf="layout_details && layout_details.categoryId && !layout_details.categoryId.length">
+                <div class="col-6">
+                  Add Category
+                </div>
+              </div>
+              <!-- <div class="edit_text">
+                <a (click)="edit=!edit;" tappable>EDIT</a>
+              </div> -->
+              <!-- <div class="set_dropdown" *ngIf="edit"> -->
+              <div class="set_dropdown">
+                <select tappable class="country_dropdown" [(ngModel)]="editCategory" (ngModelChange)="addNewCategory(editCategory);" [ngModelOptions]="{standalone: true}" multiple>
+                    <option [ngValue]="undefined" disabled  selected >Select Category</option>
+                    <option *ngFor="let data of category" value = "{{data.name}}">
+                      {{data.name}}
+                    </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="layout_details.speciesId">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Species:</label>
+            <div class="col-sm-10">
+              <div class="set_dropdown">
+                <select tappable class="country_dropdown" [(ngModel)]="layout_details.speciesId._id" (change)="changeSpcies(layout_details.speciesId._id);" [ngModelOptions]="{standalone: true}">
+                  <option [ngValue]="undefined" disabled  selected>Select Species</option>
+                  <option *ngFor="let data of species" value = "{{data._id}}">
+                    <span> {{data.name}} </span>
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Location:</label>
+            <div class="col-sm-6">
+              <input readonly type="text" class="form-control input_fields" [(ngModel)]="layout_details.location" [ngModelOptions]="{standalone: true}">
+              <!-- <input *ngIf="location" type="text" class="form-control input_fields" style="color:black" [(ngModel)]="layout_details.location" [ngModelOptions]="{standalone: true}"> -->
+            </div>
+            <div class="col-sm-1 edit_text" style="margin-left: -47px!important;">
+              <!-- <a (click)="location=!location;" tappable>EDIT</a> -->
+              <!-- <a *ngIf="location" (click)="location=!location;" tappable>Done</a> -->
+            </div>
+          </div>
+          <div class="row">
+            <label for="inputPassword" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+              <div class="col-6" class="set_dropdown">
+                <select class="country_dropdown" [(ngModel)]="layout_details.location" (change)="location=!location;setCountry(layout_details.location)" [ngModelOptions]="{standalone: true}">
+                <option value="undefined" disabled  selected>Select Country</option>
+                <option *ngFor="let data of countries" value = "{{data}}">
+                  <span> {{data}} </span>
+                </option>
+              </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="col -2 uploader-box">
+      <p class="upload_artwork" text-center>Uploaded Artwork</p>
+      <div class="row">
+        <div class="col-4">
+          <div class="profile-pic">
+            <img *ngIf="!layout_details.photo" class="img-responsive pic" src="./assets/img/avatars/ic_addnew_dummy@3x.png">
+            <img *ngIf="layout_details.photo" class="img-responsive pic" [src]="imageUrl + layout_details.photo">
+          </div>
+          <input hidden id="upload_photo1" class="input-file UPLo" type="file" accept="image/*" multiple name="select_file3" (change)="editFileSelect($event,1)" required>
+          <p text-center><label for="upload_photo1" class="upload_field2" tappable>Upload image instead</label></p>
+        </div>
+        <div class="col">
+          <label float-right class="upload_field1" (click)="downloadImage(imageUrl + layout_details.photo)" tappable>Download image </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="layout_details">
+    <div class="col"></div>
+    <div class="col">
+      <div class="d-flex justify-content-start">
+        <div class="p-2"> <button type="button" class="btn btn-cancel btn_new ml-2" tappable (click)="backClicked()">Cancel</button></div>
+        <div class="p-2"> <button type="button" class="btn btn-save btn_new" (click)="editLayout()" tappable>Save</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row bottom_boxes">
+    <div class="col-4">
+    </div>
+    <div class="col-1 approve" (click)="changeStatus('Active')" tappable *ngIf=" layout_details && layout_details.status!='Active'">
+      <i class="fa fa-check" aria-hidden="true"></i>
+      <p>Approve</p>
+    </div>
+    <div class="col-1 reject " (click)="changeStatus('Rejected')" tappable *ngIf="layout_details && layout_details.status!='Rejected'">
+      <i class="fa fa-times" aria-hidden="true"></i>
+      <p>Reject</p>
+    </div>
+    <div class="col-1 archive" (click)="changeStatus('Archived')" tappable *ngIf="layout_details && layout_details.status!='Archived'">
+      <div>
+        Archive
+      </div>
+    </div>
+  </div>
+</div>

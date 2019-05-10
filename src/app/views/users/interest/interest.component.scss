@@ -1,0 +1,46 @@
+.interest-item {
+  border: 1px solid #2bb5f1;
+  padding: 5px;
+  border-radius: 3px;
+
+  input {
+    border: 1px solid #eee;
+    border-radius: 4px;
+  }
+}
+
+.actions {
+  position: relative;
+  top: -15px;
+}
+
+.actions_category {
+  position: relative;
+  top: -15px;
+  margin-top: 25px;
+}
+
+.category-item {
+  border: 1px solid #2bb5f1;
+  padding: 5px;
+  border-radius: 3px;
+  margin-top: 7px;
+
+  input {
+    border: 1px solid #eee;
+    border-radius: 4px;
+  }
+}
+
+.input {
+  border: hidden;
+  margin-top: 10px;
+}
+
+.ml-auto-category {
+  margin-left: 27px;
+}
+
+.tabset_div {
+  margin-bottom:: 30px;
+}

@@ -1,0 +1,553 @@
+<div class='row'>
+  <div tappable class="col-2 sidebar_second">
+    <div class="card-header" (click)="allSticker()">
+      All Stickers
+    </div>
+    <div class="card-header" (click)="createPageSticker()">
+      New Sticker Page
+    </div>
+    <div class="card-header" (click)="editPage()">
+      Edit Sticker Page
+    </div>
+    <div class="card-header" (click)="newSticker()">
+      New Sticker
+    </div>
+    <div class="card-header">
+      Stickers Pages
+    </div>
+    <div class="category-scroll">
+      <div class="col-12 sidebar_catelink" *ngFor="let page of page_info; let i = index ">
+        <div class="col-10 float-left" style="padding:0px;border:0px;">
+          <p (click)="getPageDetail(page._id)" tappable>{{page.name}}</p>
+        </div>
+        <div class="col-2 float-right" style="padding:0px;border:0px;"><i class="fa fa-trash-o" (click)="deletePage(page._id)"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="card col-10" *ngIf="pageDetail">
+    <div class="alert alert-success" *ngIf="show_msg">
+      {{show_msg}}
+    </div>
+    <table class="table table-responsive table-striped table-hover">
+      <thead>
+        <tr style="border:0px;">
+          <td colspan="9" style="border:0px;text-align:right">Used Platform</td>
+        </tr>
+      </thead>
+      <thead>
+        <tr>
+          <th> Sr.No. </th>
+          <th></th>
+          <th> Thumbnail </th>
+          <th> Sticker Id </th>
+          <th>Sticker Database </th>
+          <th> No. of Users Used Sticker </th>
+          <th> Created Date </th>
+          <th style="background: #f1ebd9;">IOS</th>
+          <th style="background: #f1ebd9;">Android</th>
+          <th style="background: #f1ebd9;">Browsers</th>
+          <th colspan="2">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of selected_file_sticker | orderBy :orderby :order; let i=index">
+          <td>{{i+1}}</td>
+          <td><i class="fa fa-angle-down" (click)="swapDownPage(user._id)"></i><i (click)="swapUpPage(user._id)" class="fa fa-angle-up"></i></td>
+          <td><img class="img-thumbnail" [src]="sticker_url + user.filename"></td>
+          <td>{{user._id}}</td>
+          <td>{{user.filesize}}</td>
+          <td></td>
+          <td>{{user.created | date : "dd.MM.y" }}</td>
+          <td>997</td>
+          <td>340</td>
+          <td>324</td>
+          <td [ngClass]="{ 'pink':user.status==true, 'white':user.status==false} ">Active </td>
+          <td [ngClass]="{ 'pink':user.status==false, 'white':user.status==true} ">Passive</td>
+          <td style="background: #f1ebd9;">View Sticker</td>
+          <td style="background: #f1ebd9;">View Used Post</td>
+          <td style="background: #f1ebd9;" (click)="deleteSticker(user._id,user.pageId)">Delete Sticker </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="row ">
+      <div class="col-sm-4 ">
+        <div style="background: #a3d696; " class="col-6 float-left ">Total Stickers</div>
+        <div style="background: #caefc0; " class="col-6 float-right" *ngIf="selected_file_sticker">{{selected_file_sticker.length}}</div>
+      </div>
+      <div class="col-sm-4 ">
+        <div style="background: #a3d696; " class="col-6 float-left ">Selected Stickers</div>
+        <div style="background: #caefc0; " class="col-6 float-right ">'N/A'</div>
+      </div>
+      <div class="col-sm-4 ">
+        <div tappable style="background: #e69603;text-align: center;border: 2px solid; " class="col-6 float-left ">Printout</div>
+        <div tappable tappable style="background: #e69603;text-align: center;border: 2px solid; " class="col-6 float-right " (click)="csvPage()">Download</div>
+      </div>
+    </div>
+    <div class="table-responsive ">
+      <div class="sticker_data ">
+        <div class="sticker-size ">
+          <h5 class="filter">filter</h5>
+        </div>
+        <div class="sticker-size">
+          <h5 class="allclas" (click)="getAllPage()" tappable>All</h5>
+        </div>
+        <div class="sticker-size ">
+          <h5>Sticker Id</h5>
+          <ul>
+            <li tappable (click)="setByDecIdPage($event)">Decreasing</li>
+            <li tappable (click)="setByIncIdPage($event)">Growing</li>
+          </ul>
+        </div>
+        <div class="sticker-size ">
+          <h5>Sticker Database</h5>
+          <ul>
+            <li tappable (click)="setByDecSizePage()">Decreasing</li>
+            <li tappable (click)="setByIncSizePage()">Growing</li>
+          </ul>
+        </div>
+        <div class="sticker-size ">
+          <h5>Created Date</h5>
+
+        </div>
+        <div class="sticker-size ">
+          <h5>No. of User</h5>
+          <ul>
+            <li>Decreasing</li>
+            <li>Growing</li>
+          </ul>
+        </div>
+        <div class="sticker-size ">
+          <h5>Edit Date</h5>
+          <!-- <ul>
+            <li>1</li>
+            <li>2</li>
+          </ul> -->
+        </div>
+        <div class="sticker-size ">
+          <h5>Sticker Used Post</h5>
+          <ul>
+            <li tappable>Decreasing</li>
+            <li tappable>Growing</li>
+          </ul>
+        </div>
+        <div class="sticker-size ">
+          <h5>Status</h5>
+          <div class="row ">
+            <div class="col-6 ">
+              <span class="activehover" tappable (click)="showActivePage()">Active</span>
+            </div>
+            <div class="col-6 ">
+              <span class="activehover" tappable (click)="showPassivePage()">Passive</span>
+            </div>
+          </div>
+        </div>
+        <div class="sticker-size ">
+          <h5>Platform</h5>
+          <ul>
+            <li tappable>Ios</li>
+            <li tappable>Android</li>
+            <li tappable>Browser</li>
+            <li tappable>Decreasing</li>
+            <li tappable>Growing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card col-10" *ngIf="edit_page">
+    <div class="container-fluid">
+      <div class="alert alert-success" *ngIf="show_msg">
+        {{show_msg}}
+      </div>
+      <p class="Searchtype-input"><input type="text" id="search" placeholder="Search to type"></p>
+
+      <div class="row">
+        <div class="col-6"> Choose your sticker pages</div>
+        <div class="col-6" class="selct_sizeset">
+          <select class="dropbutton" [(ngModel)]="selectedPage" (change)="getPage(selectedPage)">
+          <option *ngFor="let page of page_info" value = "{{page._id}}">
+          <span> {{page.name}} </span>
+         </option>
+  </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">Edit your Sticker Pages</div>
+        <div class="col-6 custom_input"><input type="text" [(ngModel)]="selected_page"></div>
+      </div>
+      <div class="row justify-content-center">
+        <div tappable class="col-3 text-center">
+          <input hidden id="upload_photo" class="input-file UPLo" type="file" accept="image/png" (change)="onFileSelect($event)" multiple required>
+          <div class="profile-pic">
+            <label for="upload_photo"><img  class="img-fluid pic " src="./assets/img/avatars/8T65jX9Gc.png"></label>
+          </div>
+          <label for="upload_photo" class="upload_multiple" text-center>Upload Multiple Stickers</label>
+        </div>
+      </div>
+      <div class="card-header">
+        LOCAL IMAGE
+      </div>
+      <div class="row">
+        <div *ngFor="let image_sticker of table_array;let i = index" class="col-lg-4">
+          <input hidden id="upload_photo56" type="file" (change)="onFileEdit($event,i)" accept="image/png" required>
+          <div class="uploader-box mt-2">
+            <div class="profile-pic">
+              <label for="upload_photo56" class="change"><img  class="img-fluid pic d-flex justify-content-center"  [src]='image_sticker' (click) = "getIndex(i)"></label>
+              <label for="upload_photo56" class="upload_multiple" text-center>Edit Image</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-2"> <button type="button" class="btn btn-warning btn_new float-right" (click)="doneEdit()">SAVE</button></div>
+
+
+      <hr>
+      <!-- <p> {{info_msg}}</p> -->
+      <div class="card-header">
+        UNPUBLISHED IMAGE
+      </div>
+      <div class="row" *ngIf="unpublished_arr && edit_sticker">
+        <div tappable class="col-4 text-center uploader-box" *ngFor="let edit of unpublished_arr">
+          <input hidden id="upload_photo55" type="file" (change)="fileChangeEventOfSticker($event,edit._id)" accept="image/png" required>
+          <div class="profile-pic" *ngIf="edit">
+            <label for="upload_photo55" class="change"><img class="img-fluid pic pic " [src]='sticker_url + edit.filename' (click)="diclick(edit._id)"></label>
+            <label for="upload_photo55" class="upload_multiple" text-center>Change Image</label>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="card-header">
+        PUBLISHED IMAGE
+      </div>
+      <div class="row" *ngIf="published_arr && edit_sticker">
+        <div tappable class="col-4 text-center uploader-box" *ngFor="let edit of published_arr">
+          <input hidden id="upload_photo57" type="file" (change)="fileChangeEventOfSticker($event,edit._id)" accept="image/png" required>
+          <div class="profile-pic" *ngIf="edit">
+            <label for="upload_photo57" class="change"><img class="img-fluid pic pic" [src]='sticker_url + edit.filename' (click)="diclick(edit._id)"></label>
+            <label for="upload_photo57" class="upload_multiple" text-center>Change Image</label>
+          </div>
+        </div>
+      </div>
+      <table class="table table-responsive table-striped table-hover " id="MyTbl ">
+        <thead>
+
+          <tr>
+            <th width="20% "> Sr.No. </th>
+            <th></th>
+            <th width="20% "> Thumbnail </th>
+            <th width="20% "> Sticker Id </th>
+            <th width="20% ">No.of Use </th>
+            <th width="30% "> Created Date </th>
+            <th colspan="2">Status</th>
+
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of edit_sticker; let i=index ">
+            <td width="20% ">{{i+1}}</td>
+            <td><i class="fa fa-angle-down" (click)="swapDownEdit(user._id)"></i><i (click)="swapUpEdit(user._id)" class="fa fa-angle-up"></i></td>
+            <td width="20% "><img class="img-thumbnail " [src]="sticker_url + user.filename "></td>
+            <td width="20% ">{{user._id}}</td>
+            <td width="20% "></td>
+            <td width="30% ">{{user.created | date : "dd.MM.y " }}</td>
+            <td [ngClass]="{ 'pink':user.status==true, 'white':user.status==false} ">Active </td>
+            <td [ngClass]="{ 'pink':user.status==false, 'white':user.status==true} ">Passive</td>
+            <td style="background: #f1ebd9;" (click)="deleteEdit(user._id,user.pageId)">CANCEL</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="p-2 "> <button type="button" class="float-right btn btn-warning btn_new justify-content-end " (click)="publishEdit()">Publish</button></div>
+    </div>
+  </div>
+
+  <div class="card col-10 " *ngIf="all_sticker ">
+    <div class="alert alert-success" *ngIf="show_msg ">
+      {{show_msg}}
+    </div>
+    <div id="print-section">
+      <table class="table table-responsive table-striped table-hover">
+        <thead>
+          <tr style="border:0px;">
+            <td colspan="9" style="border:0px;text-align:right">Used Platform</td>
+          </tr>
+        </thead>
+        <thead>
+          <tr>
+            <th> Sr.No. </th>
+            <th></th>
+            <th> Thumbnail </th>
+            <th> Sticker Id </th>
+            <th>Sticker Database </th>
+            <th> No. of Users Used Sticker </th>
+            <th> Created Date </th>
+            <th style="background: #f1ebd9;">IOS</th>
+            <th style="background: #f1ebd9;">Android</th>
+            <th style="background: #f1ebd9;">Browsers</th>
+            <th colspan="2">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of all_stickers | orderBy: orderby: order; let i=index ">
+            <td>{{i+1}}</td>
+            <td><i class="fa fa-angle-down " (click)="swapDownAll(user._id) "></i><i (click)="swapUpAll(user._id) " class="fa fa-angle-up "></i></td>
+            <td><img class="img-thumbnail " [src]="sticker_url + user.filename "></td>
+            <td>{{user._id}}</td>
+            <td>{{user.filesize}}</td>
+            <td></td>
+            <td>{{user.created | date : "dd.MM.y " }}</td>
+            <td>997</td>
+            <td>340</td>
+            <td>324</td>
+            <td [ngClass]="{ 'pink':user.status==true, 'white':user.status==false} ">Active </td>
+            <td [ngClass]="{ 'pink':user.status==false, 'white':user.status==true} ">Passive</td>
+            <td style="background: #f1ebd9; ">View Sticker</td>
+            <td style="background: #f1ebd9; ">View Used Post</td>
+            <td style="background: #f1ebd9; " (click)="deleteSticker2(user._id,user.pageId) ">Delete Sticker</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="pagination">
+      <li class="page-item "><a class="page-link " (click)="goBack()">Prev</a></li>
+
+      <li class="page-item "><a class="page-link " (click)="goNext()">Next</a></li>
+    </ul>
+    <div class="row ">
+      <div class="col-sm-4 ">
+        <div style="background: #a3d696; " class="col-6 float-left ">Total Stickers</div>
+        <div style="background: #caefc0; " class="col-6 float-right ">{{all_stickers.length}}</div>
+      </div>
+      <div class="col-sm-4 ">
+        <div style="background: #a3d696; " class="col-6 float-left ">Selected Stickers</div>
+        <div style="background: #caefc0; " class="col-6 float-right ">'N/A'</div>
+      </div>
+      <div class="col-sm-4 ">
+        <div tappable style="background: #e69603;text-align: center;border: 2px solid; " class="col-6 float-left " (click)="print()">Printout</div>
+        <div tappable tappable style="background: #e69603;text-align: center;border: 2px solid; " class="col-6 float-right " (click)="csv()">Download</div>
+      </div>
+    </div>
+    <div class="table-responsive ">
+      <div class="sticker_data ">
+        <div class="sticker-size ">
+          <h5 class="filter ">filter</h5>
+        </div>
+        <div class="sticker-size">
+          <h5 class="allclas" (click)="getAll()" tappable>All</h5>
+        </div>
+        <div class="sticker-size ">
+          <h5>Sticker Id</h5>
+          <ul>
+            <li tappable (click)="setByDecId($event)">Decreasing</li>
+            <li tappable (click)="setByIncId($event)">Growing</li>
+          </ul>
+        </div>
+        <div class="sticker-size ">
+          <h5>Sticker Database</h5>
+          <ul>
+            <li tappable (click)="setByDecSize()">Decreasing</li>
+            <li tappable (click)="setByIncSize()">Growing</li>
+          </ul>
+        </div>
+        <div class="sticker-size ">
+          <h5>Created Date</h5>
+          <!-- <ul>
+            <li>1</li>
+            <li>2</li>
+          </ul> -->
+        </div>
+        <div class="sticker-size ">
+          <h5>No. of User</h5>
+          <ul>
+            <li>Decreasing</li>
+            <li>Growing</li>
+          </ul>
+        </div>
+        <div class="sticker-size ">
+          <h5>Edit Date</h5>
+          <!-- <ul>
+            <li>1</li>
+            <li>2</li>
+          </ul> -->
+        </div>
+        <div class="sticker-size ">
+          <h5>Sticker Used Post</h5>
+          <ul>
+            <li tappable>Decreasing</li>
+            <li tappable>Growing</li>
+          </ul>
+        </div>
+        <div class="sticker-size ">
+          <h5>Status</h5>
+          <div class="row ">
+            <div class="col-6 ">
+              <span class="activehover" tappable (click)="showActive()">Active</span>
+            </div>
+            <div class="col-6 ">
+              <span class="activehover" tappable (click)="showPassive()">Passive</span>
+            </div>
+          </div>
+        </div>
+        <div class="sticker-size ">
+          <h5>Platform</h5>
+          <ul>
+            <li tappable>Ios</li>
+            <li tappable>Android</li>
+            <li tappable>Browser</li>
+            <li tappable>Decreasing</li>
+            <li tappable>Growing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card col-10 " *ngIf="new_sticker">
+    <div class="container-fluid ">
+      <div class="alert alert-success " *ngIf="show_msg ">
+        {{show_msg}}
+      </div>
+      <div class="row ">
+        <div class="col-6 text-center"> Choose your sticker pages</div>
+        <div class="col-6 text-center" class="selct_sizeset">
+          <select class="dropbutton" [(ngModel)]="selectedPage" (change)="getPage(selectedPage)">
+          <option *ngFor="let page of page_info " value ="{{page._id}}">
+          <span> {{page.name}} </span>
+         </option>
+  </select>
+        </div>
+      </div>
+      <div class="row justify-content-center" *ngIf="!hide_more">
+        <div tappable class="col-3 text-center">
+          <input hidden id="upload_photo" class="input-file UPLo" type="file" accept="image/png" (change)="onFileSelect($event)" multiple required>
+          <div class="profile-pic">
+            <label for="upload_photo"><img  class="img-fluid pic" src="./assets/img/avatars/8T65jX9Gc.png"></label>
+          </div>
+          <label for="upload_photo" class="upload" class="upload_multiple" text-center>Upload Multiple Stickers</label>
+        </div>
+      </div>
+      <!-- <div class="row " *ngIf='selected_sticker'>
+        <div *ngFor="let image_sticker of table_array " (change)="onFileEdit($event,i) " class="col-lg-4 ">
+          <div class="uploader-box mt-2 ">
+            <div class="profile-pic ">
+              <label><img  class="img-fluid pic d-flex justify-content-center "  [src]='image_sticker'></label>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="row " *ngIf='selected_sticker'>
+        <div *ngFor="let image_sticker of table_array;let i=index" class="col-lg-4">
+          <input hidden id="upload_photo59" type="file" (change)="onFileEdit($event,i)" accept="image/png" required>
+          <div class="uploader-box mt-2">
+            <div class="profile-pic">
+              <label for="upload_photo59" class="change"><img  class="img-fluid pic d-flex justify-content-center"  [src]='image_sticker' (click) = "getIndex(i)"></label>
+              <label for="upload_photo59" class="upload_multiple" text-center>Change Image</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end ">
+        <div class="p-2 "> <button type="button " class="btn btn-warning btn_new " (click)="doneCreate() ">SAVE</button></div>
+      </div>
+      <table class="table table-responsive table-striped table-hover" id="MyTbl">
+        <thead>
+          <tr>
+            <th width="20%"> Sr.No. </th>
+            <th></th>
+            <th width="20%"> Thumbnail </th>
+            <th width="20%"> Sticker Id </th>
+            <th width="20%">No.of Use </th>
+            <th width="30%"> Created Date </th>
+            <th colspan="2">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of table_data; let i=index ">
+            <td width="20% ">{{i+1}}</td>
+            <td><i class="fa fa-angle-down " (click)="swapDownNew(user._id) "></i><i (click)="swapUpNew(user._id) " class="fa fa-angle-up "></i></td>
+            <td width="20% "><img class="img-thumbnail " [src]="sticker_url + user.filename "></td>
+            <td width="20% ">{{user._id}}</td>
+            <td width="20% "></td>
+            <td width="30% ">{{user.created | date : "dd.MM.y " }}</td>
+            <td [ngClass]="{ 'pink':user.status==true, 'white':user.status==false} ">Active </td>
+            <td [ngClass]="{ 'pink':user.status==false, 'white':user.status==true} ">Passive</td>
+            <td style="background: #f1ebd9; " (click)="deleteNew(user._id,user.pageId) ">CANCEL</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-end ">
+      <div class="p-2 "> <button type="button " class="btn btn-success btn_new " (click)="publishNewSticker() ">Publish</button></div>
+      <div class="p-2 "> <button type="button " class="btn btn-danger btn_new ml-2 " (click)="cancelCreate() ">Cancel</button></div>
+    </div>
+  </div>
+  <div class="card col-10 " *ngIf="create_Page">
+    <div class="container-fluid ">
+      <div class="alert alert-success " *ngIf="show_msg ">
+        {{show_msg}}
+      </div>
+      <div class="row layout-cate " mt-9>
+        <div class="col-12 col-sm-6 ">Name your Sticker Page</div>
+        <div class="col-12 col-sm-6 category-input ">
+          <div class="float-left col-12 col-sm-8 ">
+            <input type="text " [(ngModel)]="page" style="width:100%; " placeholder="Name your Sticker Page ">
+          </div>
+          <div class="float-right col-12 col-sm-4 ">
+            <button tappable class="save-button btn btn-warning btn_new " (click)="createPage(page)">CREATE PAGE</button>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center" *ngIf="!hide_more">
+        <div tappable class="col-3 text-center">
+          <input hidden id="upload_photo" class="input-file UPLo" type="file" accept="image/png" (change)="onFileSelect($event)" multiple required>
+          <div class="profile-pic text-center">
+            <label for="upload_photo"><img  class="img-fluid pic" src="./assets/img/avatars/8T65jX9Gc.png"></label>
+          </div>
+          <label for="upload_photo" class="upload_multiple" text-center>Upload Multiple Stickers</label>
+        </div>
+      </div>
+      <div class="row " *ngIf='selected_sticker'>
+        <div *ngFor="let image_sticker of table_array" class="col-lg-4 ">
+          <div class="uploader-box mt-2 ">
+            <div class="profile-pic ">
+              <label><img  class="img-fluid pic d-flex justify-content-center "  [src]='image_sticker'></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end ">
+        <div class="p-2 "> <button type="button " class="btn btn-warning btn_new " (click)="doneCreate()">SAVE</button></div>
+      </div>
+      <table class="table table-responsive table-striped table-hover " id="MyTbl ">
+        <thead>
+          <tr>
+            <th width="20% "> Sr.No. </th>
+            <th></th>
+            <th width="20% "> Thumbnail </th>
+            <th width="20% "> Sticker Id </th>
+            <th width="20% ">No.of Use </th>
+            <th width="30% "> Created Date </th>
+            <th colspan="2 ">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of table_data; let i=index ">
+            <td width="20% ">{{i+1}}</td>
+            <td><i class="fa fa-angle-down " (click)="swapDownCreate(user._id) "></i><i (click)="swapUpCreate(user._id) " class="fa fa-angle-up "></i></td>
+            <td width="20% "><img class="img-thumbnail " [src]="sticker_url + user.filename "></td>
+            <td width="20% ">{{user._id}}</td>
+            <td width="20% "></td>
+            <td width="30% ">{{user.created | date : "dd.MM.y " }}</td>
+            <td [ngClass]="{ 'pink':user.status==true, 'white':user.status==false} ">Active </td>
+            <td [ngClass]="{ 'pink':user.status==false, 'white':user.status==true} ">Passive</td>
+            <td style="background: #f1ebd9; " (click)="deleteCreated(user._id,user.pageId) ">CANCEL</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-end ">
+      <div class="p-2 "> <button type="button " class="btn btn-success btn_new " (click)="publishSticker() ">Publish</button></div>
+      <div class="p-2 "> <button type="button " class="btn btn-danger btn_new ml-2 " (click)="cancelCreate() ">Cancel</button></div>
+    </div>
+  </div>

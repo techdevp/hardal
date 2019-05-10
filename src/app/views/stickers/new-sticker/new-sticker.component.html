@@ -1,0 +1,82 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="container-fluid ">
+  <div class="alert alert-success " *ngIf="show_msg ">
+    {{show_msg}}
+  </div>
+  <div class="row ">
+    <div class="col-6 text-center"> Choose your sticker pages</div>
+    <div class="col-6 text-center" class="selct_sizeset">
+      <select class="dropbutton" [(ngModel)]="selectedPage" (change)="getPage(selectedPage)">
+            <option [ngValue]="undefined" disabled  selected>Select Page</option>
+        <option *ngFor="let page of page_info " value ="{{page._id}}">
+        <span> {{page.name}} </span>
+       </option>
+</select>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div tappable class="col-3 text-center">
+      <input hidden id="upload_photo" class="input-file UPLo" type="file" accept="image/png" (change)="onFileSelect($event)" multiple required>
+      <div class="profile-pic">
+        <label tappable for="upload_photo"><img  class="img-fluid pic" src="./assets/img/avatars/8T65jX9Gc.png"></label>
+      </div>
+      <label for="upload_photo" tappable class="upload" class="upload_multiple" text-center>Upload Multiple Stickers</label>
+    </div>
+  </div>
+  <!-- <div class="row " *ngIf='selected_sticker'>
+      <div *ngFor="let image_sticker of table_array " (change)="onFileEdit($event,i) " class="col-lg-4 ">
+        <div class="uploader-box mt-2 ">
+          <div class="profile-pic ">
+            <label><img  class="img-fluid pic d-flex justify-content-center "  [src]='image_sticker'></label>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  <div class="row " *ngIf='selected_sticker'>
+    <div *ngFor="let image_sticker of table_array;let i=index" class="col-lg-3">
+      <input hidden id="upload_photo59" type="file" (change)="onFileEdit($event,i)" accept="image/png" required>
+      <div class="uploader-box mt-2">
+        <div class="profile-pic">
+          <label for="upload_photo59" class="change"><img  class="img-fluid pic"  [src]='image_sticker' (click) = "getIndex(i)"></label>
+          <label for="upload_photo59" class="upload_multiple" text-center>Change Image</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end ">
+    <div class="p-2 "> <button type="button " class="btn btn-warning btn_new " (click)="doneCreate() ">SAVE</button></div>
+  </div>
+  <div class="d-flex justify-content-end ">
+    <div class="p-2 "> <button type="button " class="btn btn-success btn_new " (click)="publishNewSticker() ">Publish</button></div>
+    <div class="p-2 "> <button type="button " class="btn btn-danger btn_new ml-2 " (click)="cancelCreate() ">Cancel</button></div>
+  </div>
+  <table class="table table-responsive table-bordered table-hover allSticker newSticker" id="MyTbl">
+    <thead>
+      <tr>
+        <th> Sr.No. </th>
+        <th class="arrow_th"></th>
+        <th> Thumbnail </th>
+        <th> Sticker Id </th>
+        <th>No.of Use </th>
+        <th> Created Date </th>
+        <th colspan="2">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of table_data; let i=index;let last=last ">
+        <td>{{i+1}}</td>
+        <td>
+          <img *ngIf="!last" class="down arrow" src='./assets/img/ic_down_arrow.png' (click)="swapDownNew(user._id) ">
+          <img *ngIf="i!=0" class="up arrow" src='./assets/img/ic_up_arrow.png' (click)="swapUpNew(user._id) ">
+          <td><img class="img-thumbnail " [src]="sticker_url + user.filename "></td>
+          <td>{{user._id}}</td>
+          <td></td>
+          <td>{{user.created | date : "dd.MM.y " }}</td>
+          <td [ngClass]="{ 'pink':user.status==true, 'white':user.status==false} " tappable (click)="doActive(user._id,user.status) ">Active </td>
+          <td [ngClass]="{ 'pink':user.status==false, 'white':user.status==true} " tappable (click)="doPassive(user._id,user.status) ">Passive</td>
+          <td style="background: #f1ebd9; " tappable (click)="deleteNew(user._id,user.pageId) ">DELETE</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

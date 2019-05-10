@@ -1,0 +1,351 @@
+<div class="animated fadeIn">
+  <div class="row" *ngIf="total_count">
+    <div class="col-sm-6 col-lg-3">
+      <div class="card text-white bg-primary">
+        <div class="card-body pb-0">
+          <div class="btn-group float-right" dropdown>
+          </div>
+          <h4 class="mb-0">{{total_count.user_count}}</h4>
+          <p>Total Users</p>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+    <div class="col-sm-6 col-lg-3">
+      <div class="card text-white bg-info">
+        <div class="card-body pb-0">
+          <button type="button" class="btn btn-transparent p-0 float-right">
+            <!-- <i class="icon-location-pin"></i> -->
+          </button>
+          <h4 class="mb-0">{{total_count.layout_count}}</h4>
+          <p>Total Layouts</p>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+    <div class="col-sm-6 col-lg-3">
+      <div class="card text-white bg-warning">
+        <div class="card-body pb-0">
+          <div class="btn-group float-right" dropdown>
+          </div>
+          <h4 class="mb-0">{{total_count.post_count}}</h4>
+          <p>Total Posts</p>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+    <div class="col-sm-6 col-lg-3">
+      <div class="card text-white bg-danger">
+        <div class="card-body pb-0">
+          <div class="btn-group float-right" dropdown>
+
+          </div>
+          <h4 class="mb-0">{{total_count.badge_count}}</h4>
+          <p>Total Badge</p>
+        </div>
+
+      </div>
+    </div>
+    <!--/.col-->
+  </div>
+  <!--/.row-->
+
+  <!--/.card-->
+
+  <!--/.row-->
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card info-div">
+        <div class="card-header">
+          Recent Badge Status
+        </div>
+        <div class="card-body">
+
+          <div class="row ">
+            <div class="col-3">
+              <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="col-9">
+              <span class="name">Pari</span><br/>
+              <span class="name">@Anushka</span><br/>
+              <span class="name">An Artist Badge Request</span>
+            </div>
+          </div>
+          <hr>
+          <div class="row ">
+            <div class="col-3">
+              <img src="assets/img/avatars/1.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="col-9">
+              <span class="name">god</span><br/>
+              <span class="name">@god</span><br/>
+              <span class="name">An Artist Badge Request</span>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-3">
+              <img src="assets/img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="col-9">
+              <span class="name">gerry</span><br/>
+              <span class="name">@gerry</span><br/>
+              <span class="name">An Artist Badge Request</span>
+            </div>
+          </div>
+          <hr>
+          <div class="row ">
+            <div class="col-3">
+              <img src="assets/img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="col-9">
+              <span class="name">Pari</span><br/>
+              <span class="name">@Anushka</span><br/>
+              <span class="name">An Artist Badge Request</span>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-3">
+              <img src="assets/img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="col-9">
+              <span class="name">robert</span><br/>
+              <span class="name">@robert</span><br/>
+              <span class="name">An Artist Badge Request</span>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-3">
+              <img src="assets/img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="col-9">
+              <span class="name">yuvi</span><br/>
+              <span class="name">@yuvi</span><br/>
+              <span class="name">An Artist Badge Request</span>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-3">
+              <img src="assets/img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+            <div class="col-9">
+              <span class="name">admin</span><br/>
+              <span class="name">@Anushka</span><br/>
+              <span class="name">An Artist Badge Request</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-9 ">
+      <div class="card">
+        <div class="card-header">
+          Downloads
+        </div>
+        <div class="card-body">
+          <canvas baseChart [data]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [chartType]="lineChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+        </div>
+
+      </div>
+    </div>
+    <!--/.col-->
+  </div>
+
+  <!--/.row-->
+
+  <div class="row mb-4">
+    <!-- <div class="col-lg-3">
+      <div class="card-header">
+        Date
+      </div>
+      <div class="card-body style_graph">
+        <div *ngIf="calendarOptions">
+          <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick($event.detail)" (eventDrop)="updateEvent($event.detail)" (eventResize)="updateEvent($event.detail)" (clickButton)="clickButton($event.detail)"></ng-fullcalendar>
+        </div>
+      </div>
+
+    </div> -->
+    <div class="col-lg-3">
+      <div class="card-header">
+        Top Hashtags
+      </div>
+
+      <div class="card-body table_info">
+        <table class="table table-sm">
+
+          <tbody class="font-weight-light ">
+            <tr>
+              <td><small>#artist</small></td>
+              <td><small>5000</small></td>
+              <td>
+                <div class="progress">
+                  <div class="progress-bar bg-success" style="width:70%"></div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><small>#comedy</small></td>
+              <td><small>4000</small></td>
+              <td>
+                <div class="progress">
+                  <div class="progress-bar" style="width:60%"></div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><small>#Mark</small></td>
+              <td><small>444</small></td>
+              <td>
+                <div class="progress">
+                  <div class="progress-bar bg-success" style="width:50%"></div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><small>#camphor</small></td>
+              <td><small>3443</small></td>
+              <td>
+                <div class="progress">
+                  <div class="progress-bar" style="width:40%"></div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><small>#kamp</small></td>
+              <td><small>643</small></td>
+              <td>
+                <div class="progress">
+                  <div class="progress-bar bg-success" style="width:30%"></div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><small>#ramp</small></td>
+              <td><small>333</small></td>
+              <td>
+                <div class="progress">
+                  <div class="progress-bar" style="width:20%"></div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><small>#gamp</small></td>
+              <td><small>Mark</small></td>
+              <td>
+                <div class="progress">
+                  <div class="progress-bar bg-success" style="width:20%"></div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="card-header">
+        Top Users
+      </div>
+      <div class="card-body table_info">
+        <table class="table table-sm">
+          <thead class="font-weight-light ">
+            <tr>
+              <th><small>Username</small></th>
+              <th><small>Location</small></th>
+              <th><small>Follower</small></th>
+              <!-- <th><small>Likes</small></th> -->
+            </tr>
+          </thead>
+          <tbody class="font-weight-light " *ngIf="users">
+            <tr *ngFor="let data of users;let i=index">
+              <td><small>{{i+1}}) {{data.username}}</small></td>
+              <td class="text_align"><small>{{data.location?data.location:'--'}}</small></td>
+              <td class="text_align"><small>{{data.length}}</small></td>
+              <!-- <td><small>Mark</small></td> -->
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+    <div class="col-lg-3 ">
+      <div class="card-header ">
+        Traffic Status
+      </div>
+      <div class="card-body style_graph">
+        <canvas class=" style_graph" baseChart [data]="lineChartDatasingle" [labels]="lineChartLabelsDta" [options]="lineChartOptions" [chartType]="lineChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+      </div>
+    </div>
+
+
+
+  </div>
+  <div class="row ">
+    <div class="col-lg-3 ">
+      <div class="card-header ">
+        Posts
+      </div>
+
+      <div class="card-body table_info">
+        <table class="table table-sm">
+          <tbody class="font-weight-light " *ngIf="posts_count">
+            <tr>
+              <td><small>Total Post Created</small></td>
+              <td><small>{{posts_count.total_posts}}</small></td>
+
+            </tr>
+            <tr>
+              <td><small>Total reported post</small></td>
+              <td><small>{{posts_count.reported_posts}}</small></td>
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+    <div class="col-lg-3 ">
+      <div class="card-header ">
+        Top Layout
+      </div>
+      <div class="card-body table_info">
+        <table class="table table-sm">
+          <thead class="font-weight-light">
+            <tr>
+              <th><small>ARTIST</small></th>
+              <th><small>LAYOUT ID</small></th>
+              <th><small>USAGE</small></th>
+              <!-- <th><small>LIKES</small></th> -->
+            </tr>
+          </thead>
+          <tbody class="font-weight-light" *ngIf="layout">
+            <tr *ngFor="let data of layout;let i=index;">
+              <td><small>{{i+1}}) {{data.artist&& data.artist.name?data.artist.name:'--'}}</small></td>
+              <td class="text_align"><small>{{data._id}}</small></td>
+              <td class="text_align"><small>{{data.post_count}}</small></td>
+
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+    <div class="col-lg-6 ">
+      <div class="card-header ">
+        Total Visits
+      </div>
+      <div class="card-body style_graph">
+        <agm-map style="height: 180px" [latitude]="30.7333" [longitude]="76.7794">
+          <!-- <agm-marker-cluster *ngIf=markers>
+            <agm-marker *ngFor="let marker of markers" [latitude]="marker.latitude" [longitude]="marker.longitude"></agm-marker>
+          </agm-marker-cluster> -->
+
+        </agm-map>
+      </div>
+    </div>

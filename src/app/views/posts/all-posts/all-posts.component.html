@@ -1,0 +1,224 @@
+<div class="row" *ngIf="posts_count">
+  <div class="col-2 new_layout">
+    <p>New Posts(30 days)</p>
+    {{posts_count.new_posts}}
+  </div>
+  <div class="col-2 remove_layout">
+    <p>Deleted Posts</p>
+    {{posts_count.new_posts}}
+  </div>
+  <div class="col-2 remove_layout_interest">
+    <p>Reported Posts</p>
+    {{posts_count.reported_posts}}
+  </div>
+  <div class="col-2 total_layout_usage">
+    <p> Total Posts</p>
+    {{posts_count.total_posts}}
+  </div>
+</div>
+
+<div class="all_header layout_header">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-xl-4 search_div">
+        <input type="text" class="search-input search_field" placeholder="Search Post ID,Username or User ID" [(ngModel)]="search_text">
+        <span class="input-group-addon search-icon"><i class="icon-magnifier" tappable  (click)="searchPost(search_text)"></i></span>
+      </div>
+      <div class="col-sm-3 col-xl-4">All Posts</div>
+    </div>
+  </div>
+</div>
+<div class="alert alert-success" *ngIf="successMessage">
+  {{successMessage}}
+</div>
+<div class="alert alert-danger" *ngIf="error_msg">
+  {{error_msg}}
+</div>
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div id="print-section">
+  <table class="table table-responsive table-hover allSticker">
+    <thead>
+      <tr *ngIf="posts && posts.length">
+        <th> Sr.No. </th>
+        <th> Post Id </th>
+        <th>Username </th>
+        <th>user id </th>
+        <th class="long_text_database">Post created Date and Time</th>
+        <!-- <th class="long_text_database">Post edited Date and Time</th> -->
+        <th class="long_text_database">Post type</th>
+        <th class="long_text_database">Used hashtags</th>
+        <th class="long_text_database">tagged users</th>
+        <th class="long_text_database">mentions</th>
+        <th>Location </th>
+        <!-- <th>Language</th> -->
+        <th>Views</th>
+        <th>Likes</th>
+        <th>Shares</th>
+        <th>Comments</th>
+        <th>Interaction(%)</th>
+        <th>Reports</th>
+        <th colspan>Posts Status</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="posts && posts.length">
+      <tr *ngFor="let data of posts;let i=index;" class="k-alt">
+        <td>
+          <tr>
+            <td class="checbox_field">
+              <input type="checkbox" name="{{'select'+i}}" [(ngModel)]="selected[i]" (ngModelChange)="selectLayout($event,data._id,selected[i],i)"><br>
+            </td>
+            <td class="checbox_field">{{i+1}}</td>
+            <!-- <td class="checbox_field"><img class="down arrow" src='./assets/img/ic_down_arrow.png' (click)="swapDownAll(user._id) "><img class="up arrow" src='./assets/img/ic_up_arrow.png' (click)=" swapUpAll(user._id) "> -->
+          </tr>
+        </td>
+        <td class="id_underline">{{data._id}}</td>
+        <td>
+          {{data.creator && data.creator.username?data.creator.username:'--'}}
+        </td>
+        <td> {{data.creator && data.creator._id?data.creator._id:'--'}}</td>
+        <td>{{data.created| date : "dd.MM.y hh:mm "}}</td>
+        <!-- <td>{{data.updated?(data.updated|date : "dd.MM.y hh:mm" ):'--'}}</td> -->
+        <td>Regular Post</td>
+        <td>
+          <select class="dropbutton hashtag_drop">
+            <!-- <option value="data.hashtags[0]"  selected *ngIf="data.hashtags.length">{{data.hashtags[0]}}</option> -->
+              <option *ngFor="let hashtag of data.hashtags;let i=index" [value] ="hashtag" [selected]="i===0?true:false">
+             {{hashtag}}
+             </option>
+            </select>
+        </td>
+        <td>
+          <select class="dropbutton hashtag_drop">
+              <option *ngFor="let tag of data.tags ;let i=index" value ="{{tag.username}}"  [selected]="i===0?true:false">
+              <span> {{tag.username}} </span>
+             </option>
+            </select>
+        </td>
+        <td>
+          <select class="dropbutton hashtag_drop" [(ngModel)]="hashtags">
+              <option *ngFor="let tag of data.tags" value ="{{tag}}"  [selected]="i===0?true:false">
+              <span> {{tag}} </span>
+             </option>
+            </select>
+        </td>
+        <td>{{data.location?data.location:'--'}}</td>
+        <!-- <td>{{data.language?data.language:'--'}}</td> -->
+        <td>{{data.views_count}}</td>
+        <td>{{data.ups_count}}</td>
+        <td>0</td>
+        <td>{{data.comments_count}}</td>
+        <td>0</td>
+        <td>{{data.report_count}}<i *ngIf="data.report_count" class="fa fa-eye eye" aria-hidden="true"></i></td>
+        <td tappable [ngClass]="[!data.status?'text_archive':'grey',data.status?'green':'grey']">{{data.status?'Active':'--'}} </td>
+        <td tappable class="star" [routerLink]="['/posts/view-post', data._id]">View Post</td>
+        <td tappable class="star ">
+          <!-- <div class="edit_field">Action</div> -->
+          <select class="dropbutton action" [(ngModel)]="action[i]" (change)="setCountry(selecteCountry)">
+                <option value="undefined" disabled  selected >Action</option>
+                <option value = "" >Promote</option>
+                <option value = "">See Post Statistcs</option>
+                <option value = "">Suspend</option>
+          </select>
+        </td>
+        <!-- <td tappable (click)="editCategory(data._id,'Archived',i)"> <i class="fa fa-trash-o trash" aria-hidden="true"></i></td> -->
+      </tr>
+    </tbody>
+  </table>
+</div>
+<ul class="pagination justify-content-end" *ngIf="posts && posts.length">
+  <li class="page-item "><a class="page-link " (click)="findPrev()">Prev</a></li>
+  <li class="page-item "><a class="page-link " (click)="findNext()">Next</a></li>
+</ul>
+
+<div class="user_btns" *ngIf="posts  && posts.length">
+  <ul>
+    <li><button class="btn">Total Posts</button>
+      <p *ngIf="posts">{{total_count}}</p>
+    </li>
+    <li><button class="btn">Selected Posts</button>
+      <p>{{selected_post}}</p>
+    </li>
+    <li tappable><img class="image_css" src='assets/img/download-to-storage-drive.png' (click)="download()" />
+      <p></p>
+    </li>
+    <li tappable><img class="image_css" src='assets/img/printer-tool.png' (click)="print()" />
+      <p></p>
+    </li>
+  </ul>
+</div>
+
+<div id="print-section1" style="display:none;">
+  <div id="print-section1">
+    <table class="table table-responsive table-hover allSticker">
+      <thead>
+        <tr *ngIf="posts && posts.length">
+          <th> Sr.No. </th>
+          <th> Post Id </th>
+          <th>Username </th>
+          <th>user id </th>
+          <th class="long_text_database">Post created Date and Time</th>
+          <!-- <th class="long_text_database">Post edited Date and Time</th> -->
+          <th class="long_text_database">Post type</th>
+          <th class="long_text_database">Used hashtags</th>
+          <th class="long_text_database">tagged users</th>
+          <th class="long_text_database">mentions</th>
+          <th>Location </th>
+          <!-- <th>Language</th> -->
+          <th>Views</th>
+          <th>Likes</th>
+          <th>Shares</th>
+          <th>Comments</th>
+          <th>Interaction(%)</th>
+          <th>Reports</th>
+          <th colspan>Posts Status</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="posts && posts.length">
+
+        <tr *ngFor="let data of posts;let i=index;" class="k-alt">
+          <div *ngIf="data.checked">
+            <td class="checbox_field">{{i+1}}</td>
+            <td class="id_underline">{{data._id}}</td>
+            <td>
+              {{data.creator && data.creator.username?data.creator.username:'--'}}
+            </td>
+            <td> {{data.creator && data.creator._id?data.creator._id:'--'}}</td>
+            <td>{{data.created| date : "dd.MM.y hh:mm "}}</td>
+            <!-- <td>{{data.updated?(data.updated|date : "dd.MM.y hh:mm" ):'--'}}</td> -->
+            <td>Regular Post</td>
+            <td>
+              <span *ngFor="let hashtag of data.hashtags;let i=index">
+             {{hashtag}}
+           </span>
+            </td>
+            <td>
+              <span *ngFor="let tag of data.tags ;let i=index"> {{tag.username}} </span>
+            </td>
+            <td>
+              <span *ngFor="let tag of data.tags"> {{tag}} </span>
+            </td>
+            <td>{{data.location?data.location:'--'}}</td>
+            <!-- <td>{{data.language?data.language:'--'}}</td> -->
+            <td>{{data.views_count}}</td>
+            <td>{{data.ups_count}}</td>
+            <td>0</td>
+            <td>{{data.comments_count}}</td>
+            <td>0</td>
+            <td>{{data.report_count}}<i *ngIf="data.report_count" class="fa fa-eye eye" aria-hidden="true"></i></td>
+            <td tappable [ngClass]="[!data.status?'text_archive':'grey',data.status?'green':'grey']">{{data.status?'Active':'--'}} </td>
+            <td tappable class="star" [routerLink]="['/posts/view-post', data._id]">View Post</td>
+            <td tappable class="star ">
+              <!-- <div class="edit_field">Action</div> -->
+              <select class="dropbutton action" [(ngModel)]="action[i]" (change)="setCountry(selecteCountry)">
+                <option value="undefined" disabled  selected >Action</option>
+                <option value = "" >Promote</option>
+                <option value = "">See Post Statistcs</option>
+                <option value = "">Suspend</option>
+          </select>
+            </td>
+            <!-- <td tappable (click)="editCategory(data._id,'Archived',i)"> <i class="fa fa-trash-o trash" aria-hidden="true"></i></td> -->
+          </div>
+        </tr>
+      </tbody>
+    </table>
+  </div>

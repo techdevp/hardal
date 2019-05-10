@@ -1,0 +1,267 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+
+<div>
+  <div class="all_header layout_header">
+    <div class="row">
+      <div class="col-sm-4 text-left">
+        <i class="fa fa-arrow-left arrow_icon" aria-hidden="true" (click)="backClicked()" tappable></i>
+      </div>
+      <div class="col-sm-4">
+        VIEW PROFILE
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="users">
+    <div class="col-6">
+      <form>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Name:</label>
+          <div class="col-sm-10" *ngIf="users  && users.name">
+            <input type="text" class="form-control input_field1" [(ngModel)]="users.name" [ngModelOptions]="{standalone: true}" readonly>
+          </div>
+          <div class="col-sm-10" *ngIf="users && !users.name ">
+            <input type="text" class="form-control input_field1" placeholder="--" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Username:</label>
+          <div class="col-sm-10" *ngIf="users && users.username">
+            <input type="text" class="form-control input_field1" [(ngModel)]="users.username" [ngModelOptions]="{standalone: true}" readonly>
+          </div>
+          <div class="col-sm-10" *ngIf="users && !users.username ">
+            <input type="text" class="form-control input_field1" placeholder="--" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Email:</label>
+          <div class="col-sm-10" *ngIf="users && users.email">
+            <input type="text" class="form-control input_field1" [(ngModel)]="users.email" [ngModelOptions]="{standalone: true}" readonly>
+          </div>
+          <div class="col-sm-10" *ngIf="users && !users.email ">
+            <input type="text" class="form-control input_field1" placeholder="--" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Email:</label>
+          <div class="col-sm-10" *ngIf="users && users.gender">
+            <input type="text" class="form-control input_field1" [(ngModel)]="users.gender" [ngModelOptions]="{standalone: true}" readonly>
+          </div>
+          <div class="col-sm-10" *ngIf="users && !users.gender ">
+            <input type="text" class="form-control input_field1" placeholder="--" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Posts:</label>
+          <div class="col-sm-10" *ngIf="users && users.posts_count">
+            <input type="text" class="form-control input_field1" [(ngModel)]="users.posts_count" [ngModelOptions]="{standalone: true}" readonly>
+          </div>
+          <div class="col-sm-10" *ngIf="users && !users.posts_count ">
+            <input type="text" class="form-control input_field1" placeholder="0" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Followers:</label>
+          <div class="col-sm-10" *ngIf="users && users.followers_count">
+            <input type="text" class="form-control input_field1" [(ngModel)]="users.followers_count" [ngModelOptions]="{standalone: true}" readonly>
+          </div>
+          <div class="col-sm-10" *ngIf="users && !users.followers_count ">
+            <input type="text" class="form-control input_field1" placeholder="0" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Layouts:</label>
+          <div class="col-sm-10" *ngIf="users && users.layout_count">
+            <input type="text" class="form-control input_field1" [(ngModel)]="users.layout_count" [ngModelOptions]="{standalone: true}" readonly>
+          </div>
+          <div class="col-sm-10" *ngIf="users && !users.layout_count ">
+            <input type="text" class="form-control input_field1" placeholder="0" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Badge:</label>
+          <div class="col-sm-10" *ngIf="users && users.badge_number">
+            <input type="text" class="form-control input_field1" *ngIf="users.badge_number==2" placeholder="Yellow" readonly>
+            <input type="text" class="form-control input_field1" *ngIf="users.badge_number==1" placeholder="Grey" readonly>
+          </div>
+          <div class="col-sm-10" *ngIf="users && users.badge_number==0 ">
+            <input type="text" class="form-control input_field1" placeholder="--" readonly>
+          </div>
+        </div>
+        <div>
+          <div class="row" *ngIf="users && users.interests&& users.interests.length">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Interests:</label>
+            <div class=" input_field mt-1">
+              <span *ngFor="let data of users.interests; let last=last;">{{last?data.name:data.name + ', '}}</span>
+            </div>
+          </div>
+          <!-- <div class="row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Interests:</label>
+            <div class="col-sm-10">
+              <div class="row category_field" *ngFor="let data of users.interests;let i=index">
+                <div class="col-6">
+                  {{data.name}}
+                </div>
+                <div class="col-6">
+                </div>
+              </div>
+              <div class="row category_field" *ngIf="!users.interests.length">
+                <div class="col-6">--</div>
+                <div class="col-6">
+                </div>
+              </div>
+            </div>
+          </div> -->
+          <!-- <div class="row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Species:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control input_field1" [(ngModel)]="users.speciesId.name" [ngModelOptions]="{standalone: true}" readonly>
+            </div>
+          </div> -->
+          <div class="row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Location:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control input_field1" [(ngModel)]="users.location" [ngModelOptions]="{standalone: true}" readonly>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col -2 uploader-box">
+      <p class="upload_artwork" text-center>Profile Image</p>
+      <div class="row">
+        <div class="col-4">
+          <div class="profile-pic">
+            <img *ngIf="!users.photo" class="img-responsive pic" src="./assets/img/avatars/ic_addnew_dummy@3x.png">
+            <img *ngIf="users.photo" class="img-responsive pic" [src]="profile_pic">
+          </div>
+        </div>
+        <div class="col" *ngIf="users.photo">
+          <label float-right class="upload_field1" (click)="downloadImage(imageurl + users.photo)" tappable>Download image </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="big-loader" *ngIf="loader"></div>
+<div class="backdrop" [ngStyle]="{'display':display}"></div>
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
+  <div class="modal-dialog" role="document">
+
+    <div class="modal-content" *ngIf="following">
+      <div class="modal-header">
+
+        <h4 class="modal-title">Following</h4>
+      </div>
+      <div class="modal-body">
+        <div class="big-loader" *ngIf="loader_model"></div>
+        <p *ngIf="error_msg">{{error_msg}}</p>
+        <div class="col-sm-4 share-col" *ngFor="let member of following_result">
+          <div class="fOLLowers">
+            <div class="PROfile imagedynamic" *ngIf="member && !member.photo && !member.facebookId"><img src="../assets/img/avatars/8.jpg" alt="#"></div>
+            <div class="PROfile imagedynamic" *ngIf="member && member.photo && !member.facebookId"><img src="{{imageurl}}{{member.photo}}" alt="#"></div>
+            <div class="PROfile imagedynamic" *ngIf="member && member.photo && member.facebookId"><img src="{{imageurl}}{{member.photo}}" alt="#"></div>
+            <div class="PROfile imagedynamic" *ngIf="member && !member.photo && member.facebookId"><img src="https://graph.facebook.com/{{member.facebookId}}/picture?type=square" alt="#"></div>
+            <div class="heading">
+              <h1>{{member.username}}</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="onCloseHandled()">Close</button>
+      </div>
+    </div>
+    <div class="modal-content" *ngIf="follower">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closemodel()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Followers</h4>
+      </div>
+      <div class="modal-body">
+        <p *ngIf="no_follower">{{no_follower}}</p>
+        <div class="row text-center">
+          <div class="col-sm-4 share-col" *ngFor="let member of follower_result">
+            <div class="fOLLowers">
+              <div class="PROfile imagedynamic" *ngIf="member && !member.photo && !member.facebookId"><img src="../assets/img/avatars/8.jpg" alt="#"></div>
+              <div class="PROfile imagedynamic" *ngIf="member && member.photo && !member.facebookId"><img src="{{imageurl}}{{member.photo}}" alt="#"></div>
+              <div class="PROfile imagedynamic" *ngIf="member && member.photo && member.facebookId"><img src="{{imageurl}}{{member.photo}}" alt="#"></div>
+              <div class="PROfile imagedynamic" *ngIf="member && !member.photo && member.facebookId"><img src="https://graph.facebook.com/{{member.facebookId}}/picture?type=square" alt="#"></div>
+              <div class="heading">
+                <h1>{{member.username}}</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="onCloseHandled()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="content-height" *ngIf='!loader'>
+  <section>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="fb-profile">
+            <img *ngIf="!users.facebookId" align="left" class="fb-image-lg" src="{{cover_pic?cover_pic:'../assets/img/avatars/8.jpg'}}" alt="" />
+            <img *ngIf="users.facebookId && users.cover ==''" align="left" class="fb-image-lg" src="http://graph.facebook.com/{{users.facebookId}}/cover" alt="" />
+            <img *ngIf="users.facebookId && users.cover !=''" align="left" class="fb-image-lg" src="{{cover_pic}}" alt="" />
+          </div>
+        </div>
+      </div>
+      <div class="row PROFILE_NEW">
+        <div class="col-md-3">
+          <img *ngIf="users.facebookId && users.photo != ''" align="left" class="fb-image-lg" src="{{profile_pic}}" alt="" />
+          <img *ngIf="users.facebookId && users.photo == ''" align="left" class="fb-image-lg" src="https://graph.facebook.com/{{users.facebookId}}/picture?type=normal" alt="" />
+          <img *ngIf="!users.facebookId" align="left" class="fb-image-profile img-circle img-responsive" src="{{profile_pic?profile_pic:'../assets/img/avatars/5.jpg'}}" />
+        </div>
+        <div class=" col-md-9 ">
+          <div class="row ">
+            <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12 ">
+              <div class="BANNER_PENAL1 ">
+                <div class="Profile_TITTLE">
+                  <h2> Hi! I‘m {{users.name}}</h2>
+                  <p class="joined ">
+                    Member since: <span> {{users.created | date:'dd MMM, yyyy'}}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-7 col-md-8 col-sm-8 col-xs-12 ">
+              <div class="FOLLOVER_PENAL ">
+                <ul class="FOLLOVER_PENAL_list text-center ">
+                  <li><a>{{users.posts && users.posts.length  ? users.posts.length:'0'}}<span>Posts</span></a></li>
+                  <li><a tappable (click)="openModalFollowers()">{{users.followers.length}}<span>Followers</span></a></li>
+                  <li><a tappable (click)="openModalFollowing()">{{users.follow_status?users.follow_status : '0'}}<span>Following</span></a></li>
+                  <li>
+                    <div>
+                      <i class="fa fa-ellipsis-v" (click)="openDrop()"></i>
+                      <select *ngIf="drop" class="dropbutton " (change)="muteUser(status)" [(ngModel)]="status">
+                            <option value = "send_message">
+                                    Send Message
+                            </option>
+                            <option value = "mute" >
+                                  Mute
+                            </option>
+                            <option value = "Report" (click)="reportUser()">
+                                    Report
+                            </option>
+                            <option value = "Block" (click)= "blockUser()">
+                                  Block
+                            </option>
+                            </select>
+                    </div>
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div> -->

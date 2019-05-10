@@ -1,0 +1,106 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="all_header">Hashtags Report</div>
+
+<div class="row layout-cate" mt-9>
+  <div class="col-1"></div>
+  <div class="col-3" class="search_name">SEARCH</div>
+  <div class="col-4 category-input "><input type="text" id="search" placeholder="Search hashtag id or hashtag" [(ngModel)]="hashtag_text" (ngModelChange)="searchHashtag($event,hashtag_text)" class="search_input"></div>
+  <div class="col-2 choose_fields">Choose date</div>
+  <div class="col-2 choose_fields">Choose location</div>
+</div>
+
+<div>
+  <table class="table table-responsive table-hover table-bordered allSticker">
+    <thead>
+      <tr>
+        <th> Sr.No. </th>
+        <th> Hashtag Id </th>
+        <th class="long_text_database">Hashtag </th>
+        <th class="long_text_date">Hashtag Date </th>
+        <th class="long_text_date">Number of use </th>
+        <th class="long_text_date">Hashtag Post database </th>
+        <th class="long_text_date">Last used </th>
+        <th class="long_text_date">Location </th>
+        <th class="long_text_date">Language </th>
+        <th class="long_text_date">Views </th>
+        <th class="long_text_date">Likes </th>
+        <th class="long_text_date">Comments </th>
+        <th class="long_text_date">Shares </th>
+        <th class="long_text_date">Interaction </th>
+        <th class="long_text_date">Reports </th>
+        <th class="long_text_date">TT list </th>
+        <th class="long_text_date">report reason </th>
+        <th colspan="2">operation</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="hashtags && hashtags.length">
+      <tr *ngFor="let hashtag of hashtags| orderBy: orderby: order;let i=index">
+        <td>{{i+1}}</td>
+        <td>{{hashtag._id}}</td>
+        <td>{{hashtag.name}}</td>
+        <td>{{hashtag.created | date : "dd.MM.y " }}</td>
+        <td>56</td>
+        <td>{{hashtag.filesize * 0.001 + 'KB'}} </td>
+        <td>{{hashtag.created | date : "dd.MM.y " }}</td>
+        <td>India</td>
+        <td>English</td>
+        <td>324</td>
+        <td>324</td>
+        <td>324</td>
+        <td>324</td>
+        <td>%04</td>
+        <td>34</td>
+        <td>Added to list</td>
+        <td>copyright</td>
+
+        <td tappable [ngClass]="{ 'pink':hashtag.status==true, 'white':hashtag.status==false} " (click)="doActive(hashtag._id,hashtag.status) ">Active </td>
+        <td tappable [ngClass]="{ 'pink':hashtag.status==false, 'white':hashtag.status==true} " (click)="doPassive(hashtag._id,hashtag.status) ">Passive</td>
+
+        <td tappable style="background: #f1ebd9;" (click)="viewPost(hashtag,i)">View Posts</td>
+        <td tappable style="background: #f1ebd9;" (click)="viewReport(hashtag,i)">View Report</td>
+        <td tappable style="background: #f1ebd9;" (click)="deleteReport(hashtag._id,i) ">Delete Report</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="print-section">
+  <table class="table table-responsive table-hover table-bordered allSticker">
+    <thead>
+      <tr>
+        <th> Reporter user Id </th>
+        <th class="long_text_database">Reporter username </th>
+        <th class="long_text_date">Reporter location </th>
+        <th class="long_text_date">reporter langauge </th>
+        <th class="long_text_date">report date </th>
+        <th class="long_text_date">reporter reason</th>
+        <th class="long_text_date" colspan="5">report explanation </th>
+      </tr>
+    </thead>
+    <tbody *ngIf="reports && reports.length">
+      <tr *ngFor="let report of reports| orderBy: orderby: order;let i=index">
+        <td>{{report.artist._id}}</td>
+        <td>{{report.artist.name}}</td>
+        <td>{{report.artist.location}}</td>
+        <td>{{report.artist.langauge}}</td>
+        <td>{{report.created | date : "dd.MM.y " }}</td>
+        <td>copyright</td>
+        <td></td>
+
+        <td tappable style="background: #f1ebd9;" (click)="viewPost(report,i)">View reporter user</td>
+        <td tappable style="background: #f1ebd9;" (click)="deleteReport(report._id,i) ">Delete Report</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="row ">
+  <div class="col-sm-4 ">
+  </div>
+  <div class="col-sm-4 ">
+
+  </div>
+  <div class="col-sm-4 ">
+    <div tappable style="background: #e69603;text-align: center;border: 2px solid; " class="col-6 float-left " (click)="print() ">Printout</div>
+    <div tappable style="background: #e69603;text-align: center;border: 2px solid; " class="col-6 float-right " (click)="csv() ">Download</div>
+  </div>
+</div>

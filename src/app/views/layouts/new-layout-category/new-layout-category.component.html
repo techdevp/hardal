@@ -1,0 +1,255 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="row " *ngIf="layout_count">
+  <div class="col-2 new_layout">
+    <p>New Layouts(30 days)</p>
+    {{layout_count.newlayout_count}}
+  </div>
+  <div class="col-2 remove_layout">
+    <p>Total Removed Layouts</p>
+    0
+  </div>
+  <div class="col-2 total_layout">
+    <p>Total Layout Artists</p>
+    {{layout_count.artist_count}}
+  </div>
+  <div class="col-2 total_layout_usage">
+    <p> Total Layout Usage</p>
+    {{layout_count.layout_usage_count}}
+  </div>
+</div>
+<div class="all_header layout_header">NEW LAYOUT CATEGORY</div>
+<div class="alert alert-success" *ngIf="successMessage">
+  {{successMessage}}
+</div>
+<div class="alert alert-danger" *ngIf="error_msg">
+  {{error_msg}}
+</div>
+
+<div class="container" *ngIf="!error_msg">
+  <!-- <div class="row layout-cate" mt-9>
+      <span class="star_position">*</span>
+      <div class="col-3" class="layout_name">Name Your Layout Category</div>
+      <div class="col-4 category-input layout_input"><input type="text" [(ngModel)]="category_name"></div>
+    </div> -->
+  <div class="row edit_box">
+    <div class="col-3">Name Your Layout Category</div>
+    <div class="col-4 category-input layout_input">
+      <tabset>
+        <tab heading="English" id="tab1"><input type="text" [(ngModel)]="category_name" placeholder="Category name"></tab>
+        <tab heading="Spanish"><input type="text" [(ngModel)]="category_name_es" placeholder="Category name"></tab>
+        <tab heading="Turkish"><input type="text" [(ngModel)]="category_name_tr" placeholder="Category name"></tab>
+        <tab heading="Portuguese"><input type="text" [(ngModel)]="category_name_pt" placeholder="Category name"></tab>
+      </tabset>
+    </div>
+  </div>
+
+  <div class="row edit_box">
+    <div class="col-3">Choose locations to publish</div>
+    <div class="col-6" class="selct_sizeset set_dropdown">
+      <select class="dropbutton" [(ngModel)]="selecteCountry" (change)="setCountry(selecteCountry)">
+            <option value="undefined" disabled  selected>Select Country</option>
+            <option *ngFor="let data of countries" value = "{{data}}">
+            <span> {{data}} </span>
+            </option>
+        </select>
+    </div>
+  </div>
+  <!--
+  <div class="row edit_box">
+    <div class="col-3">Choose layout species</div>
+    <div class="col-6" class="selct_sizeset set_dropdown">
+      <select class="dropbutton" [(ngModel)]="selectedSpecies">
+          <option value="undefined" disabled  selected>Select Species</option>
+          <option *ngFor="let data of species" value = "{{data._id}}">
+        <span>  {{data.name}}</span>
+          </option>
+      </select>
+    </div>
+  </div> -->
+
+  <!-- <div class="set_top">
+    <h3 text-secondary class="mandatory_text ">(<span class="star_position" style="margin-left: 2px;!important">*</span>is Mandatory). Please upload 4 images to publish layout category.</h3>
+  </div> -->
+
+  <div class="flex-container">
+    <div class="flex-item" *ngFor="let data of image_box;let i=index;">
+      <div class="uploader-box ">
+        <span class="star_position" *ngIf="i<1"></span>
+        <span class="star_position" *ngIf="i>=1"></span>
+        <input hidden id="{{'upload_photo'+i}}" class="input-file UPLo" type="file" accept="image/*" multiple name="{{'select_file'+i}}" (change)="onFileSelect($event,i)" required>
+        <div class="profile-pic">
+          <label for="{{'upload_photo'+i}}" *ngIf="image && image.length && image[i]"><img class="img-responsive pic" src="{{imageUrl+image[i].photo}}"></label>
+          <label for="{{'upload_photo'+i}}" *ngIf="image && !image[i]"><img  class="img-responsive pic" src="./assets/img/avatars/ic_addnew_dummy@3x.png"></label>
+        </div>
+        <p class="upload" text-center *ngIf="image && image.length && image[i]">Change image</p>
+        <p class="upload" text-center *ngIf="image && !image[i]">Upload image</p>
+      </div>
+      <div class="col-6" class="species_dropdown">
+        <p class="text-center mb-1 name_text">Species</p>
+        <select class="species_select" name="{{'selectedSpecies'+i}}" [(ngModel)]="selectedSpecies[i]" (ngModelOptions)="{standalone:true}" (ngModelChange)="selectSpecies(selectedSpecies[i],i);">
+            <option value="undefined" disabled  selected>Select Species</option>
+            <option *ngFor="let data of species" value = "{{data._id}}">
+            {{data.name}}
+            </option>
+        </select>
+      </div>
+      <p class="text-center mb-1 name_text">Artist Username</p>
+      <input type="text" placeholder="Search username" class="artist_input" name="{{'select'+i}}" [(ngModel)]="selected[i]" (ngModelChange)="selectArtisan($event,data._id,selected[i],i);" (focus)="focusedIn(i)" (focusout)="focusedOut(i)">
+      <div *ngIf="drop_div[i]" style="height: 27vh;overflow-y: scroll;">
+        <div *ngFor="let user of artists;let j=index;" (click)="slectedUser(user,j,i)" tappable>{{user.username}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-center button_fields">
+    <div class="p-2" [routerLink]="'/layouts/layout-category'"> <button type="button" class="btn btn-danger btn_new ml-2" tappable>Cancel</button></div>
+    <div class="p-2 "> <button type="button " class="btn btn-warning btn_new " (click)="createCategory() " tappable>Save</button></div>
+    <div class="p-2"> <button type="button" class="btn btn-success btn_new" (click)="publishLayout()" tappable>Publish</button></div>
+  </div>
+
+  <div id="print-section" *ngIf="layout && layout.length">
+    <table class="table table-responsive table-hover allSticker">
+      <thead>
+        <tr>
+          <th> Sr.No. </th>
+          <th> Thumbnail </th>
+          <th> Layout Id </th>
+          <th>Artist Username </th>
+          <th>Layout Category </th>
+          <th>Layout Species </th>
+          <th>Location will be used </th>
+          <th class="long_text_database">Layout Database </th>
+          <th class="long_text_database">Registration Date and Time</th>
+          <th class="long_text_database">Number of users used it</th>
+          <th class="long_text_no">Edit Date </th>
+          <th class="long_text_no"> Number of total posts</th>
+          <th><i class="fa fa-star star" aria-hidden="true"></i>HighLight/UnhighLight </th>
+          <th>Layout Status</th>
+          <th></th>
+          <th class="text_archive">Archive</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of layout|filter:search_text;let i=index;" class="k-alt">
+          <td>
+            <tr>
+              <td class="checbox_field">
+                <input type="checkbox" name="{{'select'+i}}" [(ngModel)]="selected[i]" (ngModelChange)="selectLayout($event,data._id,selected[i],i)"><br>
+              </td>
+              <td class="checbox_field">{{i+1}}</td>
+            </tr>
+          </td>
+          <td><img class="img_thumbnail" [src]="imageUrl + data.photo"></td>
+          <td class="id_underline">{{data._id}}</td>
+          <td>{{data.artist && data.artist.username?data.artist.username:'--'}}</td>
+          <td>
+            <div *ngFor="let cat of data.categoryId">{{cat.name}} </div>
+          </td>
+          <td>{{data.speciesId.name}}</td>
+          <td>{{data.location}}</td>
+          <td>{{data.filesize}} kb</td>
+          <td>{{data.created| date : "dd.MM.y hh:mm "}}</td>
+          <td>{{data.user_count}}</td>
+          <td *ngIf="data.updated">{{data.updated| date : "dd.MM.y hh:mm "}}</td>
+          <td *ngIf="!data.updated">-</td>
+          <td>{{data.post_count}}</td>
+          <td tappable [ngClass]="data.highlighted ?'yellow':'grey'" (click)="changeHighlighted(data._id,i)"><i class="fa fa-star" aria-hidden="true"></i></td>
+
+          <td tappable [ngClass]="[data.status=='Archived'?'text_archive':'grey',data.status=='Active'?'green':'grey']">{{data.status}} </td>
+          <td tappable class="star">View Layout</td>
+          <td tappable (click)="changeStatus(data._id,'Archived',i)"> <i class="fa fa-trash-o trash" aria-hidden="true"></i></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="user_btns" *ngIf="layout && layout.length">
+  <ul>
+    <li><button class="btn">Total Layouts</button>
+      <p *ngIf="layout">{{layout.length}}</p>
+    </li>
+    <li><button class="btn">Selected Layouts</button>
+      <p>{{selected_layout}}</p>
+    </li>
+    <li tappable><img class="image_css" src='assets/img/download-to-storage-drive.png' (click)="download()" />
+      <p></p>
+    </li>
+    <li tappable><img class="image_css" src='assets/img/printer-tool.png' (click)="print()" />
+      <p></p>
+    </li>
+  </ul>
+</div>
+<!-- <div class="row footer_section">
+  <div class="col-sm-2">
+    <div class="green_box">Total Layouts</div>
+    <div class="count_text" *ngIf="layout">{{layout.length}}</div>
+  </div>
+  <div class="col-sm-2">
+    <div class="green_box ">Selected Layouts</div>
+    <div class="count_text">{{selected_layout}}</div>
+  </div>
+  <div class="col-3 ">
+    <div tappable>
+      <i class="fa fa-print font_icon" aria-hidden="true" style="margin-right:35px;" (click)="print()" tappable></i>
+      <i class="fa fa-download font_icon" aria-hidden="true" (click)="download()" tappable></i>
+    </div>
+  </div>
+</div> -->
+<div id="print-section1" style="display:none">
+  <table class="table table-responsive table-hover allSticker">
+    <thead>
+      <tr>
+        <th> Sr.No. </th>
+        <th> Thumbnail </th>
+        <th> Layout Id </th>
+        <th>Artist Username </th>
+        <th>Layout Category </th>
+        <th>Layout Species </th>
+        <th>Location will be used </th>
+        <th class="long_text_database">Layout Database </th>
+        <th class="long_text_database">Registration Date and Time</th>
+        <th class="long_text_database">Number of users used it</th>
+        <th class="long_text_no">Edit Date </th>
+        <th class="long_text_no"> Number of total posts</th>
+        <th><i class="fa fa-star star" aria-hidden="true"></i>HighLight/UnhighLight </th>
+        <th>Layout Status</th>
+        <th></th>
+        <th class="text_archive">Archive</th>
+      </tr>
+    </thead>
+    <tbody>
+      <div *ngFor="let data of layout|filter:search_text;let i=index;">
+        <tr class="k-alt" *ngIf="data.checked">
+          <td>
+            <tr>
+              <td class="checbox_field">
+                <input type="checkbox" name="{{'select'+i}}" [(ngModel)]="selected[i]" (ngModelChange)="selectLayout($event,data._id,selected[i],i)"><br>
+              </td>
+              <td class="checbox_field">{{i+1}}</td>
+            </tr>
+          </td>
+          <td><img class="img_thumbnail" [src]="imageUrl + data.photo"></td>
+          <td class="id_underline">{{data._id}}</td>
+          <td>{{data.artist && data.artist.username?data.artist.username:'--'}}</td>
+          <td>
+            <div *ngFor="let cat of data.categoryId">{{cat.name}} </div>
+          </td>
+          <td>{{data.speciesId.name}}</td>
+          <td>{{data.location}}</td>
+          <td>{{data.filesize}} kb</td>
+          <td>{{data.created| date : "dd.MM.y hh:mm "}}</td>
+          <td>{{data.user_count}}</td>
+          <td *ngIf="data.updated">{{data.updated| date : "dd.MM.y hh:mm "}}</td>
+          <td *ngIf="!data.updated">-</td>
+          <td>{{data.post_count}}</td>
+          <td tappable [ngClass]="data.highlighted ?'yellow':'grey'" (click)="changeHighlighted(data._id,i)"><i class="fa fa-star" aria-hidden="true"></i></td>
+
+          <td tappable [ngClass]="[data.status=='Archived'?'text_archive':'grey',data.status=='Active'?'green':'grey']">{{data.status}} </td>
+          <td tappable class="star">View Layout</td>
+          <td tappable (click)="changeStatus(data._id,'Archived',i)"> <i class="fa fa-trash-o trash" aria-hidden="true"></i></td>
+        </tr>
+      </div>
+    </tbody>
+  </table>
+</div>

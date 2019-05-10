@@ -1,0 +1,33 @@
+<header class="app-header navbar">
+  <button class="navbar-toggler d-lg-none" type="button" appMobileSidebarToggler>
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="brandname mr-5" *ngIf="header && header.value">{{header.value.title}}</a>
+  <div class="mr-auto  d-none d-sm-block">
+
+    <!-- <input type="text" class="search-input" placeholder="Search">
+    <span class="input-group-addon search-icon"><i class="icon-magnifier"></i></span> -->
+  </div>
+  <!-- <button class="navbar-toggler d-md-down-none mr-auto" type="button" appSidebarToggler>
+    <span class="navbar-toggler-icon"></span>
+  </button> -->
+  <ol class="breadcrumb d-none d-sm-flex">
+    <app-breadcrumbs></app-breadcrumbs>
+  </ol>
+
+  <!-- <div class="header-icons">
+    <i class="icon-envelope"></i>
+    <span class="msg-badge">1</span>
+  </div>
+  <div class="header-icons">
+    <i class="icon-bell"></i>
+    <span class="bell-badge">1</span>
+  </div>
+  <div class="header-icons">
+    <i class="icon-star"></i>
+    <span class="star-badge">1</span>
+  </div> -->
+  <!-- <button class="navbar-toggler d-md-down-none" type="button" appAsideMenuToggler>
+    <span class="navbar-toggler-icon"></span>
+  </button> -->
+</header>

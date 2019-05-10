@@ -1,0 +1,209 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="all_header layout_header" style="margin-bottom:20px">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-xl-4 search_div">
+        <input type="text" class="search-input search_field" placeholder="User name or email" [(ngModel)]="search_text" (focusout)="checkBlur(search_text)">
+        <span class="input-group-addon search-icon magnifier"><i class="icon-magnifier" tappable  (click)="searchUser(search_text)"></i></span>
+      </div>
+      <div class="col-sm-3 col-xl-4">
+        YELLOW BADGE
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="alert alert-success" *ngIf="successMessage">
+  {{successMessage}}
+</div>
+<div class="alert alert-danger" *ngIf="error_msg">
+  {{error_msg}}
+</div>
+
+<div class="backdrop" [ngStyle]="{'display':display}"></div>
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <h4 class="modal-title">Badge Number</h4>
+      </div>
+      <div class="modal-body">
+        <fieldset class="rating text-center">
+          <input type="radio" value="2" [name]="inpustName" [checked]="rating===2" />
+          <label title="Nice!" (click)='ratingMeasure(2)'>2 stars</label>
+          <input type="radio" value="1" [name]="inpustName" [checked]="rating===1" />
+          <label title="Not Bad" (click)='ratingMeasure(1)'>1 star</label>
+        </fieldset>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="onCloseHandled()">Close</button>
+        <button type="button" class="btn btn-primary">Save Changes</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal !-->
+
+
+
+<table class="table table-responsive table-bordered table-hover allSticker">
+  <thead class="small">
+
+    <tr>
+      <th> Sr.No. </th>
+      <th style="min-width:200px;"> Username </th>
+      <th style="min-width:200px;"> Name </th>
+      <th *ngIf="admin_type==1"> E-mail Address </th>
+      <th *ngIf="admin_type==1"> Login Time </th>
+      <th> Gender </th>
+      <th style="min-width:100px;"> Age </th>
+      <th> Ip address </th>
+      <th> Location </th>
+      <th> Language </th>
+      <th> Follower </th>
+      <th> Following </th>
+      <th> Monthly Follower Increase </th>
+      <th> Post </th>
+      <th style="min-width:200px;"> Post Allowed </th>
+      <th> Tagged Post </th>
+      <th> Saved Post </th>
+      <th> Activities </th>
+      <th> Mentions </th>
+      <th> Messaging </th>
+      <!-- <th> Mobile Number </th> -->
+      <th> Reports </th>
+      <th> Badge </th>
+      <th> Species </th>
+      <th> Status </th>
+    </tr>
+
+  </thead>
+  <tbody class="small">
+
+    <tr *ngFor="let user of users; let i = index ">
+      <td> {{i + 1}}</td>
+      <td>
+        <div class="row">
+          <div class="col-9 input_ico ">
+            <span *ngIf="!usernameEdit[i] ">{{user.username?user.username:'Unknown'}}</span>
+            <!-- <input *ngIf="usernameEdit[i]" type="text" class="form-control" [(ngModel)]="user.username" style="width:200%"> -->
+            <input *ngIf="usernameEdit[i]" type="text" pattern="[a-zA-Z0-9_]+" maxlength="16" minlength="2" class="form-control" name="usrname[i]" #usrname[i]="ngModel" [(ngModel)]="user.username" placeholder="Username" />
+          </div>
+          <div class="col-1 link_ico " *ngIf="!usernameEdit[i] && admin_type==1">
+            <a [hidden]="usernameEdit[i] " tappable class="float-left text-danger mr-1 ">
+              <i class="icon-pencil " (click) = "usernameEdit[i]=!usernameEdit[i]">
+            </i>
+          </a>
+          </div>
+          <div class="col-1 link_ico " *ngIf="usernameEdit[i]" style="margin-left:15px">
+            <a tappable class="float-right text-primary " style="margin-left: 15px; " [hidden]="!usernameEdit[i] ">
+            <i class="fa fa-check "(click) = "updateUsername(user,user.username,userForm,i);">
+            </i>
+          </a>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="row">
+          <div class="col-9 input_ico ">
+            <span *ngIf="!nameEdit[i]">{{user.name?user.name:'N/A'}}</span>
+            <!-- <input *ngIf="nameEdit[i]" type="text" class="form-control" name="u_name" #uname="ngModel" [(ngModel)]="user.name" pattern="^[A-Za-z0-9_]{2,16}$"> -->
+            <input *ngIf="nameEdit[i]" type="text" pattern="[a-zA-Z0-9_]+" maxlength="30" minlength="2" class="form-control" name="name[i]" #name[i]="ngModel" [(ngModel)]="user.name" placeholder="Name" />
+          </div>
+          <div class="col-1 link_ico " *ngIf="!nameEdit[i] && admin_type==1">
+            <a [hidden]="nameEdit[i] " tappable class="float-left text-danger mr-1 ">
+              <i class="icon-pencil " (click) = "nameEdit[i]=!nameEdit[i]">
+            </i>
+          </a>
+          </div>
+          <div class="col-1 link_ico " *ngIf="nameEdit[i]" style="margin-left:15px">
+            <a tappable class="float-right text-primary " style="margin-left: 15px; " [hidden]="!nameEdit[i] ">
+            <i class="fa fa-check "(click) = "updatename(user,user.name,userForm,i);">
+            </i>
+          </a>
+          </div>
+        </div>
+      </td>
+      <td *ngIf="admin_type==1">{{user.email?user.email:'N/A'}}</td>
+      <td *ngIf="admin_type==1">{{user.last_login?(user.last_login|date:"dd:MM:yy hh:mm:ss"):'N/A'}}</td>
+      <td>{{user.gender?user.gender:'N/A'}}</td>
+      <td>{{user.dob?user.dob:'N/A'}}</td>
+      <td>{{user.ip_address?user.ip_address:'N/A'}}</td>
+      <td>{{user.location?user.location:'N/A'}}</td>
+      <td>{{user.language?user.language:'N/A'}}</td>
+      <td>{{user.followers&&user.followers.length ?user.followers.length :'0' }}</td>
+      <td>{{user.followings_count == 0?user.followings_count:user.followings_count ?user.followings_count :'N/A' }}</td>
+      <td>{{user.monthly_follower_increase?user.monthly_follower_increase:'N/A'}}</td>
+      <td>{{user.posts && user.posts.length?user.posts.length:'N/A'}}</td>
+      <td style="padding-left: 0px;padding-right: 0px; ">
+        <div>
+          <div class="input_ico ">
+            <span *ngIf="!isEdit[user._id] ">  {{user.posts_allowed}}</span>
+            <input *ngIf="isEdit[user._id] " type="text " class="input " [(ngModel)]="user.posts_allowed ">
+          </div>
+          <div class="link_ico " *ngIf=" admin_type==1">
+            <a [hidden]="isEdit[user._id] " tappable class="float-left text-danger mr-1 ">
+              <i class="icon-pencil " (click) = "editPosts(user) "></i>
+            </a>
+            <a tappable class="float-right text-primary " style="margin-left: 15px; " [hidden]="!isEdit[user._id] "><i class="fa fa-check "(click) = "savePostAllowed(user,user.posts_allowed) "></i></a>
+          </div>
+        </div>
+      </td>
+      <td>{{user.tagged_post?user.tagged_post:'N/A'}}</td>
+      <td>{{user.saved_posts && user.saved_posts.length?user.saved_posts.length:'N/A'}}</td>
+      <td>{{user.activities?user.activities:'N/A'}}</td>
+      <td>{{user.mentions?user.mentions:'N/A'}}</td>
+      <td>{{user.messaging?user.messaging:'N/A'}}</td>
+      <!-- <td>{{user.phone?user.phone:'N/A'}}</td> -->
+      <td>{{user.reported_count == 0?user.reported_count:user.reported_count ?user.reported_count :'N/A' }} <i *ngIf="user.reported_count !=0" class="fa fa-eye ml-2" (click)="goToReports(user)"></i></td>
+      <td>
+        <fieldset class="rating text-center ">
+          <label tappable class="text-secondary " (click)="ratingMeasure(user,0)" [ngClass]="{ 'gold' :badge_gold[user._id]}"><i class="fa fa-star"></i></label>
+          <!-- <label tappable class="text-secondary " (click)="ratingMeasure(user,2)" [ngClass]="{ 'grey' :badge_grey[user._id]}"><i class="fa fa-star"></i></label> -->
+        </fieldset>
+      </td>
+      <td><select *ngIf="user.interests.length !=0 " class="dropbutton ">
+            <option *ngFor="let interest of user.interests " value = {{interest.name}}>
+                    {{interest.name}}
+            </option>
+            </select>
+        <p class="text-center " *ngIf="user.interests.length==0 ">N/A</p>
+      </td>
+      <td>
+        <i class="fa fa-check-circle" [ngClass]="{ 'text-success':user.is_verified, 'text-warning':!user.is_verified} "></i>
+        <p><button tappable *ngIf="!user.is_verified && admin_type==1" class="verify_bt mt-1" (click)="verifyEmail(user._id)">Verify email</button></p>
+      </td>
+      <td><a class="text-warning" (click)="goToProfile(user)" tappable>VIEW</a>
+        <i tappable class="fa fa-trash-o ml-2 " *ngIf="admin_type==1" aria-hidden="true " (click)="deleteRecord(user._id) " data-toggle="tooltip" data-placement="bottom" title="Delete"></i>
+        <i tappable class="fa fa-ban ml-2 " *ngIf="admin_type==1 && user.status!=1" aria-hidden="true " (click)="updateuser(user,1) " data-toggle="tooltip" data-placement="bottom" title="Suspend"></i>
+        <i tappable class="fa fa-hand-paper-o ml-2 " *ngIf="admin_type==1" aria-hidden="true " (click)="updateuser(user,2) " data-toggle="tooltip" data-placement="bottom" title="Hold"></i>
+        <i tappable class="fa fa-check-circle ml-2 " *ngIf="admin_type==1 && (user.status==1)" aria-hidden="true " (click)="updateuser(user,0) " data-toggle="tooltip" data-placement="bottom" title="Active"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<ul class="pagination justify-content-end ">
+  <li class="page-item "><a class="page-link " (click)="goBack()">Prev</a></li>
+  <li class="page-item "><a class="page-link " (click)="goNext()">Next</a></li>
+</ul>
+
+<div class="user_btns">
+  <ul>
+    <li><button class="btn">Total Users</button>
+      <p>{{total_count}}</p>
+    </li>
+    <li><button class="btn">Selected Users</button>
+      <p>0</p>
+    </li>
+    <li tappable><img class="image_css" src='assets/img/download-to-storage-drive.png' (click)="csv()" />
+      <p></p>
+    </li>
+    <li tappable><img class="image_css" src='assets/img/printer-tool.png' (click)="print()" />
+      <p></p>
+    </li>
+
+  </ul>
+</div>

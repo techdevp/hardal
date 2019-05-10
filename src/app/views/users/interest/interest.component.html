@@ -1,0 +1,252 @@
+<div class="animated fadeIn mt-4">
+  <div class="mt-auto">
+    <div class="form-group form-inline">
+      <select (change)="showInterest()" [(ngModel)]="selectedCategory" class="form-control">
+        <option value="0" [disabled]="true">Choose Category</option>
+        <option *ngFor="let category of categories" [value]="category._id">
+          {{category.name}}
+        </option>
+      </select>
+
+      <div class="ml-auto-view_category ml-1">
+        <a class="btn btn-primary" (click)="viewCategories()" *ngIf="!view_categories">View Categories <i class="icon-eye"></i></a>
+        <a class="btn btn-primary" (click)="viewCategories()" *ngIf="view_categories">Hide Categories <i class="fa fa-eye-slash"></i></a>
+      </div>
+      <div class="ml-auto">
+        <a class="btn btn-danger" (click)="addNewInterest()"><i class="icon-plus"></i> Add Interest</a>
+      </div>
+      <div class="ml-auto-category">
+        <a class="btn btn-danger" (click)="addNewCategory()"><i class="icon-plus"></i> Add Category</a>
+      </div>
+    </div>
+  </div>
+  <div class="alert alert-success" *ngIf="successMessage">
+    {{successMessage}}
+  </div>
+  <div class="alert alert-danger" *ngIf="error_msg">
+    {{error_msg}}
+  </div>
+  <div class="tabset_div">
+    <tabset *ngIf="add_category">
+      <tab heading="English" id="tab1" (select)="onSelect($event)">
+        <div class=" p-2" *ngIf="add_category">
+          <h3>Add Category</h3>
+          <div class="alert alert-success" *ngIf="successMessage">
+            {{successMessage}}
+          </div>
+          <form #categoryForm="ngForm" class="form">
+            <div class="form-group">
+              <input type="text" required #newCategory="ngModel" name="newCategory" [(ngModel)]="new_category" placeholder="Add Category" class="form-control" />
+              <p class="text-danger" *ngIf="newCategory.invalid && (newCategory.touched || newCategory.dirty)">*Category field is required</p>
+            </div>
+            <input class="btn btn-primary" [disabled]="categoryForm.invalid || newCategory.value == '0'" (click)="saveCategory()" type="submit" value="Submit" />
+            <button class="btn btn-danger" (click)="cancelNewCategory()">Cancel</button>
+          </form>
+        </div>
+      </tab>
+      <tab heading="Spanish" id="tab2" (select)="onSelect($event)">
+        <div class=" p-2" *ngIf="add_category">
+          <h3>Add Category</h3>
+          <div class="alert alert-success" *ngIf="successMessage">
+            {{successMessage}}
+          </div>
+          <form #categoryForm="ngForm" class="form">
+            <div class="form-group">
+              <input type="text" required #newCategory="ngModel" name="newCategory" [(ngModel)]="new_category_es" placeholder="Add Category" class="form-control" />
+              <p class="text-danger" *ngIf="newCategory.invalid && (newCategory.touched || newCategory.dirty)">*Category field is required</p>
+            </div>
+            <input class="btn btn-primary" [disabled]="categoryForm.invalid || newCategory.value == '0'" (click)="saveCategory()" type="submit" value="Submit" />
+            <button class="btn btn-danger" (click)="cancelNewCategory()">Cancel</button>
+          </form>
+        </div>
+      </tab>
+      <tab heading="Turkish" id="tab3" (select)="onSelect($event)">
+        <div class=" p-2" *ngIf="add_category">
+          <h3>Add Category</h3>
+          <div class="alert alert-success" *ngIf="successMessage">
+            {{successMessage}}
+          </div>
+          <form #categoryForm="ngForm" class="form">
+
+            <div class="form-group">
+              <input type="text" required #newCategory="ngModel" name="newCategory" [(ngModel)]="new_category_tr" placeholder="Add Category" class="form-control" />
+              <p class="text-danger" *ngIf="newCategory.invalid && (newCategory.touched || newCategory.dirty)">*Category field is required</p>
+            </div>
+            <input class="btn btn-primary" [disabled]="categoryForm.invalid || newCategory.value == '0'" (click)="saveCategory()" type="submit" value="Submit" />
+            <button class="btn btn-danger" (click)="cancelNewCategory()">Cancel</button>
+          </form>
+        </div>
+      </tab>
+      <tab heading="Portuguese" id="tab4" (select)="onSelect($event)">
+        <div class=" p-2" *ngIf="add_category">
+          <h3>Add Category</h3>
+          <div class="alert alert-success" *ngIf="successMessage">
+            {{successMessage}}
+          </div>
+          <form #categoryForm="ngForm" class="form">
+
+            <div class="form-group">
+              <input type="text" required #newCategory="ngModel" name="newCategory" [(ngModel)]="new_category_pt" placeholder="Add Category" class="form-control" />
+              <p class="text-danger" *ngIf="newCategory.invalid && (newCategory.touched || newCategory.dirty)">*Category field is required</p>
+            </div>
+            <input class="btn btn-primary" [disabled]="categoryForm.invalid || newCategory.value == '0'" (click)="saveCategory()" type="submit" value="Submit" />
+            <button class="btn btn-danger" (click)="cancelNewCategory()">Cancel</button>
+          </form>
+        </div>
+      </tab>
+    </tabset>
+  </div>
+
+
+  <div class="tabset_div p-2" *ngIf="addInterest">
+    <tabset>
+      <tab heading="English" id="tab1" (select)="onSelect($event)">
+        <h3>Add Interest</h3>
+        <div class="alert alert-success" *ngIf="successMessage">
+          {{successMessage}}
+        </div>
+        <form #interestForm="ngForm" class="form">
+          <div class="form-group">
+            <input type="text" required #newInterest="ngModel" name="newInterest" [(ngModel)]="new_interest" placeholder="Interest" class="form-control" />
+            <p class="text-danger" *ngIf="newInterest.invalid && (newInterest.touched || newInterest.dirty)">*Interest field is required</p>
+          </div>
+          <div class="form-group">
+            <select required name="cat" #cat="ngModel" [(ngModel)]="category" class="form-control">
+              <option value="0" [disabled]="true">Choose Category</option>
+              <option *ngFor="let category of categories" [value]="category._id">
+                {{category.name}}
+              </option>
+            </select>
+            <p class="text-danger" *ngIf="cat.invalid && (cat.touched || cat.dirty)">*Interest field is required</p>
+          </div>
+          <input class="btn btn-primary" [disabled]="interestForm.invalid || cat.value == '0'" (click)="saveInterest()" type="submit" value="Submit" />
+          <button class="btn btn-danger" (click)="cancelNewInterest()">Cancel</button>
+        </form>
+      </tab>
+      <tab heading="Spanish" id="tab2" (select)="onSelect($event)">
+        <h3>Add Interest</h3>
+        <div class="alert alert-success" *ngIf="successMessage">
+          {{successMessage}}
+        </div>
+        <form #interestForm1="ngForm" class="form">
+          <div class="form-group">
+            <input type="text" required #newInterest1="ngModel" name="newInterest1" [(ngModel)]="new_interest_es" placeholder="Interest" class="form-control" />
+            <p class="text-danger" *ngIf="newInterest1.invalid && (newInterest1.touched || newInterest1.dirty)">*Interest field is required</p>
+          </div>
+          <div class="form-group">
+            <select required name="cat" #cat="ngModel" [(ngModel)]="category" class="form-control">
+                <option value="0" [disabled]="true">Choose Category</option>
+                <option *ngFor="let category of categories" [value]="category._id">
+                  {{category.name}}
+                </option>
+              </select>
+            <p class="text-danger" *ngIf="cat.invalid && (cat.touched || cat.dirty)">*Interest field is required</p>
+          </div>
+          <input class="btn btn-primary" [disabled]="interestForm1.invalid || cat.value == '0'" (click)="saveInterest()" type="submit" value="Submit" />
+          <button class="btn btn-danger" (click)="cancelNewInterest()">Cancel</button>
+        </form>
+      </tab>
+      <tab heading="Turkish" id="tab3" (select)="onSelect($event)">
+        <h3>Add Interest</h3>
+        <div class="alert alert-success" *ngIf="successMessage">
+          {{successMessage}}
+        </div>
+        <form #interestForm2="ngForm" class="form">
+          <div class="form-group">
+            <input type="text" required #newInterest2="ngModel" name="newInterest2" [(ngModel)]="new_interest_tr" placeholder="Interest" class="form-control" />
+            <p class="text-danger" *ngIf="newInterest2.invalid && (newInterest2.touched || newInterest2.dirty)">*Interest field is required</p>
+          </div>
+          <div class="form-group">
+            <select required name="cat" #cat="ngModel" [(ngModel)]="category" class="form-control">
+                <option value="0" [disabled]="true">Choose Category</option>
+                <option *ngFor="let category of categories" [value]="category._id">
+                  {{category.name}}
+                </option>
+              </select>
+            <p class="text-danger" *ngIf="cat.invalid && (cat.touched || cat.dirty)">*Interest field is required</p>
+          </div>
+          <input class="btn btn-primary" [disabled]="interestForm2.invalid || cat.value == '0'" (click)="saveInterest()" type="submit" value="Submit" />
+          <button class="btn btn-danger" (click)="cancelNewInterest()">Cancel</button>
+        </form>
+      </tab>
+      <tab heading="portuguese" id="tab4" (select)="onSelect($event)">
+        <h3>Add Interest</h3>
+        <div class="alert alert-success" *ngIf="successMessage">
+          {{successMessage}}
+        </div>
+        <form #interestForm3="ngForm" class="form">
+          <div class="form-group">
+            <input type="text" required #newInterest3="ngModel" name="newInterest3" [(ngModel)]="new_interest_pt" placeholder="Interest" class="form-control" />
+            <p class="text-danger" *ngIf="newInterest3.invalid && (newInterest3.touched || newInterest3.dirty)">*Interest field is required</p>
+          </div>
+          <div class="form-group">
+            <select required name="cat" #cat="ngModel" [(ngModel)]="category" class="form-control">
+                <option value="0" [disabled]="true">Choose Category</option>
+                <option *ngFor="let category of categories" [value]="category._id">
+                  {{category.name}}
+                </option>
+              </select>
+            <p class="text-danger" *ngIf="cat.invalid && (cat.touched || cat.dirty)">*Interest field is required</p>
+          </div>
+          <input class="btn btn-primary" [disabled]="interestForm3.invalid || cat.value == '0'" (click)="saveInterest()" type="submit" value="Submit" />
+          <button class="btn btn-danger" (click)="cancelNewInterest()">Cancel</button>
+        </form>
+      </tab>
+    </tabset>
+  </div>
+  <div *ngIf="view_categories" class="card p-2">
+
+    <h3 *ngIf="categories">Categories</h3>
+    <div class="row" *ngIf="categories">
+      <div class="col-sm-3" *ngFor="let category of categories">
+        <div class="category-item ">
+          <p *ngIf="!isEdit[category._id]">English:{{category.name?category.name:'N/A'}}</p>
+          <p *ngIf="!isEdit[category._id]">Spanish:{{category.name_es?category.name_es:'N/A'}}</p>
+          <p *ngIf="!isEdit[category._id]">Turkish:{{category.name_tr?category.name_tr:'N/A'}}</p>
+          <p *ngIf="!isEdit[category._id]">Portuguese:{{category.name_pt?category.name_pt:'N/A'}}</p>
+          <div class="actions_category">
+            <input *ngIf="isEdit[category._id]" type="text" class="input" [(ngModel)]="category.name">
+            <input *ngIf="isEdit[category._id]" type="text" class="input" [(ngModel)]="category.name_es">
+            <input *ngIf="isEdit[category._id]" type="text" class="input" [(ngModel)]="category.name_tr">
+            <input *ngIf="isEdit[category._id]" type="text" class="input" [(ngModel)]="category.name_pt">
+            <a tappable class="float-right text-primary " *ngIf="!isEdit[category._id]"><i class="icon-close" (click) = "deleteCategory(category._id,category)"></i></a>
+            <a tappable class="float-right text-danger mr-1" *ngIf="!isEdit[category._id]"><i class="icon-pencil "(click)="edit(category)" from="name" ></i></a>
+            <a tappable class="float-right text-danger" *ngIf="isEdit[category._id]"><i class="fa fa-times" (click) = "cancelCategory(category)"></i></a>
+            <a tappable class="float-right text-primary mr-3" *ngIf="isEdit[category._id]"><i class="fa fa-check"(click) = "editCategory(category._id,category,category)"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!categories ">
+      No category found !
+    </div>
+  </div>
+  <div class="card p-2 ">
+    <h3 *ngIf="interests && !loader">Interests</h3>
+    <div class="row " *ngIf="interests && !loader ">
+      <div class="col-sm-3 " *ngFor="let interest of interests">
+        <div class="interest-item ">
+          <p *ngIf="!isEdit[interest._id]">English: {{interest.name?interest.name:'N/A'}}</p>
+          <p *ngIf="!isEdit[interest._id]">Spanish: {{interest.name_es?interest.name_es:'N/A'}}</p>
+          <p *ngIf="!isEdit[interest._id]">Turkish: {{interest.name_tr?interest.name_tr:'N/A'}}</p>
+          <p *ngIf="!isEdit[interest._id]">Portuguese: {{interest.name_pt?interest.name_pt:'N/A'}}</p>
+          <input *ngIf="isEdit[interest._id]" type="text" class="input" placeholder="English" [(ngModel)]="interest.name">
+          <input *ngIf="isEdit[interest._id]" type="text" class="input" placeholder="Spanish" [(ngModel)]="interest.name_es">
+          <input *ngIf="isEdit[interest._id]" type="text" class="input" placeholder="Turkish" [(ngModel)]="interest.name_tr">
+          <input *ngIf="isEdit[interest._id]" type="text" class="input" placeholder="Portuguese" [(ngModel)]="interest.name_pt">
+          <div class="actions">
+            <a tappable class="float-right text-primary " *ngIf="!isEdit[interest._id]"><i class="icon-close" (click) = "deleteInterest(interest._id,interest)"></i></a>
+            <a tappable class="float-right text-danger mr-1" *ngIf="!isEdit[interest._id]"><i class="icon-pencil "(click)="editInterest(interest)" from="name" ></i></a>
+            <a tappable class="float-right text-danger" *ngIf="isEdit[interest._id]"><i class="fa fa-times" (click) = "cancelInterest(interest)"></i></a>
+            <a tappable class="float-right text-primary mr-3" *ngIf="isEdit[interest._id]"><i class="fa fa-check"(click) = "updatedInterest(interest._id,interest,interest)"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="interest && !interest.length && !loader ">
+      No interest found in this category!
+    </div>
+    <h4 *ngIf="emptyInterest && !loader ">{{emptyInterest}}</h4>
+    <h4 *ngIf="loader ">Loading...</h4>
+  </div>
+</div>

@@ -1,0 +1,212 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="row " *ngIf="layout_count">
+  <div class="col-2 new_layout">
+    <p>New Layouts(30 days)</p>
+    {{layout_count.newlayout_count}}
+  </div>
+  <div class="col-2 remove_layout">
+    <p>Total Removed Layouts</p>
+    0
+  </div>
+  <div class="col-2 total_layout">
+    <p>Total Layout Artists</p>
+    {{layout_count.artist_count}}
+  </div>
+  <div class="col-2 total_layout_usage">
+    <p> Total Layout Usage</p>
+    {{layout_count.layout_usage_count}}
+  </div>
+</div>
+
+<div class="all_header layout_header">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4 col-xl-4 search_div">
+        <input type="text" class="search-input search_field" placeholder="Search Layouts or Layout Category" [(ngModel)]="search_text" (focusout)="checkBlur(search_text)">
+        <span class="input-group-addon search-icon magnifier"><i class="icon-magnifier" tappable  (click)="searchLayout(search_text)"></i></span>
+      </div>
+      <div class="col-sm-2 col-xl-2">
+        LAYOUTS DRAFT
+      </div>
+      <div class="col-sm-3 col-xl-3" *ngIf="!error_msg">
+        <button type="button" class="btn btn-warning btn_new" (click)="publishLayout()">Publish Layout</button>
+      </div>
+      <div class="col-sm-3 col-xl-3" *ngIf="!error_msg">
+        <button type="button" class="btn btn-add" (click)="openModal(template)">Delete Layout</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Are you sure want to delete layout.</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="deleteLayout()">YES</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modalRef.hide()">NO</button>
+  </div>
+</ng-template>
+
+<div class="alert alert-success" *ngIf="successMessage">
+  {{successMessage}}
+</div>
+<div class="alert alert-danger" *ngIf="error_msg">
+  {{error_msg}}
+</div>
+<div id="print-section" *ngIf="layout && layout.length">
+  <table class="table table-responsive table-hover allSticker">
+    <thead>
+      <tr>
+        <th> Sr.No. </th>
+        <th> Thumbnail </th>
+        <th> Layout Id </th>
+        <th>Artist Username </th>
+        <th>Layout Category </th>
+        <th>Layout Species </th>
+        <th>Location will be used </th>
+        <th class="long_text_database">Layout Database </th>
+        <th class="long_text_database">Registration Date and Time</th>
+        <th class="long_text_database">Number of users used it</th>
+        <th class="long_text_no">Edit Date </th>
+        <th class="long_text_no"> Number of total posts</th>
+        <th><i class="fa fa-star yellow" aria-hidden="true"></i>HighLight/UnhighLight</th>
+        <th>Layout Status</th>
+        <th></th>
+        <th class="text_archive">Archive</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of layout;let i=index" class="k-alt">
+        <td>
+          <tr>
+            <td class="checbox_field">
+              <input type="checkbox" name="{{'select'+i}}" [(ngModel)]="selected[i]" (ngModelChange)="selectLayout($event,data._id,selected[i],i)"><br>
+            </td>
+            <td class="checbox_field">{{i+1}}</td>
+          </tr>
+        </td>
+        <td><img class="img_thumbnail" [src]="imageUrl + data.photo"></td>
+        <td class="id_underline">{{data._id}}</td>
+        <td>{{data.artist && data.artist.username?data.artist.username:'--'}}</td>
+        <td *ngIf="data.categoryId.length">
+          <div *ngFor="let cat of data.categoryId">{{cat.name}} </div>
+        </td>
+        <td *ngIf="!data.categoryId.length">
+          <div>{{data.categoryId.name}} </div>
+        </td>
+        <td *ngIf="data.speciesId"> {{data.speciesId.name}}</td>
+        <td *ngIf="!data.speciesId"></td>
+        <td>{{data.location}}</td>
+        <td>{{data.filesize * 0.001 + 'KB'}}</td>
+        <td>{{data.created| date : "dd.MM.y hh:mm "}}</td>
+        <td>{{data.user_count}}</td>
+        <td *ngIf="data.updated">{{data.updated| date : "dd.MM.y hh:mm "}}</td>
+        <td *ngIf="!data.updated">-</td>
+        <td>{{data.post_count}}</td>
+        <!-- <td><span *ngIf="data.artist && data.artist.total_layout">{{data.artist.total_layout}}</span></td> -->
+        <td [ngClass]="data.highlighted ?'yellow':'grey'"><i class="fa fa-star" aria-hidden="true" tappable (click)="changeHighlighted(data._id,i)"></i></td>
+        <td [ngClass]="[data.status=='Archived'?'text_archive':'grey',data.status=='Active'?'green':'grey']">{{data.status}} </td>
+        <td tappable style="color: #f3ba37;" [routerLink]="['/layouts/view-layout', data._id]">View Layout</td>
+        <td><i class="fa fa-trash-o trash" aria-hidden="true" tappable (click)="changeStatus(data._id,'Archived',i)"></i></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ul class="pagination justify-content-end" *ngIf="layout && layout.length">
+  <li class="page-item "><a class="page-link " (click)="findPrev()">Prev</a></li>
+  <li class="page-item "><a class="page-link " (click)="findNext()">Next</a></li>
+</ul>
+<div class="user_btns" *ngIf="layout && layout.length">
+  <ul>
+    <li><button class="btn">Total Layouts</button>
+      <p *ngIf="layout">{{layout.length}}</p>
+    </li>
+    <li><button class="btn">Selected Layouts</button>
+      <p>{{selected_layout}}</p>
+    </li>
+    <li tappable><img class="image_css" src='assets/img/download-to-storage-drive.png' (click)="download()" />
+      <p></p>
+    </li>
+    <li tappable><img class="image_css" src='assets/img/printer-tool.png' (click)="print()" />
+      <p></p>
+    </li>
+  </ul>
+</div>
+<!-- <div class="row footer_section">
+  <div class="col-sm-2">
+    <div class="green_box">Total Layouts</div>
+    <div class="count_text" *ngIf="layout">{{layout.length}}</div>
+  </div>
+  <div class="col-sm-2">
+    <div class="green_box ">Selected Layouts</div>
+    <div class="count_text">{{selected_layout}}</div>
+  </div>
+  <div class="col-3 ">
+    <div tappable>
+      <i class="fa fa-print font_icon" aria-hidden="true" style="margin-right:35px;" (click)="print()" tappable></i>
+      <i class="fa fa-download font_icon" aria-hidden="true" (click)="download()" tappable></i>
+    </div>
+  </div>
+</div> -->
+
+<div id="print-section1" style="display:none">
+  <table class="table table-responsive table-hover allSticker">
+    <thead>
+      <tr>
+        <th> Sr.No. </th>
+        <th> Thumbnail </th>
+        <th> Layout Id </th>
+        <th>Artist Username </th>
+        <th>Layout Category </th>
+        <th>Layout Species </th>
+        <th>Location will be used </th>
+        <th class="long_text_database">Layout Database </th>
+        <th class="long_text_database">Registration Date and Time</th>
+        <th class="long_text_database">Number of users used it</th>
+        <th class="long_text_no">Edit Date </th>
+        <th class="long_text_no"> Number of total posts</th>
+        <th><i class="fa fa-star yellow" aria-hidden="true"></i>HighLight/UnhighLight</th>
+        <th>Layout Status</th>
+        <th></th>
+        <th class="text_archive">Archive</th>
+      </tr>
+    </thead>
+    <tbody>
+      <div *ngFor="let data of layout;let i=index">
+        <div *ngIf="data.checked">
+          <tr class="k-alt">
+            <td class="checbox_field">{{i+1}}</td>
+            <td><img class="img_thumbnail" [src]="imageUrl + data.photo"></td>
+            <td class="id_underline">{{data._id}}</td>
+            <td>{{data.artist && data.artist.username?data.artist.username:'--'}}</td>
+            <td *ngIf="data.categoryId.length">
+              <div *ngFor="let cat of data.categoryId">{{cat.name}} </div>
+            </td>
+            <td *ngIf="!data.categoryId.length">
+              <div>{{data.categoryId.name}} </div>
+            </td>
+            <td *ngIf="data.speciesId"> {{data.speciesId.name}}</td>
+            <td *ngIf="!data.speciesId">-</td>
+            <td>{{data.location}}</td>
+            <td>{{data.filesize * 0.001 + 'KB'}}</td>
+            <td>{{data.created| date : "dd.MM.y hh:mm "}}</td>
+            <td>{{data.user_count}}</td>
+            <td *ngIf="data.updated">{{data.updated| date : "dd.MM.y hh:mm "}}</td>
+            <td *ngIf="!data.updated">-</td>
+            <td>{{data.post_count}}</td>
+            <!-- <td><span *ngIf="data.artist && data.artist.total_layout">{{data.artist.total_layout}}</span></td> -->
+            <td [ngClass]="data.highlighted ?'yellow':'grey'" (click)="changeHighlighted(data._id,i)"><i class="fa fa-star" aria-hidden="true"></i></td>
+            <td tappable [ngClass]="[data.status=='Archived'?'text_archive':'grey',data.status=='Active'?'green':'grey']">{{data.status}} </td>
+            <td tappable style="color: #f3ba37;">View Layout</td>
+            <td tappable (click)="changeStatus(data._id,'Archived',i)"><i class="fa fa-trash-o trash" aria-hidden="true"></i></td>
+          </tr>
+        </div>
+      </div>
+    </tbody>
+  </table>
+</div>

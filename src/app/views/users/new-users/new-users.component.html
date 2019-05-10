@@ -1,0 +1,160 @@
+<table class="table table-responsive table-bordered table-hover allSticker">
+  <thead class="small">
+
+    <tr>
+      <th> USER ID </th>
+      <th> USERNAME </th>
+      <th> NAME </th>
+      <th> E-MAIL ADDRESS </th>
+      <th> LOGIN TIME </th>
+      <th> GENDER </th>
+      <th> AGE </th>
+      <th> LOCATION </th>
+      <th> LANGUAGE </th>
+      <th> FOLLOWER </th>
+      <th> FOLLOWING </th>
+      <th> POST/LAYER ID</th>
+      <th> TAGGED POST </th>
+      <th> SAVED POST </th>
+      <th> PUBLICATION ID </th>
+      <th> ACTIVITIES ID </th>
+      <th> SPECIES </th>
+    </tr>
+
+  </thead>
+  <tr>
+
+    <td>
+      <div> <button type="button" class="btn btn-warning">OPEN</button> <button type="button" class="btn btn-warning">HIDDEN</button></div>
+    </td>
+
+    <td><input type="text" class="input"> </td>
+    <td><input type="text" class="input"> </td>
+    <td><input type="text" class="input"> </td>
+    <td><input type="text" class="input"> </td>
+
+    <td>
+      <div> <button type="button" class="btn btn-warning">MALE</button> <button type="button" class="btn btn-warning">FEMALE</button></div>
+    </td>
+    <td><input type="text" class="input"> </td>
+    <td><select class="dropbutton ">
+          <option value = "India">
+                  India
+          </option>
+          <option value = "Pakistan">
+                  Pakistan
+          </option>
+          </select></td>
+    <td><select class="dropbutton ">
+          <option value = "hindi">
+                  English
+          </option>
+          <option value = "hindi">
+                  Hindi
+          </option>
+          </select></td>
+    <td><input type="text" class="input"> </td>
+    <td><input type="text" class="input"> </td>
+    <td><input type="text" class="input"> </td>
+    <td><input type="text" class="input"> </td>
+    <td><input type="text" class="input"> </td>
+    <td><input type="text" class="input"> </td>
+    <td><input type="text" class="input"> </td>
+
+    <td><select class="dropbutton ">
+            <option value = "Interest1">
+              Interest1
+            </option>
+            <option value = "Interest2">
+              Interest2
+            </option>
+          </select></td>
+    <td>
+      <button type="button" class="btn btn-warning">AUTOFILL</button>
+    </td>
+    <td><i class="fa fa-check text-danger "></i><i class="fa fa-times text-success"></i></td>
+  </tr>
+
+  </tbody>
+</table>
+<header class="app-header navbar">
+
+  <a class="brandname  text-warning " text center>Created Users</a>
+</header>
+<table class="table table-responsive table-bordered table-hover allSticker">
+  <thead class="small">
+
+    <tr>
+      <th> Sr.No. </th>
+      <th> USERNAME </th>
+      <th> NAME </th>
+      <th> E-MAIL ADDRESS </th>
+      <th> LOGIN TIME </th>
+      <th> GENDER </th>
+      <th> AGE </th>
+      <th> LOCATION </th>
+      <th> LANGUAGE </th>
+      <th> FOLLOWER </th>
+      <th> FOLLOWING </th>
+      <th> MONTHLY FOLLOWER INCREASE </th>
+      <th> POST </th>
+      <th> TAGGED POST </th>
+      <th> SAVED POSTS </th>
+      <th> ACTIVITIES </th>
+      <th> MENTIONS </th>
+      <th> MESSAGING </th>
+      <th> MOBILE NUMBER </th>
+      <th> REPORTS </th>
+      <th> BADGE </th>
+      <th> INTERESTS </th>
+      <th> STATUS </th>
+    </tr>
+
+  </thead>
+  <tbody class="small">
+
+    <tr *ngFor="let user of users; let i = index">
+      <td> {{i + 1}}</td>
+      <td>{{user.username?user.username:'Unknown'}}</td>
+      <td>{{user.name?user.name:'N/A'}}</td>
+      <td>{{user.email?user.email:'N/A'}}</td>
+      <td>{{user.login_time?user.login_time:'N/A'}}</td>
+      <td>{{user.gender?user.gender:'N/A'}}</td>
+      <td>{{user.age?user.age:'N/A'}}</td>
+      <td>{{user.location?user.location:'N/A'}}</td>
+      <td>{{user.language?user.language:'N/A'}}</td>
+      <td>{{user.followers_count == 0?user.followers_count:user.followers_count ?user.followers_count :'N/A' }}</td>
+      <td>{{user.followings_count == 0?user.followings_count:user.followings_count ?user.followings_count :'N/A' }}</td>
+      <td>{{user.monthly_follower_increase?user.monthly_follower_increase:'N/A'}}</td>
+      <td>{{user.post?user.post:'N/A'}}</td>
+      <td>{{user.tagged_post?user.tagged_post:'N/A'}}</td>
+      <td>{{user.saved_post?user.saved_post:'N/A'}}</td>
+      <td>{{user.activities?user.activities:'N/A'}}</td>
+      <td>{{user.mentions?user.mentions:'N/A'}}</td>
+      <td>{{user.messaging?user.messaging:'N/A'}}</td>
+      <td>{{user.phone?user.phone:'N/A'}}</td>
+      <td>{{user.reported_count == 0?user.reported_count:user.reported_count ?user.reported_count :'N/A' }} <i *ngIf="user.reported_count != 0" class="fa fa-eye ml-2 "></i></td>
+      <td>
+        <fieldset class="rating text-center ">
+
+
+          <i class="fa fa-star "></i>
+
+
+          <i class="fa fa-star "></i>
+
+        </fieldset>
+      </td>
+      <td><select *ngIf="user.interests.length !=0 " class="dropbutton ">
+                  <option *ngFor="let interest of user.interests " value = {{interest.name}}>
+                          {{interest.name}}
+                  </option>
+                  </select>
+        <p class="text-center " *ngIf="user.interests.length==0 ">N/A</p>
+      </td>
+      <td><i class="fa fa-check-circle " [ngClass]="{ 'text-success':user.is_verified, 'text-warning':!user.is_verified} "></i></td>
+      <td><a class="text-warning ">VIEW</a><i class="fa fa-trash-o ml-2 " aria-hidden="true " (click)="deleteRecord(user._id) "></i></td>
+    </tr>
+
+  </tbody>
+</table>
